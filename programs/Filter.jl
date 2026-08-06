@@ -8,10 +8,10 @@
 ====================================================#
 module Filter
 
-export conv, averaging, sobelGradient, sobelLR, sobelTD
+export conv, averaging, sobelGradient, sobelLR, sobelTD, gaussian, laplacian
 
 
-function conv(width, height, data::Matrix{Int16}, filter)::Matrix{Int16}
+function conv(width::Int, height::Int, data::Matrix{Int16}, filter)::Matrix{Int16}
     img = Float64.(data)
     padded::Matrix{Float64} = zeros(Float64, height + 2, width + 2)
     padded[2:end-1, 2:end-1].=img
@@ -25,7 +25,7 @@ function conv(width, height, data::Matrix{Int16}, filter)::Matrix{Int16}
     return round.(Int16, img)
 end
 
-function normalize(width, height, data::Matrix{Float64})::Matrix{Int16}
+function normalize(width::Int, height::Int, data::Matrix{Float64})::Matrix{Int16}
     img::Matrix{Int16} = round.(Int16, data)
     for i in 1:height
         for j in 1:width
@@ -39,7 +39,7 @@ function normalize(width, height, data::Matrix{Float64})::Matrix{Int16}
     return img
 end
 
-function averaging(width, height, data::Matrix{Int16})::Matrix{Int16}
+function averaging(width::Int, height::Int, data::Matrix{Int16})::Matrix{Int16}
     filter = [1.0/9.0 1.0/9.0 1.0/9.0;
               1.0/9.0 1.0/9.0 1.0/9.0;
               1.0/9.0 1.0/9.0 1.0/9.0]
@@ -48,14 +48,30 @@ function averaging(width, height, data::Matrix{Int16})::Matrix{Int16}
     return result
 end
 
-function averaging(width, height, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+function averaging(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
     r = averaging(width, height, r)
     g = averaging(width, height, g)
     b = averaging(width, height, b)
     return r,g,b
 end
 
-function sobelLR(width, height, data::Matrix{Int16})::Matrix{Float64}
+function gaussian(width::Int, height::Int, data::Matrix{Int16})::Matrix{Int16}
+    filter = [1.0/16.0 2.0/16.0 1.0/16.0;
+              2.0/16.0 4.0/16.0 2.0/16.0;
+              1.0/16.0 2.0/16.0 1.0/16.0]
+    img::Matrix{Float64} = conv(width, height, data, filter)
+    result::Matrix{Int16} = normalize(width, height, img)
+    return result
+end
+
+function gaussian(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+    r = gaussian(width, height, r)
+    g = gaussian(width, height, g)
+    b = gaussian(width, height, b)
+    return r,g,b
+end
+
+function sobelLR(width::Int, height::Int, data::Matrix{Int16})::Matrix{Float64}
     filterLR = [-1 0 1;
                 -2 0 2;
                 -1 0 1]
@@ -63,7 +79,7 @@ function sobelLR(width, height, data::Matrix{Int16})::Matrix{Float64}
     return imgLR
 end
 
-function sobelLR(width, height, data::Matrix{Int16})::Matrix{Int16}
+function sobelLR(width::Int, height::Int, data::Matrix{Int16})::Matrix{Int16}
     filterLR = [-1 0 1;
                 -2 0 2;
                 -1 0 1]
@@ -72,21 +88,21 @@ function sobelLR(width, height, data::Matrix{Int16})::Matrix{Int16}
     return result
 end
 
-function sobelLR(width, height, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+function sobelLR(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
     r = sobelLR(width, height, r)
     g = sobelLR(width, height, g)
     b = sobelLR(width, height, b)
     return r,g,b
 end
 
-function sobelTD(width, height, data::Matrix{Int16})::Matrix{Float64}
+function sobelTD(width::Int, height::Int, data::Matrix{Int16})::Matrix{Float64}
     filterTD = [ 1  2  1;
                  0  0  0;
                 -1 -2 -1]
     imgTD::Matrix{Float64} = conv(width, height, data, filterTD)
     return imgTD
 end
-function sobelTD(width, height, data::Matrix{Int16})::Matrix{Int16}
+function sobelTD(width::Int, height::Int, data::Matrix{Int16})::Matrix{Int16}
     filterTD = [ 1  2  1;
                  0  0  0;
                 -1 -2 -1]
@@ -95,14 +111,14 @@ function sobelTD(width, height, data::Matrix{Int16})::Matrix{Int16}
     return result
 end
 
-function sobelTD(width, height, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+function sobelTD(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
     r = sobelTD(width, height, r)
     g = sobelTD(width, height, g)
     b = sobelTD(width, height, b)
     return r,g,b
 end
 
-function sobelGradient(width, height, data::Matrix{Int16})::Matrix{Int16}
+function sobelGradient(width::Int, height::Int, data::Matrix{Int16})::Matrix{Int16}
     imgLR::Matrix{Float64} = sobelLR(width, height, data)
     imgTD::Matrix{Float64} = sobelTD(width, height, data)
     img::Matrix{Float64} = sqrt.(imgLR.^2 + imgTD.^2)
@@ -110,12 +126,28 @@ function sobelGradient(width, height, data::Matrix{Int16})::Matrix{Int16}
     return result
 end
 
-function sobelGradient(width, height, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+function sobelGradient(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
     r = sobelGradient(width, height, r)
     g = sobelGradient(width, height, g)
     b = sobelGradient(width, height, b)
     return r,g,b
 end
 
-
+function laplacian(width::Int, height::Int, data::Matrix{Int16})::Matrix{Int16}
+    filter = [0  1 0;
+              1 -4 1;
+              0  1 0]
+    img::Matrix{Float64} = conv(width, height, data, filter)
+    result::Matrix{Int16} = normalize(width, height, img)
+    return result
 end
+
+function laplacian(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+    r = laplacian(width, height, r)
+    g = laplacian(width, height, g)
+    b = laplacian(width, height, b)
+    return r,g,b
+end
+
+
+end                             # module

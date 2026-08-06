@@ -46,11 +46,11 @@ function saveHeader(name::AbstractString, ext::AbstractString,
     end
 end
 
-function savePPM(filename::AbstractString, operation::AbstractString,
+function savePPM(name::AbstractString, ext::AbstractString,
+                 operation::AbstractString,
                  magic_num::AbstractString,
                  width::Int, height::Int, max_brightness::Int16,
                  red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16})
-    name::String, ext::String = splitext(filename)
     saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
 
     try
@@ -73,10 +73,10 @@ function savePPM(filename::AbstractString, operation::AbstractString,
     end
 end
 
-function savePGM(filename::AbstractString, operation::AbstractString,
+function savePGM(name::AbstractString, ext::AbstractString,
+                 operation::AbstractString,
                  magic_num::AbstractString,
                  width::Int, height::Int, max_brightness::Int16, gray::Matrix{Int16})
-    name::String, ext::String = splitext(filename)
     saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
 
     try
