@@ -11,11 +11,11 @@ module FileIO
 export loadFile, savePPM, savePGM
 
 
-function loadFile(path)
-    data = String[]
+function loadFile(path::AbstractString)::Vector{String}
+    data::Vector{String} = []
 
     try
-        buffer = read(path, String)
+        buffer::String = read(path, String)
         data = split(buffer)
     catch e
         @error "Load error." exception=e
@@ -24,15 +24,17 @@ function loadFile(path)
     return data
 end
 
-function saveHeader(name, ext, operation, magic_num,
-                    width, height,
-                    max_brightness)
+function saveHeader(name::AbstractString, ext::AbstractString,
+                    operation::AbstractString,
+                    magic_num::AbstractString,
+                    width::Int, height::Int,
+                    max_brightness::Int16)
     if !isdir("output")
         mkdir("output")
     end
     try
-        write("output/"*name*operation*ext, "")
-        open("output/"*name*operation*ext, "a") do io
+        write("output/"*name*"-"*operation*ext, "")
+        open("output/"*name*"-"*operation*ext, "a") do io
             println(io, magic_num)
             print(io, width)
             print(io, " ")
@@ -44,14 +46,15 @@ function saveHeader(name, ext, operation, magic_num,
     end
 end
 
-function savePPM(filename, operation, magic_num,
-                 width, height, max_brightness,
-                 red, green, blue)
-    name, ext = splitext(filename)
+function savePPM(filename::AbstractString, operation::AbstractString,
+                 magic_num::AbstractString,
+                 width::Int, height::Int, max_brightness::Int16,
+                 red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16})
+    name::String, ext::String = splitext(filename)
     saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
 
     try
-        open("output/"*name*operation*ext, "a") do io
+        open("output/"*name*"-"*operation*ext, "a") do io
             for i in 1:height
                 for j in 1:width
                     print(io, red[i, j])
@@ -64,19 +67,20 @@ function savePPM(filename, operation, magic_num,
                 print(io, "\n")
             end
         end
-        println("Saved "*"output/"*name*operation*ext)
+        println("Saved "*"output/"*name*"-"*operation*ext)
     catch e
         @error "Load error." exception=e
     end
 end
 
-function savePGM(filename, operation, magic_num,
-                 width, height, max_brightness, gray)
-    name, ext = splitext(filename)
+function savePGM(filename::AbstractString, operation::AbstractString,
+                 magic_num::AbstractString,
+                 width::Int, height::Int, max_brightness::Int16, gray::Matrix{Int16})
+    name::String, ext::String = splitext(filename)
     saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
 
     try
-        open("output/"*name*operation*ext, "a") do io
+        open("output/"*name*"-"*operation*ext, "a") do io
             for i in 1:height
                 for j in 1:width-1
                     print(io, gray[i, j])
@@ -87,7 +91,7 @@ function savePGM(filename, operation, magic_num,
             end
         end
 
-        println("Saved "*"output/"*name*operation*ext)
+        println("Saved "*"output/"*name*"-"*operation*ext)
     catch e
         @error "Load error." exception=e
     end
