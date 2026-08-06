@@ -17,7 +17,70 @@ const SOBEL_LR = 2
 const SOBEL_TD = 3
 const GAUSSIAN = 4
 const LAPLACIAN = 5
+const UNSHARPMASK = 6
 
+"""
+# Show App Version
+```julia
+  printVersion()
+```
+"""
+function printVersion()
+    println("""
+    version 0.0.0
+    """)
+end
+
+"""
+# Show Help
+```julia
+  printHelp()
+```
+"""
+function printHelp()
+    println("""
+    Usage: julia main.jl [FILENAME] [OPTION-OR-COMMAND]
+
+    Options:
+        --help, -h       print this help and exit
+        --version, -v    print version information and exit
+
+    Commands:
+        averaging        averaging filter
+        gaussian         gaussian filter
+        sobel-gradient   sobel filter (gradient)
+        sobel-LR         sobel filter (horizontal)
+        sobel-TD         sobel filter (vertical)
+        laplacian        laplacian filter
+    """)
+end
+
+"""
+# PPM File
+```julia
+  ppm(name::AbstractString,
+      ext::AbstractString,
+      operation::AbstractString,
+      magic_num::AbstractString,
+      width::Int, height::Int,
+      max_brightness::Int16,
+      rgb::Vector{Int16},
+      cmd::UInt8)
+```
+
+## Arguments
+- `name::AbstractString`
+- `ext::AbstractString`
+- `operation::AbstractString`
+- `magic_num::AbstractString`
+- `width::Int`
+- `height::Int`
+- `max_brightness::Int16`
+- `rgb::Vector{Int16}`
+- `cmd::UInt8`
+
+## Return value
+"""
 function ppm(name::AbstractString, ext::AbstractString,
              operation::AbstractString,
              magic_num::AbstractString,
@@ -40,6 +103,9 @@ function ppm(name::AbstractString, ext::AbstractString,
         red, green, blue = gaussian(width, height, red, green, blue)
     elseif cmd == LAPLACIAN
         red, green, blue = laplacian(width, height, red, green, blue)
+    elseif cmd == UNSHARPMASK
+        k::Int8 = parse(Int8, split(operation, "-")[end])
+        red, green, blue = unsharpMask(width, height, red, green, blue, k)
     end
 
     savePPM(name, ext, operation, magic_num,
@@ -47,6 +113,32 @@ function ppm(name::AbstractString, ext::AbstractString,
             red, green, blue)
 end
 
+"""
+# PGM File
+```julia
+  pgm(name::AbstractString,
+      ext::AbstractString,
+      operation::AbstractString,
+      magic_num::AbstractString,
+      width::Int, height::Int,
+      max_brightness::Int16,
+      gray::Vector{Int16},
+      cmd::UInt8)
+```
+
+## Arguments
+- `name::AbstractString`
+- `ext::AbstractString`
+- `operation::AbstractString`
+- `magic_num::AbstractString`
+- `width::Int`
+- `height::Int`
+- `max_brightness::Int16`
+- `gray::Vector{Int16}`
+- `cmd::UInt8`
+
+## Return value
+"""
 function pgm(name::AbstractString, ext::AbstractString,
              operation::AbstractString,
              magic_num::AbstractString,
@@ -66,6 +158,9 @@ function pgm(name::AbstractString, ext::AbstractString,
         gray = gaussian(width, height, gray)
     elseif cmd == LAPLACIAN
         gray = laplacian(width, height, gray)
+    elseif cmd == UNSHARPMASK
+        k::Int8 = parse(Int8, split(operation, "-")[end])
+        gray = unsharpMask(width, height, gray, k)
     end
 
     savePGM(name, ext, operation, magic_num,
@@ -73,6 +168,37 @@ function pgm(name::AbstractString, ext::AbstractString,
             gray)
 end
 
+"""
+# Main
+```julia
+  main(ARGS::Vector{String})
+```
+
+## Usage:
+```julia
+  julia main.jl [FILENAME] [OPTION-OR-COMMAND]
+```
+
+## Options:
+```
+   | OPTION          | Summary                            |
+   |-----------------|------------------------------------|
+   | --help, -h      | print this help and exit           |
+   | --version, -v   | print version information and exit |
+```
+
+## Commands:
+```
+   | COMMAND         | Summary                   |
+   |-----------------|---------------------------|
+   | averaging       | averaging filter          |
+   | gaussian        | gaussian filter           |
+   | sobel-gradient  | sobel filter (gradient)   |
+   | sobel-LR        | sobel filter (horizontal) |
+   | sobel-TD        | sobel filter (vertical)   |
+   | laplacian       | laplacian filter          |
+```
+"""
 function main(ARGS::Vector{String})
     cmd::UInt8 = 0
 
@@ -81,26 +207,10 @@ function main(ARGS::Vector{String})
         return
     elseif length(ARGS) == 1
         if ARGS[1] == "-h" || ARGS[1] == "--help"
-            println("""
-            Usage: julia main.jl [FILENAME] [OPTION-OR-COMMAND]
-
-            Options:
-                --help, -h       print this help and exit
-                --version, -v    print version information and exit
-
-            Commands:
-                averaging        averaging filter
-                gaussian         gaussian filter
-                sobel-gradient   sobel filter (gradient)
-                sobel-LR         sobel filter (horizontal)
-                sobel-TD         sobel filter (vertical)
-                laplacian        laplacian filter
-            """)
+            printHelp()
             return
         elseif ARGS[1] == "-v" || ARGS[1] == "--version"
-            println("""
-            version 0.0.0
-            """)
+            printVersion()
             return
         end
     elseif length(ARGS) < 2
@@ -118,6 +228,8 @@ function main(ARGS::Vector{String})
         cmd = GAUSSIAN
     elseif ARGS[2] == "laplacian"
         cmd = LAPLACIAN
+    elseif occursin(r"^sharpening-[0-9]*$", ARGS[2])
+        cmd = UNSHARPMASK
     else
         println("Try other command.")
         return
