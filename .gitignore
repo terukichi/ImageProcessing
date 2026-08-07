@@ -1,0 +1,10 @@
+input/
+output/
+
+*.ppm
+*.pgm
+*.pbm
+*.jpg
+*.png
+
+*~
