@@ -27,8 +27,9 @@
 """
 module FileIO
 
-export loadFile, savePPM, savePGM, loadGrayscale, loadRGB, createGrayscaleMatrix, createRGBMatrix
+using ..ImageProcessing: dataLoaded, dataPPM, dataPGM
 
+export loadFile, savePPM, savePGM, loadGrayscale, loadRGB, createGrayscaleMatrix, createRGBMatrix
 
 """
 # Load File
@@ -50,13 +51,14 @@ Load image file
 - `max_brightness::Int16`
 - `pixels::Vector{Int16}`
 """
-function loadFile(path::AbstractString)::Tuple{String, Int, Int, Int16, Vector{Int16}}
-    magic_num::String = ""
-    width::Int = 0
-    height::Int = 0
-    max_brightness::Int16 = 0
+function loadFile(path::AbstractString)::dataLoaded
+    # magic_num::String = ""
+    # width::Int = 0
+    # height::Int = 0
+    # max_brightness::Int16 = 0
     data::Vector{String} = []
-    pixels::Vector{Int16} = []
+    # pixels::Vector{Int16} = []
+    result = dataLoaded("", 0, 0, 0, [])
 
     ext = split(path, ".")[end]
 
@@ -69,17 +71,17 @@ function loadFile(path::AbstractString)::Tuple{String, Int, Int, Int16, Vector{I
         end
 
         try
-            magic_num = data[1]
-            width = parse(Int, data[2])
-            height = parse(Int, data[3])
-            max_brightness = parse(Int16, data[4])
-            pixels = parse.(Int16, data[5:end])
+            result.magic_num = data[1]
+            result.width = parse(Int, data[2])
+            result.height = parse(Int, data[3])
+            result.max_brightness = parse(Int16, data[4])
+            result.pixels = parse.(Int16, data[5:end])
         catch e
             @error "File parameter error." exception=e
         end
     end
 
-    return magic_num, width, height, max_brightness, pixels
+    return result
 end
 
 """
@@ -136,7 +138,7 @@ end
 # Load Grayscale Data
 ```julia
   loadGrayscale(path::AbstractString)
-                ::Tuple{String, Int, Int, Int16, Matrix{Int16}}
+                ::dataPGM
 ```
 
 ## Summary
@@ -146,16 +148,12 @@ Load grayscale data
 - `path::AbstractString`
 
 ## Return value
-- `magic_num::String`
-- `width::Int`
-- `height::Int`
-- `max_brightness::Int16`
-- `gray::Vector{Int16}`
+- `dataPGM`
 """
-function loadGrayscale(path::AbstractString)::Tuple{String, Int, Int, Int16, Matrix{Int16}}
-    magic_num::String, width::Int, height::Int, max_brightness::Int16, pixels::Vector{Int16} = loadFile(path)
-    gray::Matrix{Int16} = createGrayscaleMatrix(width, height, pixels)
-    return magic_num, width, height, max_brightness, gray
+function loadGrayscale(path::AbstractString)::dataPGM
+    loaded::dataLoaded = loadFile(path)
+    gray::Matrix{Int16} = createGrayscaleMatrix(loaded.width, loaded.height, loaded.pixels)
+    return dataPGM(loaded.magic_num, loaded.width, loaded.height, loaded.max_brightness, gray)
 end
 
 """
@@ -181,10 +179,10 @@ Load RGB data
 - `green::Vector{Int16}`
 - `blue::Vector{Int16}`
 """
-function loadRGB(path::AbstractString)::Tuple{String, Int, Int, Int16, Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
-    magic_num::String, width::Int, height::Int, max_brightness::Int16, pixels::Vector{Int16} = loadFile(path)
-    red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16} = createRGBMatrix(width, height, pixels)
-    return magic_num, width, height, max_brightness, red, green, blue
+function loadRGB(path::AbstractString)::dataPPM
+    loaded::dataLoaded = loadFile(path)
+    red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16} = createRGBMatrix(loaded.width, loaded.height, loaded.pixels)
+    return dataPPM(loaded.magic_num, loaded.width, loaded.height, loaded.max_brightness, red, green, blue)
 end
 
 """
@@ -311,20 +309,18 @@ Save PPM data
 """
 function savePPM(name::AbstractString, ext::AbstractString,
                  operation::AbstractString,
-                 magic_num::AbstractString,
-                 width::Int, height::Int, max_brightness::Int16,
-                 red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16})
-    saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
+                 ppm::dataPPM)
+    saveHeader(name, ext, operation, ppm.magic_num, ppm.width, ppm.height, ppm.max_brightness)
 
     try
         open("output/"*name*"-"*operation*ext, "a") do io
-            for i in 1:height
-                for j in 1:width
-                    print(io, red[i, j])
+            for i in 1:ppm.height
+                for j in 1:ppm.width
+                    print(io, ppm.red[i, j])
                     print(io, " ")
-                    print(io, green[i, j])
+                    print(io, ppm.green[i, j])
                     print(io, " ")
-                    print(io, blue[i, j])
+                    print(io, ppm.blue[i, j])
                     print(io, " ")
                 end
                 print(io, "\n")
@@ -364,20 +360,18 @@ Save PPM data
 ## Return value
 """
 function savePPM(path::AbstractString,
-                 magic_num::AbstractString,
-                 width::Int, height::Int, max_brightness::Int16,
-                 red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16})
-    saveHeader(path, magic_num, width, height, max_brightness)
+                 ppm::dataPPM)
+    saveHeader(path, ppm.magic_num, ppm.width, ppm.height, ppm.max_brightness)
 
     try
         open("output/"*path, "a") do io
-            for i in 1:height
-                for j in 1:width
-                    print(io, red[i, j])
+            for i in 1:ppm.height
+                for j in 1:ppm.width
+                    print(io, ppm.red[i, j])
                     print(io, " ")
-                    print(io, green[i, j])
+                    print(io, ppm.green[i, j])
                     print(io, " ")
-                    print(io, blue[i, j])
+                    print(io, ppm.blue[i, j])
                     print(io, " ")
                 end
                 print(io, "\n")
@@ -418,19 +412,17 @@ Save PGM data
 """
 function savePGM(name::AbstractString, ext::AbstractString,
                  operation::AbstractString,
-                 magic_num::AbstractString,
-                 width::Int, height::Int, max_brightness::Int16,
-                 gray::Matrix{Int16})
-    saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
+                 pgm::dataPGM)
+    saveHeader(name, ext, operation, pgm.magic_num, pgm.width, pgm.height, pgm.max_brightness)
 
     try
         open("output/"*name*"-"*operation*ext, "a") do io
-            for i in 1:height
-                for j in 1:width-1
-                    print(io, gray[i, j])
+            for i in 1:pgm.height
+                for j in 1:pgm.width-1
+                    print(io, pgm.gray[i, j])
                     print(io, " ")
                 end
-                print(io, gray[i, width])
+                print(io, pgm.gray[i, pgm.width])
                 print(io, "\n")
             end
         end
@@ -465,19 +457,17 @@ Save PGM data
 ## Return value
 """
 function savePGM(path::AbstractString,
-                 magic_num::AbstractString,
-                 width::Int, height::Int, max_brightness::Int16,
-                 gray::Matrix{Int16})
-    saveHeader(path, magic_num, width, height, max_brightness)
+                 pgm::dataPGM)
+    saveHeader(path, pgm.magic_num, pgm.width, pgm.height, pgm.max_brightness)
 
     try
         open("output/"*path, "a") do io
-            for i in 1:height
-                for j in 1:width-1
-                    print(io, gray[i, j])
+            for i in 1:pgm.height
+                for j in 1:pgm.width-1
+                    print(io, pgm.gray[i, j])
                     print(io, " ")
                 end
-                print(io, gray[i, width])
+                print(io, pgm.gray[i, pgm.width])
                 print(io, "\n")
             end
         end

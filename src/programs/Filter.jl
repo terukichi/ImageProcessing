@@ -27,6 +27,8 @@
 """
 module Filter
 
+using ..ImageProcessing: dataPPM, dataPGM
+
 export averaging, sobelGradient, sobelLR, sobelTD, gaussian, laplacian, unsharpMask
 
 
@@ -178,14 +180,15 @@ Averaging filter
 ## Return value
 - `img::Matrix{Int16}`
 """
-function averaging(width::Int, height::Int, pixels::Matrix{Int16})::Matrix{Int16}
-    img::Matrix{Float64} = pixels
+function averaging(data::dataPGM)::dataPGM
+    img::Matrix{Float64} = Float64.(data.gray)
     filter::Matrix{Float64} = [1.0/9.0 1.0/9.0 1.0/9.0;
                                1.0/9.0 1.0/9.0 1.0/9.0;
                                1.0/9.0 1.0/9.0 1.0/9.0]
-    img = conv(width, height, img, filter)
-    result::Matrix{Int16} = clipping(width, height, img)
-    return result
+    img = conv(data.width, data.height, img, filter)
+    clipped::Matrix{Int16} = clipping(data.width, data.height, img)
+    data.gray = clipped
+    return data
 end
 
 """
@@ -211,11 +214,17 @@ Averaging filter
 - `g::Matrix{Int16}`
 - `b::Matrix{Int16}`
 """
-function averaging(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
-    r = averaging(width, height, r)
-    g = averaging(width, height, g)
-    b = averaging(width, height, b)
-    return r,g,b
+function averaging(data::dataPPM)::dataPPM
+    red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
+    green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
+    blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
+    red = averaging(red)
+    green = averaging(green)
+    blue = averaging(blue)
+    data.red = red.gray
+    data.green = green.gray
+    data.blue = blue.gray
+    return data
 end
 
 """
@@ -236,14 +245,14 @@ Gaussian filter
 ## Return value
 - `img::Matrix{Int16}`
 """
-function gaussian(width::Int, height::Int, pixels::Matrix{Int16})::Matrix{Int16}
-    img::Matrix{Float64} = pixels
+function gaussian(data::dataPGM)::dataPGM
+    img::Matrix{Float64} = Float64.(data.gray)
     filter::Matrix{Float64} = [1.0/16.0 2.0/16.0 1.0/16.0;
                                2.0/16.0 4.0/16.0 2.0/16.0;
                                1.0/16.0 2.0/16.0 1.0/16.0]
-    img = conv(width, height, img, filter)
-    result::Matrix{Int16} = clipping(width, height, img)
-    return result
+    img = conv(data.width, data.height, img, filter)
+    data.gray = clipping(data.width, data.height, img)
+    return data
 end
 
 """
@@ -269,11 +278,17 @@ Gaussian filter
 - `g::Matrix{Int16}`
 - `b::Matrix{Int16}`
 """
-function gaussian(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
-    r = gaussian(width, height, r)
-    g = gaussian(width, height, g)
-    b = gaussian(width, height, b)
-    return r,g,b
+function gaussian(data::dataPPM)::dataPPM
+    red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
+    green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
+    blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
+    red = gaussian(red)
+    green = gaussian(green)
+    blue = gaussian(blue)
+    data.red = red.gray
+    data.green = green.gray
+    data.blue = blue.gray
+    return data
 end
 
 """
@@ -320,13 +335,14 @@ Sobel filter (Horizontal)
 ## Return value
 - `img::Matrix{Int16}`
 """
-function sobelLR(width::Int, height::Int, pixels::Matrix{Int16})::Matrix{Int16}
+function sobelLR(data::dataPGM)::dataPGM
     filterLR::Matrix{Int16} = [-1 0 1;
                                -2 0 2;
                                -1 0 1]
-    imgLR::Matrix{Int16} = conv(width, height, pixels, filterLR)
-    result::Matrix{Int16} = clipping(width, height, imgLR)
-    return result
+    imgLR::Matrix{Int16} = conv(data.width, data.height, data.gray, filterLR)
+    img::Matrix{Int16} = clipping(data.width, data.height, imgLR)
+    data.gray = img
+    return data
 end
 
 """
@@ -352,11 +368,17 @@ Sobel filter (Horizontal)
 - `g::Matrix{Int16}`
 - `b::Matrix{Int16}`
 """
-function sobelLR(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
-    r = sobelLR(width, height, r)
-    g = sobelLR(width, height, g)
-    b = sobelLR(width, height, b)
-    return r,g,b
+function sobelLR(data::dataPPM)::dataPPM
+    red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
+    green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
+    blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
+    red = sobelLR(red)
+    green = sobelLR(green)
+    blue = sobelLR(blue)
+    data.red = red.gray
+    data.green = green.gray
+    data.blue = blue.gray
+    return data
 end
 
 """
@@ -403,13 +425,13 @@ Sobel filter (Vertical)
 ## Return value
 - `img::Matrix{Int16}`
 """
-function sobelTD(width::Int, height::Int, pixels::Matrix{Int16})::Matrix{Int16}
+function sobelTD(data::dataPGM)::dataPGM
     filterTD::Matrix{Int16} = [  1  2  1;
                                  0  0  0;
                                 -1 -2 -1]
-    imgTD::Matrix{Int16} = conv(width, height, pixels, filterTD)
-    result::Matrix{Int16} = clipping(width, height, imgTD)
-    return result
+    imgTD::Matrix{Int16} = conv(data.width, data.height, data.gray, filterTD)
+    data.gray = clipping(data.width, data.height, imgTD)
+    return data
 end
 
 """
@@ -435,11 +457,17 @@ Sobel filter (Vertical)
 - `g::Matrix{Int16}`
 - `b::Matrix{Int16}`
 """
-function sobelTD(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
-    r = sobelTD(width, height, r)
-    g = sobelTD(width, height, g)
-    b = sobelTD(width, height, b)
-    return r,g,b
+function sobelTD(data::dataPPM)::dataPPM
+    red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
+    green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
+    blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
+    red = sobelTD(red)
+    green = sobelTD(green)
+    blue = sobelTD(blue)
+    data.red = red.gray
+    data.green = green.gray
+    data.blue = blue.gray
+    return data
 end
 
 """
@@ -460,13 +488,14 @@ Sobel filter (Gradient)
 ## Return value
 - `img::Matrix{Int16}`
 """
-function sobelGradient(width::Int, height::Int, pixels::Matrix{Int16})::Matrix{Int16}
-    img::Matrix{Float64} = pixels
-    imgLR::Matrix{Float64} = sobelLR(width, height, img)
-    imgTD::Matrix{Float64} = sobelTD(width, height, img)
+function sobelGradient(data::dataPGM)::dataPGM
+    img::Matrix{Float64} = Float64.(data.gray)
+    imgLR::Matrix{Float64} = sobelLR(data.width, data.height, img)
+    imgTD::Matrix{Float64} = sobelTD(data.width, data.height, img)
     img = sqrt.(imgLR.^2 + imgTD.^2)
-    result::Matrix{Int16} = clipping(width, height, img)
-    return result
+    result::Matrix{Int16} = clipping(data.width, data.height, img)
+    data.gray = result
+    return data
 end
 
 """
@@ -492,11 +521,17 @@ Sobel filter (Gradient)
 - `g::Matrix{Int16}`
 - `b::Matrix{Int16}`
 """
-function sobelGradient(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
-    r = sobelGradient(width, height, r)
-    g = sobelGradient(width, height, g)
-    b = sobelGradient(width, height, b)
-    return r, g, b
+function sobelGradient(data::dataPPM)::dataPPM
+    red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
+    green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
+    blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
+    red = sobelGradient(red)
+    green = sobelGradient(green)
+    blue = sobelGradient(blue)
+    data.red = red.gray
+    data.green = green.gray
+    data.blue = blue.gray
+    return data
 end
 
 """
@@ -517,13 +552,13 @@ Laplacian filter
 ## Return value
 - `img::Matrix{Int16}`
 """
-function laplacian(width::Int, height::Int, pixels::Matrix{Int16})::Matrix{Int16}
+function laplacian(data::dataPGM)::dataPGM
     filter::Matrix{Int16} = [0  1 0;
                              1 -4 1;
                              0  1 0]
-    img::Matrix{Int16} = conv(width, height, pixels, filter)
-    result::Matrix{Int16} = clipping(width, height, img)
-    return result
+    img::Matrix{Int16} = conv(data.width, data.height, data.gray, filter)
+    data.gray = clipping(data.width, data.height, img)
+    return data
 end
 
 
@@ -550,11 +585,17 @@ Laplacian filter
 - `g::Matrix{Int16}`
 - `b::Matrix{Int16}`
 """
-function laplacian(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
-    r = laplacian(width, height, r)
-    g = laplacian(width, height, g)
-    b = laplacian(width, height, b)
-    return r,g,b
+function laplacian(data::dataPPM)::dataPPM
+    red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
+    green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
+    blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
+    red = laplacian(red)
+    green = laplacian(green)
+    blue = laplacian(blue)
+    data.red = red.gray
+    data.green = green.gray
+    data.blue = blue.gray
+    return data
 end
 
 """
@@ -577,14 +618,14 @@ Unsharp masking
 ## Return value
 - `img::Matrix{Int16}`
 """
-function unsharpMask(width::Int, height::Int, pixels::Matrix{Int16}, k::Int8)::Matrix{Int16}
-    img::Matrix{Float64} = pixels
+function unsharpMask(data::dataPGM, k::Int8)::dataPGM
+    img::Matrix{Float64} = Float64.(data.gray)
     filter::Matrix{Float64} = [-k/9.0 -k/9.0 -k/9.0;
                                -k/9.0 1+8.0k/9.0 -k/9.0;
                                -k/9.0 -k/9.0 -k/9.0]
-    img = conv(width, height, img, filter)
-    result::Matrix{Int16} = clipping(width, height, img)
-    return result
+    img = conv(data.width, data.height, img, filter)
+    data.gray = clipping(data.width, data.height, img)
+    return data
 end
 
 """
@@ -612,11 +653,17 @@ Unsharp masking
 - `g::Matrix{Int16}`
 - `b::Matrix{Int16}`
 """
-function unsharpMask(width::Int, height::Int, r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16}, k::Int8)::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
-    r = unsharpMask(width, height, r, k)
-    g = unsharpMask(width, height, g, k)
-    b = unsharpMask(width, height, b, k)
-    return r,g,b
+function unsharpMask(data::dataPPM, k::Int8)::dataPPM
+    red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
+    green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
+    blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
+    red = unsharpMask(red, k)
+    green = unsharpMask(green, k)
+    blue = unsharpMask(blue, k)
+    data.red = red.gray
+    data.green = green.gray
+    data.blue = blue.gray
+    return data
 end
 
 
