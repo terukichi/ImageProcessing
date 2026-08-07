@@ -164,7 +164,7 @@ function pgm(name::AbstractString, ext::AbstractString,
         gray = unsharpMask(width, height, gray, k)
     end
 
-    savePGM(name, ext, operation, magic_num,
+    savePGM(name, ext, ope, magic_num,
             width, height, max_brightness,
             gray)
 end

@@ -235,6 +235,50 @@ function saveHeader(name::AbstractString, ext::AbstractString,
 end
 
 """
+# Save PNM's Header
+```julia
+  saveHeader(path::AbstractString,
+             ext::AbstractString,
+             magic_num::AbstractString,
+             width::Int, height::Int,
+             max_brightness::Int16)
+```
+
+## Summary
+Save header information
+
+## Arguments
+- `path::AbstractString`
+- `ext::AbstractString`
+- `magic_num::AbstractString`
+- `width::Int`
+- `height::Int`
+- `max_brightness::Int16`
+
+## Return value
+"""
+function saveHeader(path::AbstractString,
+                    magic_num::AbstractString,
+                    width::Int, height::Int,
+                    max_brightness::Int16)
+    if !isdir("output")
+        mkdir("output")
+    end
+    try
+        write("output/"*path, "")
+        open("output/"*path, "a") do io
+            println(io, magic_num)
+            print(io, width)
+            print(io, " ")
+            println(io, height)
+            println(io, max_brightness)
+        end
+    catch e
+        @error "Load error." exception=e
+    end
+end
+
+"""
 # Save PPM Data
 ```julia
   savePPM(name::AbstractString,
@@ -293,6 +337,59 @@ function savePPM(name::AbstractString, ext::AbstractString,
 end
 
 """
+# Save PPM Data
+```julia
+  savePPM(path::AbstractString,
+          magic_num::AbstractString,
+          width::Int, height::Int,
+          max_brightness::Int16,
+          red::Matrix{Int16},
+          green::Matrix{Int16},
+          blue::Matrix{Int16})
+```
+
+## Summary
+Save PPM data
+
+## Arguments
+- `path::AbstractString`
+- `magic_num::AbstractString`
+- `width::Int`
+- `height::Int`
+- `max_brightness::Int16`
+- `red::Matrix{Int16}`
+- `green::Matrix{Int16}`
+- `blue::Matrix{Int16}`
+
+## Return value
+"""
+function savePPM(path::AbstractString,
+                 magic_num::AbstractString,
+                 width::Int, height::Int, max_brightness::Int16,
+                 red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16})
+    saveHeader(path, magic_num, width, height, max_brightness)
+
+    try
+        open("output/"*path, "a") do io
+            for i in 1:height
+                for j in 1:width
+                    print(io, red[i, j])
+                    print(io, " ")
+                    print(io, green[i, j])
+                    print(io, " ")
+                    print(io, blue[i, j])
+                    print(io, " ")
+                end
+                print(io, "\n")
+            end
+        end
+        println("Saved "*"output/"*path)
+    catch e
+        @error "Load error." exception=e
+    end
+end
+
+"""
 # Save PGM Data
 ```julia
   savePGM(name::AbstractString,
@@ -339,6 +436,53 @@ function savePGM(name::AbstractString, ext::AbstractString,
         end
 
         println("Saved "*"output/"*name*"-"*operation*ext)
+    catch e
+        @error "Load error." exception=e
+    end
+end
+
+"""
+# Save PGM Data
+```julia
+  savePGM(path::AbstractString,
+          magic_num::AbstractString,
+          width::Int, height::Int,
+          max_brightness::Int16,
+          gray::Matrix{Int16})
+```
+
+## Summary
+Save PGM data
+
+## Arguments
+- `path::AbstractString`
+- `magic_num::AbstractString`
+- `width::Int`
+- `height::Int`
+- `max_brightness::Int16`
+- `gray::Matrix{Int16}`
+
+## Return value
+"""
+function savePGM(path::AbstractString,
+                 magic_num::AbstractString,
+                 width::Int, height::Int, max_brightness::Int16,
+                 gray::Matrix{Int16})
+    saveHeader(path, magic_num, width, height, max_brightness)
+
+    try
+        open("output/"*path, "a") do io
+            for i in 1:height
+                for j in 1:width-1
+                    print(io, gray[i, j])
+                    print(io, " ")
+                end
+                print(io, gray[i, width])
+                print(io, "\n")
+            end
+        end
+
+        println("Saved "*"output/"*path)
     catch e
         @error "Load error." exception=e
     end

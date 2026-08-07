@@ -14,16 +14,16 @@
 ### Public
 
 - `averaging`
-  - `gaussian`
-  - `sobelLR`
-  - `sobelTD`
-  - `sobelGradient`
-  - `laplacian`
+- `gaussian`
+- `sobelLR`
+- `sobelTD`
+- `sobelGradient`
+- `laplacian`
 
 ### Private
 
 - `conv`
-  - `clipping`
+- `clipping`
 """
 module Filter
 
