@@ -13,23 +13,28 @@
 
 ### Public
 
-- loadFile
-- savePPM
-- savePGM
+- `loadFile`
+- `savePPM`
+- `savePGM`
+- `loadGrayscale`
+- `loadRGB`
+- `createGrayscaleMatrix`
+- `createRGBMatrix`
 
 ### Private
 
-- saveHeader
+- `saveHeader`
 """
 module FileIO
 
-export loadFile, savePPM, savePGM
+export loadFile, savePPM, savePGM, loadGrayscale, loadRGB, createGrayscaleMatrix, createRGBMatrix
 
 
 """
 # Load File
 ```julia
-  loadFile(path::AbstractString)::Vector{String}
+  loadFile(path::AbstractString)
+           ::Tuple{String, Int, Int, Int16, Vector{Int16}}
 ```
 
 ## Summary
@@ -39,19 +44,147 @@ Load image file
 - `path::AbstractString`
 
 ## Return value
-- `data::Vector{String}`
+- `magic_num::String`
+- `width::Int`
+- `height::Int`
+- `max_brightness::Int16`
+- `pixels::Vector{Int16}`
 """
-function loadFile(path::AbstractString)::Vector{String}
+function loadFile(path::AbstractString)::Tuple{String, Int, Int, Int16, Vector{Int16}}
+    magic_num::String = ""
+    width::Int = 0
+    height::Int = 0
+    max_brightness::Int16 = 0
     data::Vector{String} = []
+    pixels::Vector{Int16} = []
 
-    try
-        buffer::String = read(path, String)
-        data = split(buffer)
-    catch e
-        @error "Load error." exception=e
+    ext = split(path, ".")[end]
+
+    if ext == "ppm" || ext == "pgm"
+        try
+            buffer::String = replace(read(path, String), r"#.*" => "")
+            data = split(buffer)
+        catch e
+            @error "Load error." exception=e
+        end
+
+        try
+            magic_num = data[1]
+            width = parse(Int, data[2])
+            height = parse(Int, data[3])
+            max_brightness = parse(Int16, data[4])
+            pixels = parse.(Int16, data[5:end])
+        catch e
+            @error "File parameter error." exception=e
+        end
     end
 
-    return data
+    return magic_num, width, height, max_brightness, pixels
+end
+
+"""
+# Create Grayscale Matrix
+```julia
+  createGrayscaleMatrix(width::Int, height::Int,
+                        pixels::Vector{Int16})::Matrix{Int16}
+```
+
+## Summary
+Create grayscale matrix from list
+
+## Arguments
+- `width::Int`
+- `heigh::Int`
+- `pixels::Vector{Int16}`
+
+## Return value
+- `gray::Matrix{Int16}`
+"""
+function createGrayscaleMatrix(width::Int, height::Int, pixels::Vector{Int16})::Matrix{Int16}
+    return transpose(reshape(pixels, width, height))
+end
+
+"""
+# Create RGB Matrix
+```julia
+  createRGBMatrix(width::Int, height::Int,
+                  pixels::Vector{Int16})
+                  ::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+```
+
+## Summary
+Create RGB matrix from list
+
+## Arguments
+- `width::Int`
+- `heigh::Int`
+- `pixels::Vector{Int16}`
+
+## Return value
+- `red::Matrix{Int16}`
+- `green::Matrix{Int16}`
+- `blue::Matrix{Int16}`
+"""
+function createRGBMatrix(width::Int, height::Int, pixels::Vector{Int16})::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+    red::Matrix{Int16} = createGrayscaleMatrix(width, height, pixels[1:3:end])
+    green::Matrix{Int16} = createGrayscaleMatrix(width, height, pixels[2:3:end])
+    blue::Matrix{Int16} = createGrayscaleMatrix(width, height, pixels[3:3:end])
+    return red, green, blue
+end
+
+"""
+# Load Grayscale Data
+```julia
+  loadGrayscale(path::AbstractString)
+                ::Tuple{String, Int, Int, Int16, Matrix{Int16}}
+```
+
+## Summary
+Load grayscale data
+
+## Arguments
+- `path::AbstractString`
+
+## Return value
+- `magic_num::String`
+- `width::Int`
+- `height::Int`
+- `max_brightness::Int16`
+- `gray::Vector{Int16}`
+"""
+function loadGrayscale(path::AbstractString)::Tuple{String, Int, Int, Int16, Matrix{Int16}}
+    magic_num::String, width::Int, height::Int, max_brightness::Int16, pixels::Vector{Int16} = loadFile(path)
+    gray::Matrix{Int16} = createGrayscaleMatrix(width, height, pixels)
+    return magic_num, width, height, max_brightness, gray
+end
+
+"""
+# Load RGB Data
+```julia
+  loadRGB(path::AbstractString)
+          ::Tuple{String, Int, Int, Int16,
+                  Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+```
+
+## Summary
+Load RGB data
+
+## Arguments
+- `path::AbstractString`
+
+## Return value
+- `magic_num::String`
+- `width::Int`
+- `height::Int`
+- `max_brightness::Int16`
+- `red::Vector{Int16}`
+- `green::Vector{Int16}`
+- `blue::Vector{Int16}`
+"""
+function loadRGB(path::AbstractString)::Tuple{String, Int, Int, Int16, Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+    magic_num::String, width::Int, height::Int, max_brightness::Int16, pixels::Vector{Int16} = loadFile(path)
+    red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16} = createRGBMatrix(width, height, pixels)
+    return magic_num, width, height, max_brightness, red, green, blue
 end
 
 """
@@ -109,7 +242,10 @@ end
           operation::AbstractString,
           magic_num::AbstractString,
           width::Int, height::Int,
-          max_brightness::Int16)
+          max_brightness::Int16,
+          red::Matrix{Int16},
+          green::Matrix{Int16},
+          blue::Matrix{Int16})
 ```
 
 ## Summary
@@ -123,6 +259,9 @@ Save PPM data
 - `width::Int`
 - `height::Int`
 - `max_brightness::Int16`
+- `red::Matrix{Int16}`
+- `green::Matrix{Int16}`
+- `blue::Matrix{Int16}`
 
 ## Return value
 """
@@ -161,7 +300,8 @@ end
           operation::AbstractString,
           magic_num::AbstractString,
           width::Int, height::Int,
-          max_brightness::Int16)
+          max_brightness::Int16,
+          gray::Matrix{Int16})
 ```
 
 ## Summary
@@ -175,13 +315,15 @@ Save PGM data
 - `width::Int`
 - `height::Int`
 - `max_brightness::Int16`
+- `gray::Matrix{Int16}`
 
 ## Return value
 """
 function savePGM(name::AbstractString, ext::AbstractString,
                  operation::AbstractString,
                  magic_num::AbstractString,
-                 width::Int, height::Int, max_brightness::Int16, gray::Matrix{Int16})
+                 width::Int, height::Int, max_brightness::Int16,
+                 gray::Matrix{Int16})
     saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
 
     try

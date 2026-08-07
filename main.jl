@@ -52,6 +52,7 @@ function printHelp()
         sobel-LR         sobel filter (horizontal)
         sobel-TD         sobel filter (vertical)
         laplacian        laplacian filter
+        sharpening       unsharp masking
     """)
 end
 
@@ -87,9 +88,7 @@ function ppm(name::AbstractString, ext::AbstractString,
              width::Int, height::Int,
              max_brightness::Int16, rgb::Vector{Int16}, cmd::UInt8)
 
-    red::Matrix{Int16} = transpose(reshape(rgb[1:3:end], width, height))
-    green::Matrix{Int16} = transpose(reshape(rgb[2:3:end], width, height))
-    blue::Matrix{Int16} = transpose(reshape(rgb[3:3:end], width, height))
+    red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16} = createRGBMatrix(width, height, rgb)
 
     if cmd == AVERAGING
         red, green, blue = averaging(width, height, red, green, blue)
@@ -197,6 +196,7 @@ end
    | sobel-LR        | sobel filter (horizontal) |
    | sobel-TD        | sobel filter (vertical)   |
    | laplacian       | laplacian filter          |
+   | sharpening      | unsharp masking           |
 ```
 """
 function main(ARGS::Vector{String})
@@ -228,7 +228,7 @@ function main(ARGS::Vector{String})
         cmd = GAUSSIAN
     elseif ARGS[2] == "laplacian"
         cmd = LAPLACIAN
-    elseif occursin(r"^sharpening-[0-9]*$", ARGS[2])
+    elseif occursin(r"^sharpening-[1-9][0-9]*$", ARGS[2])
         cmd = UNSHARPMASK
     else
         println("Try other command.")
@@ -243,27 +243,24 @@ function main(ARGS::Vector{String})
         return
     end
 
-    data::Vector{String} = loadFile(path)
+    magic_num::String = ""
 
-    if length(data) < 4
-        println("File parameter error.")
-        return
-    end
+    width::Int = 0
+    height::Int = 0
+    max_brightness::Int16 = 0
 
-    magic_num::String = data[1]
+    pixels::Vector{Int16} = []
 
-    width::Int = parse(Int, data[2])
-    height::Int = parse(Int, data[3])
-    max_brightness::Int16 = parse(Int16, data[4])
+    magic_num, width, height, max_brightness, pixels = loadFile(path)
 
     if magic_num == "P3"
-        rgb::Vector{Int16} = parse.(Int16, data[5:end])
+        rgb::Vector{Int16} = pixels
         ppm(name, ext, ARGS[2], magic_num,
             width, height, max_brightness, rgb, cmd)
     end
 
     if magic_num == "P2"
-        gray::Matrix{Int16} = transpose(reshape(parse.(Int16, data[5:end]), width, height))
+        gray::Matrix{Int16} = createGrayscaleMatrix(width, height, pixels)
         pgm(name, ext, ARGS[2], magic_num,
              width, height, max_brightness, gray, cmd)
     end
