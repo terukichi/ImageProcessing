@@ -6,10 +6,12 @@
 #  This project is licensed under the MIT License.
 #  See the LICENSE file.
 ====================================================#
-include("./programs/FileIO.jl")
-include("./programs/Filter.jl")
+# include("./programs/FileIO.jl")
+# include("./programs/Filter.jl")
+# include("./src/ImageProcessing.jl")
+import ImageProcessing
 
-using .FileIO, .Filter
+using .ImageProcessing.FileIO, .ImageProcessing.Filter
 
 const AVERAGING = 0
 const SOBEL_GRADIENT = 1
@@ -27,7 +29,7 @@ const UNSHARPMASK = 6
 """
 function printVersion()
     println("""
-    version 0.0.0
+    version 0.1.0
     """)
 end
 
