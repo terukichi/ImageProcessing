@@ -2,3 +2,10 @@
 *.jl    text
 *.md    text
 LICENSE text
+
+*.jpeg binary
+*.jpg  binary
+*.png  binary
+*.ppm  binary
+*.pgm  binary
+*.pbm  binary
