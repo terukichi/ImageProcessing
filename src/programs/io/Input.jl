@@ -9,8 +9,7 @@
 """
 # Load File
 ```julia
-  loadFile(path::AbstractString)
-           ::dataLoaded
+  loadFile(path::AbstractString)::dataLoaded
 ```
 
 ## Summary
@@ -45,6 +44,8 @@ function loadFile(path::AbstractString)::dataLoaded
         catch e
             @error "File parameter error." exception=e
         end
+    else
+        println("File format error.")
     end
 
     return result
@@ -103,8 +104,7 @@ end
 """
 # Load PGM Data
 ```julia
-  loadPGM(path::AbstractString)
-                ::dataPGM
+  loadPGM(path::AbstractString)::dataPGM
 ```
 
 ## Summary
@@ -130,8 +130,7 @@ end
 """
 # Load PPM Data
 ```julia
-  loadPPM(path::AbstractString)
-          ::dataPPM
+  loadPPM(path::AbstractString)::dataPPM
 ```
 
 ## Summary

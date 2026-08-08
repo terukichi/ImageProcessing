@@ -41,15 +41,15 @@ function saveHeader(name::AbstractString, ext::AbstractString,
     end
     try
         write("output/"*name*"-"*operation*ext, "")
-        open("output/"*name*"-"*operation*ext, "a") do io
-            println(io, magic_num)
-            print(io, width)
-            print(io, " ")
-            println(io, height)
-            println(io, max_brightness)
+        open("output/"*name*"-"*operation*ext, "a") do f
+            println(f, magic_num)
+            print(f, width)
+            print(f, " ")
+            println(f, height)
+            println(f, max_brightness)
         end
     catch e
-        @error "Load error." exception=e
+        @error "Save error." exception=e
     end
 end
 
@@ -83,15 +83,15 @@ function saveHeader(path::AbstractString,
     end
     try
         write("output/"*path, "")
-        open("output/"*path, "a") do io
-            println(io, magic_num)
-            print(io, width)
-            print(io, " ")
-            println(io, height)
-            println(io, max_brightness)
+        open("output/"*path, "a") do f
+            println(f, magic_num)
+            print(f, width)
+            print(f, " ")
+            println(f, height)
+            println(f, max_brightness)
         end
     catch e
-        @error "Load error." exception=e
+        @error "Save error." exception=e
     end
 end
 
@@ -128,30 +128,29 @@ function savePPM(name::AbstractString, ext::AbstractString,
     saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
 
     try
-        open("output/"*name*"-"*operation*ext, "a") do io
+        open("output/"*name*"-"*operation*ext, "a") do f
             for i in 1:height
                 for j in 1:width
-                    print(io, red[i, j])
-                    print(io, " ")
-                    print(io, green[i, j])
-                    print(io, " ")
-                    print(io, blue[i, j])
-                    print(io, " ")
+                    print(f, red[i, j])
+                    print(f, " ")
+                    print(f, green[i, j])
+                    print(f, " ")
+                    print(f, blue[i, j])
+                    print(f, " ")
                 end
-                print(io, "\n")
+                print(f, "\n")
             end
         end
         println("Saved "*"output/"*name*"-"*operation*ext)
     catch e
-        @error "Load error." exception=e
+        @error "Save error." exception=e
     end
 end
 
 """
 # Save PPM Data
 ```julia
-  savePPM(path::AbstractString,
-          ppm::dataPPM)
+  savePPM(path::AbstractString, ppm::dataPPM)
 ```
 
 ## Summary
@@ -175,22 +174,22 @@ function savePPM(path::AbstractString,
     saveHeader(path, magic_num, width, height, max_brightness)
 
     try
-        open("output/"*path, "a") do io
+        open("output/"*path, "a") do f
             for i in 1:height
                 for j in 1:width
-                    print(io, red[i, j])
-                    print(io, " ")
-                    print(io, green[i, j])
-                    print(io, " ")
-                    print(io, blue[i, j])
-                    print(io, " ")
+                    print(f, red[i, j])
+                    print(f, " ")
+                    print(f, green[i, j])
+                    print(f, " ")
+                    print(f, blue[i, j])
+                    print(f, " ")
                 end
-                print(io, "\n")
+                print(f, "\n")
             end
         end
         println("Saved "*"output/"*path)
     catch e
-        @error "Load error." exception=e
+        @error "Save error." exception=e
     end
 end
 
@@ -217,36 +216,35 @@ Save PGM data
 function savePGM(name::AbstractString, ext::AbstractString,
                  operation::AbstractString,
                  pgm::dataPGM)
-    magic_num::String = ppm.magic_num
-    width::Int = ppm.width
-    height::Int = ppm.height
-    max_brightness::Int16 = ppm.max_brightness
-    pixels::Matrix{Int16} = ppm.pixels
+    magic_num::String = pgm.magic_num
+    width::Int = pgm.width
+    height::Int = pgm.height
+    max_brightness::Int16 = pgm.max_brightness
+    pixels::Matrix{Int16} = pgm.pixels
     saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
 
     try
-        open("output/"*name*"-"*operation*ext, "a") do io
+        open("output/"*name*"-"*operation*ext, "a") do f
             for i in 1:height
                 for j in 1:width-1
-                    print(io, pixels[i, j])
-                    print(io, " ")
+                    print(f, pixels[i, j])
+                    print(f, " ")
                 end
-                print(io, pixels[i, width])
-                print(io, "\n")
+                print(f, pixels[i, width])
+                print(f, "\n")
             end
         end
 
         println("Saved "*"output/"*name*"-"*operation*ext)
     catch e
-        @error "Load error." exception=e
+        @error "Save error." exception=e
     end
 end
 
 """
 # Save PGM Data
 ```julia
-  savePGM(path::AbstractString,
-          pgm::dataPGM)
+  savePGM(path::AbstractString, pgm::dataPGM)
 ```
 
 ## Summary
@@ -260,27 +258,27 @@ Save PGM data
 """
 function savePGM(path::AbstractString,
                  pgm::dataPGM)
-    magic_num::String = ppm.magic_num
-    width::Int = ppm.width
-    height::Int = ppm.height
-    max_brightness::Int16 = ppm.max_brightness
-    pixels::Matrix{Int16} = ppm.pixels
+    magic_num::String = pgm.magic_num
+    width::Int = pgm.width
+    height::Int = pgm.height
+    max_brightness::Int16 = pgm.max_brightness
+    pixels::Matrix{Int16} = pgm.pixels
     saveHeader(path, magic_num, width, height, max_brightness)
 
     try
-        open("output/"*path, "a") do io
+        open("output/"*path, "a") do f
             for i in 1:height
                 for j in 1:width-1
-                    print(io, pixels[i, j])
-                    print(io, " ")
+                    print(f, pixels[i, j])
+                    print(f, " ")
                 end
-                print(io, pixels[i, width])
-                print(io, "\n")
+                print(f, pixels[i, width])
+                print(f, "\n")
             end
         end
 
         println("Saved "*"output/"*path)
     catch e
-        @error "Load error." exception=e
+        @error "Save error." exception=e
     end
 end

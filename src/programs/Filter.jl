@@ -42,4 +42,4 @@ include("filter/UnsharpMasking.jl")
 export averagingFilter, sobelFilterGradient, sobelFilterHorizontal, sobelFilterVertical, gaussianFilter, laplacianFilter, unsharpMasking
 
 
-end                             # module
+end                             # module Filter

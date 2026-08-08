@@ -36,4 +36,4 @@ include("io/Output.jl")
 export loadFile, savePPM, savePGM, loadPGM, loadPPM, createGrayscaleMatrix, createRGBMatrix
 
 
-end                             # module
+end                             # module IO
