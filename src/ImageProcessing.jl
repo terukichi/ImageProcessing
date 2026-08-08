@@ -45,7 +45,7 @@
 """
 module ImageProcessing
 
-include("./programs/dataFormat.jl")
+include("./programs/DataFormat.jl")
 export dataPGM, dataPPM, dataLoaded
 
 include("./programs/IO.jl")

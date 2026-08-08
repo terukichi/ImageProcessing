@@ -1,5 +1,5 @@
 #====================================================
-#  dataFormat.jl
+#  DataFormat.jl
 #
 #  Copyright (c) 2026 terukichi
 #
