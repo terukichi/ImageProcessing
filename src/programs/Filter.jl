@@ -13,12 +13,13 @@
 
 ### Public
 
-- `averaging`
-- `gaussian`
-- `sobelLR`
-- `sobelTD`
-- `sobelGradient`
-- `laplacian`
+- `averagingFilter`
+- `gaussianFilter`
+- `sobelFilterHorizontal`
+- `sobelFilterVertical`
+- `sobelFilterGradient`
+- `laplacianFilter`
+- `unsharpMasking`
 
 ### Private
 
@@ -29,7 +30,7 @@ module Filter
 
 using ..ImageProcessing: dataPPM, dataPGM
 
-export averaging, sobelGradient, sobelLR, sobelTD, gaussian, laplacian, unsharpMask
+export averagingFilter, sobelFilterGradient, sobelFilterHorizontal, sobelFilterVertical, gaussianFilter, laplacianFilter, unsharpMasking
 
 
 """
@@ -165,137 +166,117 @@ end
 """
 # Averaging Filter
 ```julia
-  averaging(width::Int, height::Int,
-            pixels::Matrix{Int16})::Matrix{Int16}
+  averagingFilter(data::dataPGM)::dataPGM
 ```
 
 ## Summary
 Averaging filter
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `pixels::Matrix{Int16}`
+- `data::dataPGM`
 
 ## Return value
-- `img::Matrix{Int16}`
+- `data::dataPGM`
 """
-function averaging(data::dataPGM)::dataPGM
-    img::Matrix{Float64} = Float64.(data.gray)
+function averagingFilter(data::dataPGM)::dataPGM
+    pixels::Matrix{Int16} = data.pixels
+    img::Matrix{Float64} = Float64.(data.pixels)
     filter::Matrix{Float64} = [1.0/9.0 1.0/9.0 1.0/9.0;
                                1.0/9.0 1.0/9.0 1.0/9.0;
                                1.0/9.0 1.0/9.0 1.0/9.0]
     img = conv(data.width, data.height, img, filter)
     clipped::Matrix{Int16} = clipping(data.width, data.height, img)
-    data.gray = clipped
+    data.pixels = clipped
     return data
 end
 
 """
 # Averaging Filter
 ```julia
-  averaging(width::Int, height::Int,
-            r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})
-            ::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+  averagingFilter(data::dataPPM)::dataPPM
 ```
 
 ## Summary
 Averaging filter
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 
 ## Return values
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 """
-function averaging(data::dataPPM)::dataPPM
+function averagingFilter(data::dataPPM)::dataPPM
     red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
     green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
     blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
-    red = averaging(red)
-    green = averaging(green)
-    blue = averaging(blue)
-    data.red = red.gray
-    data.green = green.gray
-    data.blue = blue.gray
+    red = averagingFilter(red)
+    green = averagingFilter(green)
+    blue = averagingFilter(blue)
+    data.red = red.pixels
+    data.green = green.pixels
+    data.blue = blue.pixels
     return data
 end
 
 """
 # Gaussian Filter
 ```julia
-  gaussian(width::Int, height::Int,
-           pixels::Matrix{Int16})::Matrix{Int16}
+  gaussianFilter(data::dataPGM)::dataPGM
 ```
 
 ## Summary
 Gaussian filter
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `pixels::Matrix{Int16}`
+- `data::dataPGM`
 
 ## Return value
-- `img::Matrix{Int16}`
+- `data::dataPGM`
 """
-function gaussian(data::dataPGM)::dataPGM
-    img::Matrix{Float64} = Float64.(data.gray)
+function gaussianFilter(data::dataPGM)::dataPGM
+    img::Matrix{Float64} = Float64.(data.pixels)
     filter::Matrix{Float64} = [1.0/16.0 2.0/16.0 1.0/16.0;
                                2.0/16.0 4.0/16.0 2.0/16.0;
                                1.0/16.0 2.0/16.0 1.0/16.0]
     img = conv(data.width, data.height, img, filter)
-    data.gray = clipping(data.width, data.height, img)
+    data.pixels = clipping(data.width, data.height, img)
     return data
 end
 
 """
 # Gaussian Filter
 ```julia
-  gaussian(width::Int, height::Int,
-           r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})
-           ::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+  gaussianFilter(data::dataPPM)::dataPPM
 ```
 
 ## Summary
 Gaussian filter
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 
 ## Return values
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 """
-function gaussian(data::dataPPM)::dataPPM
+function gaussianFilter(data::dataPPM)::dataPPM
     red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
     green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
     blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
-    red = gaussian(red)
-    green = gaussian(green)
-    blue = gaussian(blue)
-    data.red = red.gray
-    data.green = green.gray
-    data.blue = blue.gray
+    red = gaussianFilter(red)
+    green = gaussianFilter(green)
+    blue = gaussianFilter(blue)
+    data.red = red.pixels
+    data.green = green.pixels
+    data.blue = blue.pixels
     return data
 end
 
 """
 # Horizontal Sobel Filter
 ```julia
-  sobelLR(width::Int, height::Int,
-          pixels::Matrix{Float64})::Matrix{Float64}
+  sobelFilterHorizontal(width::Int, height::Int,
+                        pixels::Matrix{Float64})
+                        ::Matrix{Float64}
 ```
 
 ## Summary
@@ -309,7 +290,7 @@ Sobel filter (Horizontal)
 ## Return value
 - `img::Matrix{Float64}`
 """
-function sobelLR(width::Int, height::Int, pixels::Matrix{Float64})::Matrix{Float64}
+function sobelFilterHorizontal(width::Int, height::Int, pixels::Matrix{Float64})::Matrix{Float64}
     filterLR::Matrix{Float64} = [-1 0 1;
                                  -2 0 2;
                                  -1 0 1]
@@ -320,72 +301,62 @@ end
 """
 # Horizontal Sobel Filter
 ```julia
-  sobelLR(width::Int, height::Int,
-          pixels::Matrix{Int16})::Matrix{Int16}
+  sobelFilterHorizontal(data::dataPGM)::dataPGM
 ```
 
 ## Summary
 Sobel filter (Horizontal)
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `pixels::Matrix{Int16}`
+- `data::dataPGM`
 
 ## Return value
-- `img::Matrix{Int16}`
+- `data::dataPGM`
 """
-function sobelLR(data::dataPGM)::dataPGM
+function sobelFilterHorizontal(data::dataPGM)::dataPGM
     filterLR::Matrix{Int16} = [-1 0 1;
                                -2 0 2;
                                -1 0 1]
-    imgLR::Matrix{Int16} = conv(data.width, data.height, data.gray, filterLR)
+    imgLR::Matrix{Int16} = conv(data.width, data.height, data.pixels, filterLR)
     img::Matrix{Int16} = clipping(data.width, data.height, imgLR)
-    data.gray = img
+    data.pixels = img
     return data
 end
 
 """
 # Horizontal Sobel Filter
 ```julia
-  sobelLR(width::Int, height::Int,
-          r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})
-          ::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+  sobelFilterHorizontal(data::dataPPM)::dataPPM
 ```
 
 ## Summary
 Sobel filter (Horizontal)
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 
-## Return values
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+## Return value
+- `data::dataPPM`
 """
-function sobelLR(data::dataPPM)::dataPPM
+function sobelFilterHorizontal(data::dataPPM)::dataPPM
     red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
     green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
     blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
-    red = sobelLR(red)
-    green = sobelLR(green)
-    blue = sobelLR(blue)
-    data.red = red.gray
-    data.green = green.gray
-    data.blue = blue.gray
+    red = sobelFilterHorizontal(red)
+    green = sobelFilterHorizontal(green)
+    blue = sobelFilterHorizontal(blue)
+    data.red = red.pixels
+    data.green = green.pixels
+    data.blue = blue.pixels
     return data
 end
 
 """
 # Vertical Sobel Filter
 ```julia
-  sobelTD(width::Int, height::Int,
-          pixels::Matrix{Float64})::Matrix{Float64}
+  sobelFilterVertical(width::Int, height::Int,
+                      pixels::Matrix{Float64})
+                      ::Matrix{Float64}
 ```
 
 ## Summary
@@ -399,7 +370,7 @@ Sobel filter (Vertical)
 ## Return value
 - `img::Matrix{Float64}`
 """
-function sobelTD(width::Int, height::Int, pixels::Matrix{Float64})::Matrix{Float64}
+function sobelFilterVertical(width::Int, height::Int, pixels::Matrix{Float64})::Matrix{Float64}
     filterTD::Matrix{Float64} = [ 1  2  1;
                                   0  0  0;
                                  -1 -2 -1]
@@ -410,154 +381,129 @@ end
 """
 # Vertical Sobel Filter
 ```julia
-  sobelTD(width::Int, height::Int,
-          pixels::Matrix{Int16})::Matrix{Int16}
+  sobelFilterVertical(data::dataPGM)::dataPGM
 ```
 
 ## Summary
 Sobel filter (Vertical)
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `pixels::Matrix{Int16}`
+- `data::dataPGM`
 
 ## Return value
-- `img::Matrix{Int16}`
+- `data::dataPGM`
 """
-function sobelTD(data::dataPGM)::dataPGM
+function sobelFilterVertical(data::dataPGM)::dataPGM
     filterTD::Matrix{Int16} = [  1  2  1;
                                  0  0  0;
                                 -1 -2 -1]
-    imgTD::Matrix{Int16} = conv(data.width, data.height, data.gray, filterTD)
-    data.gray = clipping(data.width, data.height, imgTD)
+    imgTD::Matrix{Int16} = conv(data.width, data.height, data.pixels, filterTD)
+    data.pixels = clipping(data.width, data.height, imgTD)
     return data
 end
 
 """
 # Vertical Sobel Filter
 ```julia
-  sobelTD(width::Int, height::Int,
-          r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})
-          ::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+  sobelFilterVertical(data::dataPPM)::dataPPM
 ```
 
 ## Summary
 Sobel filter (Vertical)
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 
 ## Return values
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 """
-function sobelTD(data::dataPPM)::dataPPM
+function sobelFilterVertical(data::dataPPM)::dataPPM
     red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
     green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
     blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
-    red = sobelTD(red)
-    green = sobelTD(green)
-    blue = sobelTD(blue)
-    data.red = red.gray
-    data.green = green.gray
-    data.blue = blue.gray
+    red = sobelFilterVertical(red)
+    green = sobelFilterVertical(green)
+    blue = sobelFilterVertical(blue)
+    data.red = red.pixels
+    data.green = green.pixels
+    data.blue = blue.pixels
     return data
 end
 
 """
 # Sobel Filter (Gradient)
 ```julia
-  sobelGradient(width::Int, height::Int,
-          pixels::Matrix{Int16})::Matrix{Int16}
+  sobelFilterGradient(data::dataPGM)::dataPGM
 ```
 
 ## Summary
 Sobel filter (Gradient)
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `pixels::Matrix{Int16}`
+- `data::dataPGM`
 
 ## Return value
-- `img::Matrix{Int16}`
+- `data::dataPGM`
 """
-function sobelGradient(data::dataPGM)::dataPGM
-    img::Matrix{Float64} = Float64.(data.gray)
-    imgLR::Matrix{Float64} = sobelLR(data.width, data.height, img)
-    imgTD::Matrix{Float64} = sobelTD(data.width, data.height, img)
+function sobelFilterGradient(data::dataPGM)::dataPGM
+    img::Matrix{Float64} = Float64.(data.pixels)
+    imgLR::Matrix{Float64} = sobelFilterHorizontal(data.width, data.height, img)
+    imgTD::Matrix{Float64} = sobelFilterVertical(data.width, data.height, img)
     img = sqrt.(imgLR.^2 + imgTD.^2)
     result::Matrix{Int16} = clipping(data.width, data.height, img)
-    data.gray = result
+    data.pixels = result
     return data
 end
 
 """
 # Sobel Filter (Gradient)
 ```julia
-  sobelGradient(width::Int, height::Int,
-                r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})
-                ::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+  sobelFilterGradient(data::dataPPM)::dataPPM
 ```
 
 ## Summary
 Sobel filter (Gradient)
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 
 ## Return values
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 """
-function sobelGradient(data::dataPPM)::dataPPM
+function sobelFilterGradient(data::dataPPM)::dataPPM
     red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
     green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
     blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
-    red = sobelGradient(red)
-    green = sobelGradient(green)
-    blue = sobelGradient(blue)
-    data.red = red.gray
-    data.green = green.gray
-    data.blue = blue.gray
+    red = sobelFilterGradient(red)
+    green = sobelFilterGradient(green)
+    blue = sobelFilterGradient(blue)
+    data.red = red.pixels
+    data.green = green.pixels
+    data.blue = blue.pixels
     return data
 end
 
 """
 # Laplacian Filter
 ```julia
-  laplacian(width::Int, height::Int,
-            pixels::Matrix{Int16})::Matrix{Int16}
+  laplacianFilter(data::dataPGM)::dataPGM
 ```
 
 ## Summary
 Laplacian filter
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `pixels::Matrix{Int16}`
+- `data::dataPGM`
 
 ## Return value
-- `img::Matrix{Int16}`
+- `data::dataPGM`
 """
-function laplacian(data::dataPGM)::dataPGM
+function laplacianFilter(data::dataPGM)::dataPGM
     filter::Matrix{Int16} = [0  1 0;
                              1 -4 1;
                              0  1 0]
-    img::Matrix{Int16} = conv(data.width, data.height, data.gray, filter)
-    data.gray = clipping(data.width, data.height, img)
+    img::Matrix{Int16} = conv(data.width, data.height, data.pixels, filter)
+    data.pixels = clipping(data.width, data.height, img)
     return data
 end
 
@@ -565,104 +511,83 @@ end
 """
 # Laplacian Filter
 ```julia
-  laplacian(width::Int, height::Int,
-            r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16})
-            ::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+  laplacianFilter(data::dataPPM)::dataPPM
 ```
 
 ## Summary
 Laplacian filter
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 
 ## Return values
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 """
-function laplacian(data::dataPPM)::dataPPM
+function laplacianFilter(data::dataPPM)::dataPPM
     red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
     green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
     blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
-    red = laplacian(red)
-    green = laplacian(green)
-    blue = laplacian(blue)
-    data.red = red.gray
-    data.green = green.gray
-    data.blue = blue.gray
+    red = laplacianFilter(red)
+    green = laplacianFilter(green)
+    blue = laplacianFilter(blue)
+    data.red = red.pixels
+    data.green = green.pixels
+    data.blue = blue.pixels
     return data
 end
 
 """
 # Unsharp Masking
 ```julia
-  unsharpMask(width::Int, height::Int,
-              pixels::Matrix{Int16},
-              k::Int8)::Matrix{Int16}
+  unsharpMasking(data::dataPGM, k::Int8)::dataPGM
 ```
 
 ## Summary
 Unsharp masking
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `pixels::Matrix{Int16}`
+- `data::dataPGM`
 - `k::Int8`
 
 ## Return value
-- `img::Matrix{Int16}`
+- `data::dataPGM`
 """
-function unsharpMask(data::dataPGM, k::Int8)::dataPGM
-    img::Matrix{Float64} = Float64.(data.gray)
+function unsharpMasking(data::dataPGM, k::Int8)::dataPGM
+    img::Matrix{Float64} = Float64.(data.pixels)
     filter::Matrix{Float64} = [-k/9.0 -k/9.0 -k/9.0;
                                -k/9.0 1+8.0k/9.0 -k/9.0;
                                -k/9.0 -k/9.0 -k/9.0]
     img = conv(data.width, data.height, img, filter)
-    data.gray = clipping(data.width, data.height, img)
+    data.pixels = clipping(data.width, data.height, img)
     return data
 end
 
 """
 # Unsharp Masking
 ```julia
-  unsharpMask(width::Int, height::Int,
-              r::Matrix{Int16}, g::Matrix{Int16}, b::Matrix{Int16},
-              k::Int8)
-              ::Tuple{Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
+  unsharpMasking(data::dataPPM, k::Int8)::dataPPM
 ```
 
 ## Summary
 Unsharp masking
 
 ## Arguments
-- `width::Int`
-- `height::Int`
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 - `k::Int8`
 
 ## Return values
-- `r::Matrix{Int16}`
-- `g::Matrix{Int16}`
-- `b::Matrix{Int16}`
+- `data::dataPPM`
 """
-function unsharpMask(data::dataPPM, k::Int8)::dataPPM
+function unsharpMasking(data::dataPPM, k::Int8)::dataPPM
     red::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.red)
     green::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.green)
     blue::dataPGM = dataPGM(data.magic_num, data.width, data.height, data.max_brightness, data.blue)
-    red = unsharpMask(red, k)
-    green = unsharpMask(green, k)
-    blue = unsharpMask(blue, k)
-    data.red = red.gray
-    data.green = green.gray
-    data.blue = blue.gray
+    red = unsharpMasking(red, k)
+    green = unsharpMasking(green, k)
+    blue = unsharpMasking(blue, k)
+    data.red = red.pixels
+    data.green = green.pixels
+    data.blue = blue.pixels
     return data
 end
 

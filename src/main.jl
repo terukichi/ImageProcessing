@@ -11,7 +11,7 @@
 # include("./src/ImageProcessing.jl")
 import ImageProcessing
 
-using .ImageProcessing.FileIO, .ImageProcessing.Filter, .ImageProcessing
+using .ImageProcessing.IO, .ImageProcessing.Filter, .ImageProcessing
 
 const AVERAGING = 0
 const SOBEL_GRADIENT = 1
@@ -95,20 +95,20 @@ function ppm(name::AbstractString, ext::AbstractString,
     data = dataPPM(loaded.magic_num, width, height, loaded.max_brightness, red, green, blue)
 
     if cmd == AVERAGING
-        data = averaging(data)
+        data = averagingFilter(data)
     elseif cmd == SOBEL_GRADIENT
-        data = sobelGradient(data)
+        data = sobelFilterGradient(data)
     elseif cmd == SOBEL_LR
-        data = sobelLR(data)
+        data = sobelFilterHorizontal(data)
     elseif cmd == SOBEL_TD
-        data = sobelTD(data)
+        data = sobelFilterVertical(data)
     elseif cmd == GAUSSIAN
-        data = gaussian(data)
+        data = gaussianFilter(data)
     elseif cmd == LAPLACIAN
-        data = laplacian(data)
+        data = laplacianFilter(data)
     elseif cmd == UNSHARPMASK
         k::Int8 = parse(Int8, split(operation, "-")[end])
-        data = unsharpMask(data, k)
+        data = unsharpMasking(data, k)
     end
 
     savePPM(name, ext, operation, data)
@@ -123,7 +123,7 @@ end
       magic_num::AbstractString,
       width::Int, height::Int,
       max_brightness::Int16,
-      gray::Vector{Int16},
+      pixels::Vector{Int16},
       cmd::UInt8)
 ```
 
@@ -135,7 +135,7 @@ end
 - `width::Int`
 - `height::Int`
 - `max_brightness::Int16`
-- `gray::Vector{Int16}`
+- `pixels::Vector{Int16}`
 - `cmd::UInt8`
 
 ## Return value
@@ -145,24 +145,24 @@ function pgm(name::AbstractString, ext::AbstractString,
              loaded, cmd::UInt8)
     width::Int = loaded.width
     height::Int = loaded.height
-    gray::Matrix{Int16} = createGrayscaleMatrix(width, height, loaded.pixels)
-    data = dataPGM(loaded.magic_num, width, height, loaded.max_brightness, gray)
+    pixels::Matrix{Int16} = createGrayscaleMatrix(width, height, loaded.pixels)
+    data = dataPGM(loaded.magic_num, width, height, loaded.max_brightness, pixels)
 
     if cmd == AVERAGING
-        data = averaging(data)
+        data = averagingFilter(data)
     elseif cmd == SOBEL_GRADIENT
-        data = sobelGradient(data)
+        data = sobelFilterGradient(data)
     elseif cmd == SOBEL_LR
-        data = sobelLR(data)
+        data = sobelFilterHorizontal(data)
     elseif cmd == SOBEL_TD
-        data = sobelTD(data)
+        data = sobelFilterVertical(data)
     elseif cmd == GAUSSIAN
-        data = gaussian(data)
+        data = gaussianFilter(data)
     elseif cmd == LAPLACIAN
-        data = laplacian(data)
+        data = laplacianFilter(data)
     elseif cmd == UNSHARPMASK
         k::Int8 = parse(Int8, split(operation, "-")[end])
-        data = unsharpMask(data, k)
+        data = unsharpMasking(data, k)
     end
 
     savePGM(name, ext, operation, data)

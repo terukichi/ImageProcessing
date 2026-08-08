@@ -1,5 +1,5 @@
 #====================================================
-#  FileIO.jl
+#  IO.jl
 #
 #  Copyright (c) 2026 terukichi
 #
@@ -7,7 +7,7 @@
 #  See the LICENSE file.
 ====================================================#
 """
-# FileIO
+# IO
 
 ## Functions
 
@@ -25,11 +25,11 @@
 
 - `saveHeader`
 """
-module FileIO
+module IO
 
 using ..ImageProcessing: dataLoaded, dataPPM, dataPGM
 
-export loadFile, savePPM, savePGM, loadGrayscale, loadRGB, createGrayscaleMatrix, createRGBMatrix
+export loadFile, savePPM, savePGM, loadPGM, loadPPM, createGrayscaleMatrix, createRGBMatrix
 
 """
 # Load File
@@ -52,12 +52,7 @@ Load image file
 - `pixels::Vector{Int16}`
 """
 function loadFile(path::AbstractString)::dataLoaded
-    # magic_num::String = ""
-    # width::Int = 0
-    # height::Int = 0
-    # max_brightness::Int16 = 0
     data::Vector{String} = []
-    # pixels::Vector{Int16} = []
     result = dataLoaded("", 0, 0, 0, [])
 
     ext = split(path, ".")[end]
@@ -135,9 +130,9 @@ function createRGBMatrix(width::Int, height::Int, pixels::Vector{Int16})::Tuple{
 end
 
 """
-# Load Grayscale Data
+# Load PGM Data
 ```julia
-  loadGrayscale(path::AbstractString)
+  loadPGM(path::AbstractString)
                 ::dataPGM
 ```
 
@@ -150,16 +145,21 @@ Load grayscale data
 ## Return value
 - `dataPGM`
 """
-function loadGrayscale(path::AbstractString)::dataPGM
+function loadPGM(path::AbstractString)::dataPGM
     loaded::dataLoaded = loadFile(path)
-    gray::Matrix{Int16} = createGrayscaleMatrix(loaded.width, loaded.height, loaded.pixels)
-    return dataPGM(loaded.magic_num, loaded.width, loaded.height, loaded.max_brightness, gray)
+    magic_num::String = loaded.magic_num
+    width::Int = loaded.width
+    height::Int = loaded.height
+    max_brightness::Int16 = loaded.max_brightness
+    pixels::Vector{Int16} = loaded.pixels
+    gray::Matrix{Int16} = createGrayscaleMatrix(width, height, pixels)
+    return dataPGM(magic_num, width, height, max_brightness, gray)
 end
 
 """
-# Load RGB Data
+# Load PPM Data
 ```julia
-  loadRGB(path::AbstractString)
+  loadPPM(path::AbstractString)
           ::Tuple{String, Int, Int, Int16,
                   Matrix{Int16}, Matrix{Int16}, Matrix{Int16}}
 ```
@@ -179,10 +179,15 @@ Load RGB data
 - `green::Vector{Int16}`
 - `blue::Vector{Int16}`
 """
-function loadRGB(path::AbstractString)::dataPPM
+function loadPPM(path::AbstractString)::dataPPM
     loaded::dataLoaded = loadFile(path)
-    red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16} = createRGBMatrix(loaded.width, loaded.height, loaded.pixels)
-    return dataPPM(loaded.magic_num, loaded.width, loaded.height, loaded.max_brightness, red, green, blue)
+    magic_num::String = loaded.magic_num
+    width::Int = loaded.width
+    height::Int = loaded.height
+    max_brightness::Int16 = loaded.max_brightness
+    pixels::Vector{Int16} = loaded.pixels
+    red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16} = createRGBMatrix(width, height, pixels)
+    return dataPPM(magic_num, width, height, max_brightness, red, green, blue)
 end
 
 """
@@ -392,7 +397,7 @@ end
           magic_num::AbstractString,
           width::Int, height::Int,
           max_brightness::Int16,
-          gray::Matrix{Int16})
+          pixels::Matrix{Int16})
 ```
 
 ## Summary
@@ -406,7 +411,7 @@ Save PGM data
 - `width::Int`
 - `height::Int`
 - `max_brightness::Int16`
-- `gray::Matrix{Int16}`
+- `pixels::Matrix{Int16}`
 
 ## Return value
 """
@@ -419,10 +424,10 @@ function savePGM(name::AbstractString, ext::AbstractString,
         open("output/"*name*"-"*operation*ext, "a") do io
             for i in 1:pgm.height
                 for j in 1:pgm.width-1
-                    print(io, pgm.gray[i, j])
+                    print(io, pgm.pixels[i, j])
                     print(io, " ")
                 end
-                print(io, pgm.gray[i, pgm.width])
+                print(io, pgm.pixels[i, pgm.width])
                 print(io, "\n")
             end
         end
@@ -440,7 +445,7 @@ end
           magic_num::AbstractString,
           width::Int, height::Int,
           max_brightness::Int16,
-          gray::Matrix{Int16})
+          pixels::Matrix{Int16})
 ```
 
 ## Summary
@@ -452,7 +457,7 @@ Save PGM data
 - `width::Int`
 - `height::Int`
 - `max_brightness::Int16`
-- `gray::Matrix{Int16}`
+- `pixels::Matrix{Int16}`
 
 ## Return value
 """
@@ -464,10 +469,10 @@ function savePGM(path::AbstractString,
         open("output/"*path, "a") do io
             for i in 1:pgm.height
                 for j in 1:pgm.width-1
-                    print(io, pgm.gray[i, j])
+                    print(io, pgm.pixels[i, j])
                     print(io, " ")
                 end
-                print(io, pgm.gray[i, pgm.width])
+                print(io, pgm.pixels[i, pgm.width])
                 print(io, "\n")
             end
         end
