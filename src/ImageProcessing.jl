@@ -50,6 +50,7 @@ export dataPGM, dataPPM, dataLoaded
 
 include("./programs/IO.jl")
 include("./programs/Filter.jl")
+include("./programs/DFT.jl")
 
 
 end # module ImageProsessing

@@ -129,8 +129,8 @@ function savePPM(name::AbstractString, ext::AbstractString,
 
     try
         open("output/"*name*"-"*operation*ext, "a") do f
-            for i in 1:height
-                for j in 1:width
+            for i::Int in 1:height
+                for j::Int in 1:width
                     print(f, red[i, j])
                     print(f, " ")
                     print(f, green[i, j])
@@ -175,8 +175,8 @@ function savePPM(path::AbstractString,
 
     try
         open("output/"*path, "a") do f
-            for i in 1:height
-                for j in 1:width
+            for i::Int in 1:height
+                for j::Int in 1:width
                     print(f, red[i, j])
                     print(f, " ")
                     print(f, green[i, j])
@@ -225,8 +225,8 @@ function savePGM(name::AbstractString, ext::AbstractString,
 
     try
         open("output/"*name*"-"*operation*ext, "a") do f
-            for i in 1:height
-                for j in 1:width-1
+            for i::Int in 1:height
+                for j::Int in 1:width-1
                     print(f, pixels[i, j])
                     print(f, " ")
                 end
@@ -267,8 +267,8 @@ function savePGM(path::AbstractString,
 
     try
         open("output/"*path, "a") do f
-            for i in 1:height
-                for j in 1:width-1
+            for i::Int in 1:height
+                for j::Int in 1:width-1
                     print(f, pixels[i, j])
                     print(f, " ")
                 end

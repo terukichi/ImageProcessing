@@ -30,8 +30,8 @@ function convolution(width::Int, height::Int, pixels::Matrix{Float64}, filter::M
     padded::Matrix{Float64} = zeros(Float64, height + 2, width + 2)
     padded[2:end-1, 2:end-1].=pixels
 
-    for i in 1:height
-        for j in 1:width
+    for i::Int in 1:height
+        for j::Int in 1:width
             pixels[i, j] = sum(padded[i:i+2, j:j+2] .* filter)
         end
     end
@@ -63,8 +63,8 @@ function convolution(width::Int, height::Int, pixels::Matrix{Int16}, filter::Mat
     padded::Matrix{Int16} = zeros(Int16, height + 2, width + 2)
     padded[2:end-1, 2:end-1].=pixels
 
-    for i in 1:height
-        for j in 1:width
+    for i::Int in 1:height
+        for j::Int in 1:width
             pixels[i, j] = sum(padded[i:i+2, j:j+2] .* filter)
         end
     end
