@@ -10,7 +10,7 @@ module DFT
 
 using ..ImageProcessing: dataLoaded, dataPPM, dataPGM
 
-export dft, DFTtoPGM, amplitudeSpectrum
+export dft, DFTtoPGM, amplitudeSpectrum, arrangeMatrix
 
 mutable struct amplitudeSpectrum
     width::Int
@@ -39,10 +39,10 @@ function calcDftLog(data::dataPGM, u::Int, v::Int)::Float64
 end
 
 function dft(data::dataPGM)::amplitudeSpectrum
-    F::Matrix{Float64} = zeros(Float64, data.height, data.width)
-    max_spc::Float64 = 0.0
     height::Int = data.height
     width::Int = data.width
+    max_spc::Float64 = 0.0
+    F::Matrix{Float64} = zeros(Float64, height, width)
     for v::Int in 0:height-1
         vp::Int = v+1
         for u::Int in 0:width-1
@@ -57,6 +57,73 @@ function dft(data::dataPGM)::amplitudeSpectrum
     max_spc = maximum(F)
 
     return amplitudeSpectrum(width, height, max_spc, F)
+end
+
+function EVENxEVEN(data::amplitudeSpectrum)::Matrix{Float64}
+    spectrum::Matrix{Float64} = data.spectrum
+    arranged::Matrix{Float64} = zeros(Float64, data.height, data.width)
+
+    arranged[1:floor(Int, end/2), 1:floor(Int, end/2)] = spectrum[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end]
+    arranged[1:floor(Int, end/2), floor(Int, end/2)+1:end] = spectrum[floor(Int, end/2)+1:end, 1:floor(Int, end/2)]
+    arranged[floor(Int, end/2)+1:end, 1:floor(Int, end/2)] = spectrum[1:floor(Int, end/2), floor(Int, end/2)+1:end]
+    arranged[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end] = spectrum[1:floor(Int, end/2), 1:floor(Int, end/2)]
+    return arranged
+end
+
+function EVENxODD(data::amplitudeSpectrum)::Matrix{Float64}
+    spectrum::Matrix{Float64} = data.spectrum
+    arranged::Matrix{Float64} = zeros(Float64, data.height, data.width)
+
+    arranged[1:floor(Int, end/2), 1:floor(Int, end/2)+1] = spectrum[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end]
+    arranged[1:floor(Int, end/2), floor(Int, end/2)+2:end] = spectrum[floor(Int, end/2)+1:end, 1:floor(Int, end/2)]
+    arranged[floor(Int, end/2)+1:end, 1:floor(Int, end/2)+1] = spectrum[1:floor(Int, end/2), floor(Int, end/2)+1:end]
+    arranged[floor(Int, end/2)+1:end, floor(Int, end/2)+2:end] = spectrum[1:floor(Int, end/2), 1:floor(Int, end/2)]
+    return arranged
+end
+
+function ODDxEVEN(data::amplitudeSpectrum)::Matrix{Float64}
+    spectrum::Matrix{Float64} = data.spectrum
+    arranged::Matrix{Float64} = zeros(Float64, data.height, data.width)
+
+    arranged[1:floor(Int, end/2)+1, 1:floor(Int, end/2)] = spectrum[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end]
+    arranged[floor(Int, end/2)+2:end, 1:floor(Int, end/2)] = spectrum[1:floor(Int, end/2), floor(Int, end/2)+1:end]
+    arranged[1:floor(Int, end/2)+1, floor(Int, end/2)+1:end] = spectrum[floor(Int, end/2)+1:end, 1:floor(Int, end/2)]
+    arranged[floor(Int, end/2)+2:end, floor(Int, end/2)+1:end] = spectrum[1:floor(Int, end/2), 1:floor(Int, end/2)]
+    return arranged
+end
+
+function ODDxODD(data::amplitudeSpectrum)::Matrix{Float64}
+    spectrum::Matrix{Float64} = data.spectrum
+    arranged::Matrix{Float64} = zeros(Float64, data.height, data.width)
+
+    arranged[1:floor(Int, end/2)+1, 1:floor(Int, end/2)+1] = spectrum[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end]
+    arranged[1:floor(Int, end/2)+1, floor(Int, end/2)+2:end] = spectrum[floor(Int, end/2)+1:end, 1:floor(Int, end/2)]
+    arranged[floor(Int, end/2)+2:end, 1:floor(Int, end/2)+1] = spectrum[1:floor(Int, end/2), floor(Int, end/2)+1:end]
+    arranged[floor(Int, end/2)+2:end, floor(Int, end/2)+2:end] = spectrum[1:floor(Int, end/2), 1:floor(Int, end/2)]
+    return arranged
+end
+
+function arrangeMatrix(data::amplitudeSpectrum)::amplitudeSpectrum
+    height::Int = data.height
+    width::Int = data.width
+    max_spc::Float64 = data.max_spc
+    spectrum::Matrix{Float64} = data.spectrum
+    arranged::Matrix{Float64} = zeros(Float64, height, width)
+
+    if iseven(height)
+        if iseven(width)
+            arranged = EVENxEVEN(data)
+        else
+            arranged = EVENxODD(data)
+        end
+    else
+        if iseven(width)
+            arranged = ODDxEVEN(data)
+        else
+            arranged = ODDxODD(data)
+        end
+    end
+    return amplitudeSpectrum(width, height, max_spc, arranged)
 end
 
 function DFTtoPGM(data::amplitudeSpectrum)::dataPGM
