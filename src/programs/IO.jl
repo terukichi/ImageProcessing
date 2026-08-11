@@ -24,6 +24,7 @@
 ### Private
 
 - `saveHeader`
+- `clipping`
 """
 module IO
 

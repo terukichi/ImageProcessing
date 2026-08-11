@@ -24,12 +24,12 @@ Gaussian filter
 function gaussianFilter(data::dataPGM)::dataPGM
     width::Int = data.width
     height::Int = data.height
-    img::Matrix{Float64} = Float64.(data.pixels)
+    img::Matrix{Float64} = data.pixels
     filter::Matrix{Float64} = [1.0/16.0 2.0/16.0 1.0/16.0;
                                2.0/16.0 4.0/16.0 2.0/16.0;
                                1.0/16.0 2.0/16.0 1.0/16.0]
     img = convolution(width, height, img, filter)
-    data.pixels = clipping(width, height, img)
+    data.pixels = img
     return data
 end
 

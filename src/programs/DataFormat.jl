@@ -19,7 +19,7 @@ mutable struct dataPGM
     width::Int
     height::Int
     max_brightness::Int16
-    pixels::Matrix{Int16}
+    pixels::Matrix{Float64}
 end
 
 mutable struct dataPPM
@@ -27,7 +27,7 @@ mutable struct dataPPM
     width::Int
     height::Int
     max_brightness::Int16
-    red::Matrix{Int16}
-    green::Matrix{Int16}
-    blue::Matrix{Int16}
+    red::Matrix{Float64}
+    green::Matrix{Float64}
+    blue::Matrix{Float64}
 end

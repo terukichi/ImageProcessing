@@ -24,13 +24,12 @@ Averaging filter
 function averagingFilter(data::dataPGM)::dataPGM
     width::Int = data.width
     height::Int = data.height
-    img::Matrix{Float64} = Float64.(data.pixels)
+    img::Matrix{Float64} = data.pixels
     filter::Matrix{Float64} = [1.0/9.0 1.0/9.0 1.0/9.0;
                                1.0/9.0 1.0/9.0 1.0/9.0;
                                1.0/9.0 1.0/9.0 1.0/9.0]
     img = convolution(width, height, img, filter)
-    clipped::Matrix{Int16} = clipping(width, height, img)
-    data.pixels = clipped
+    data.pixels = img
     return data
 end
 

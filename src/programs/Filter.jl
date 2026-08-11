@@ -24,7 +24,6 @@
 ### Private
 
 - `convolution`
-- `clipping`
 """
 module Filter
 
@@ -32,7 +31,6 @@ using ..ImageProcessing: dataPPM, dataPGM
 
 
 include("filter/Convolution.jl")
-include("filter/Clipping.jl")
 include("filter/Normalize.jl")
 include("filter/AveragingFilter.jl")
 include("filter/GaussianFilter.jl")

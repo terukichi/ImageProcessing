@@ -51,12 +51,11 @@ Sobel filter (Horizontal)
 function sobelFilterHorizontal(data::dataPGM)::dataPGM
     width::Int = data.width
     height::Int = data.height
-    filterLR::Matrix{Int16} = [-1 0 1;
-                               -2 0 2;
-                               -1 0 1]
-    imgLR::Matrix{Int16} = convolution(width, height, data.pixels, filterLR)
-    img::Matrix{Int16} = clipping(width, height, imgLR)
-    data.pixels = img
+    filterLR::Matrix{Float64} = [-1 0 1;
+                                 -2 0 2;
+                                 -1 0 1]
+    imgLR::Matrix{Float64} = convolution(width, height, data.pixels, filterLR)
+    data.pixels = imgLR
     return data
 end
 
@@ -137,11 +136,11 @@ Sobel filter (Vertical)
 function sobelFilterVertical(data::dataPGM)::dataPGM
     width::Int = data.width
     height::Int = data.height
-    filterTD::Matrix{Int16} = [  1  2  1;
-                                 0  0  0;
-                                -1 -2 -1]
-    imgTD::Matrix{Int16} = convolution(width, height, data.pixels, filterTD)
-    data.pixels = clipping(width, height, imgTD)
+    filterTD::Matrix{Float64} = [  1  2  1;
+                                   0  0  0;
+                                  -1 -2 -1]
+    imgTD::Matrix{Float64} = convolution(width, height, data.pixels, filterTD)
+    data.pixels = imgTD
     return data
 end
 
@@ -199,8 +198,7 @@ function sobelFilterGradient(data::dataPGM)::dataPGM
     imgLR::Matrix{Float64} = sobelFilterHorizontal(width, height, img)
     imgTD::Matrix{Float64} = sobelFilterVertical(width, height, img)
     img = sqrt.(imgLR.^2 + imgTD.^2)
-    result::Matrix{Int16} = clipping(width, height, img)
-    data.pixels = result
+    data.pixels = img
     return data
 end
 

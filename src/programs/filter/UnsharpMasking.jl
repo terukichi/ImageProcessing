@@ -30,7 +30,7 @@ function unsharpMasking(data::dataPGM, k::Int8)::dataPGM
                                -k/9.0 1+8.0k/9.0 -k/9.0;
                                -k/9.0 -k/9.0 -k/9.0]
     img = convolution(width, height, img, filter)
-    data.pixels = clipping(width, height, img)
+    data.pixels = img
     return data
 end
 

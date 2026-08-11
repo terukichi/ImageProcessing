@@ -6,6 +6,8 @@
 #  This project is licensed under the MIT License.
 #  See the LICENSE file.
 ====================================================#
+include("Clipping.jl")
+
 """
 # Save PNM's Header
 ```julia
@@ -122,9 +124,12 @@ function savePPM(name::AbstractString, ext::AbstractString,
     width::Int = ppm.width
     height::Int = ppm.height
     max_brightness::Int16 = ppm.max_brightness
-    red::Matrix{Int16} = ppm.red
-    green::Matrix{Int16} = ppm.green
-    blue::Matrix{Int16} = ppm.blue
+    red::Matrix{Int16} = round.(Int16, ppm.red)
+    green::Matrix{Int16} = round.(Int16, ppm.green)
+    blue::Matrix{Int16} = round.(Int16, ppm.blue)
+    red = clipping(width, height, red)
+    green = clipping(width, height, green)
+    blue = clipping(width, height, blue)
     saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
 
     try
@@ -168,9 +173,12 @@ function savePPM(path::AbstractString,
     width::Int = ppm.width
     height::Int = ppm.height
     max_brightness::Int16 = ppm.max_brightness
-    red::Matrix{Int16} = ppm.red
-    green::Matrix{Int16} = ppm.green
-    blue::Matrix{Int16} = ppm.blue
+    red::Matrix{Int16} = round.(Int16, ppm.red)
+    green::Matrix{Int16} = round.(Int16, ppm.green)
+    blue::Matrix{Int16} = round.(Int16, ppm.blue)
+    red = clipping(width, height, red)
+    green = clipping(width, height, green)
+    blue = clipping(width, height, blue)
     saveHeader(path, magic_num, width, height, max_brightness)
 
     try
@@ -220,7 +228,8 @@ function savePGM(name::AbstractString, ext::AbstractString,
     width::Int = pgm.width
     height::Int = pgm.height
     max_brightness::Int16 = pgm.max_brightness
-    pixels::Matrix{Int16} = pgm.pixels
+    pixels::Matrix{Int16} = round.(Int16, pgm.pixels)
+    pixels = clipping(width, height, pixels)
     saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
 
     try
@@ -262,7 +271,8 @@ function savePGM(path::AbstractString,
     width::Int = pgm.width
     height::Int = pgm.height
     max_brightness::Int16 = pgm.max_brightness
-    pixels::Matrix{Int16} = pgm.pixels
+    pixels::Matrix{Int16} = round.(Int16, pgm.pixels)
+    pixels = clipping(width, height, pixels)
     saveHeader(path, magic_num, width, height, max_brightness)
 
     try

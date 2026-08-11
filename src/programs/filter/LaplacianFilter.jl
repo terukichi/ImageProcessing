@@ -24,11 +24,11 @@ Laplacian filter
 function laplacianFilter(data::dataPGM)::dataPGM
     width::Int = data.width
     height::Int = data.height
-    filter::Matrix{Int16} = [0  1 0;
-                             1 -4 1;
-                             0  1 0]
-    img::Matrix{Int16} = convolution(width, height, data.pixels, filter)
-    data.pixels = clipping(width, height, img)
+    filter::Matrix{Float64} = [0  1 0;
+                               1 -4 1;
+                               0  1 0]
+    img::Matrix{Float64} = convolution(width, height, data.pixels, filter)
+    data.pixels = img
     return data
 end
 
