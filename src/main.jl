@@ -11,7 +11,7 @@
 # include("./src/ImageProcessing.jl")
 import ImageProcessing
 
-using .ImageProcessing.FileIO, .ImageProcessing.Filter
+using .ImageProcessing.IO, .ImageProcessing.Filter, .ImageProcessing
 
 const AVERAGING = 0
 const SOBEL_GRADIENT = 1
@@ -86,32 +86,32 @@ end
 """
 function ppm(name::AbstractString, ext::AbstractString,
              operation::AbstractString,
-             magic_num::AbstractString,
-             width::Int, height::Int,
-             max_brightness::Int16, rgb::Vector{Int16}, cmd::UInt8)
-
+             loaded, cmd::UInt8)
+    width::Int = loaded.width
+    height::Int = loaded.height
+    rgb::Vector{Int16} = loaded.pixels
     red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16} = createRGBMatrix(width, height, rgb)
 
+    data = dataPPM(loaded.magic_num, width, height, loaded.max_brightness, red, green, blue)
+
     if cmd == AVERAGING
-        red, green, blue = averaging(width, height, red, green, blue)
+        data = averagingFilter(data)
     elseif cmd == SOBEL_GRADIENT
-        red, green, blue = sobelGradient(width, height, red, green, blue)
+        data = sobelFilterGradient(data)
     elseif cmd == SOBEL_LR
-        red, green, blue = sobelLR(width, height, red, green, blue)
+        data = sobelFilterHorizontal(data)
     elseif cmd == SOBEL_TD
-        red, green, blue = sobelTD(width, height, red, green, blue)
+        data = sobelFilterVertical(data)
     elseif cmd == GAUSSIAN
-        red, green, blue = gaussian(width, height, red, green, blue)
+        data = gaussianFilter(data)
     elseif cmd == LAPLACIAN
-        red, green, blue = laplacian(width, height, red, green, blue)
+        data = laplacianFilter(data)
     elseif cmd == UNSHARPMASK
         k::Int8 = parse(Int8, split(operation, "-")[end])
-        red, green, blue = unsharpMask(width, height, red, green, blue, k)
+        data = unsharpMasking(data, k)
     end
 
-    savePPM(name, ext, operation, magic_num,
-            width, height, max_brightness,
-            red, green, blue)
+    savePPM(name, ext, operation, data)
 end
 
 """
@@ -123,7 +123,7 @@ end
       magic_num::AbstractString,
       width::Int, height::Int,
       max_brightness::Int16,
-      gray::Vector{Int16},
+      pixels::Vector{Int16},
       cmd::UInt8)
 ```
 
@@ -135,38 +135,37 @@ end
 - `width::Int`
 - `height::Int`
 - `max_brightness::Int16`
-- `gray::Vector{Int16}`
+- `pixels::Vector{Int16}`
 - `cmd::UInt8`
 
 ## Return value
 """
 function pgm(name::AbstractString, ext::AbstractString,
              operation::AbstractString,
-             magic_num::AbstractString,
-             width::Int, height::Int,
-             max_brightness::Int16,
-             gray::Matrix{Int16}, cmd::UInt8)
+             loaded, cmd::UInt8)
+    width::Int = loaded.width
+    height::Int = loaded.height
+    pixels::Matrix{Int16} = createGrayscaleMatrix(width, height, loaded.pixels)
+    data = dataPGM(loaded.magic_num, width, height, loaded.max_brightness, pixels)
 
     if cmd == AVERAGING
-        gray = averaging(width, height, gray)
+        data = averagingFilter(data)
     elseif cmd == SOBEL_GRADIENT
-        gray = sobelGradient(width, height, gray)
+        data = sobelFilterGradient(data)
     elseif cmd == SOBEL_LR
-        gray = sobelLR(width, height, gray)
+        data = sobelFilterHorizontal(data)
     elseif cmd == SOBEL_TD
-        gray = sobelTD(width, height, gray)
+        data = sobelFilterVertical(data)
     elseif cmd == GAUSSIAN
-        gray = gaussian(width, height, gray)
+        data = gaussianFilter(data)
     elseif cmd == LAPLACIAN
-        gray = laplacian(width, height, gray)
+        data = laplacianFilter(data)
     elseif cmd == UNSHARPMASK
         k::Int8 = parse(Int8, split(operation, "-")[end])
-        gray = unsharpMask(width, height, gray, k)
+        data = unsharpMasking(data, k)
     end
 
-    savePGM(name, ext, operation, magic_num,
-            width, height, max_brightness,
-            gray)
+    savePGM(name, ext, operation, data)
 end
 
 """
@@ -253,18 +252,14 @@ function main(ARGS::Vector{String})
 
     pixels::Vector{Int16} = []
 
-    magic_num, width, height, max_brightness, pixels = loadFile(path)
+    loaded = loadFile(path)
 
-    if magic_num == "P3"
-        rgb::Vector{Int16} = pixels
-        ppm(name, ext, ARGS[2], magic_num,
-            width, height, max_brightness, rgb, cmd)
+    if loaded.magic_num == "P3"
+        ppm(name, ext, ARGS[2], loaded, cmd)
     end
 
-    if magic_num == "P2"
-        gray::Matrix{Int16} = createGrayscaleMatrix(width, height, pixels)
-        pgm(name, ext, ARGS[2], magic_num,
-             width, height, max_brightness, gray, cmd)
+    if loaded.magic_num == "P2"
+        pgm(name, ext, ARGS[2], loaded, cmd)
     end
 
     return

@@ -6,10 +6,51 @@
 #  This project is licensed under the MIT License.
 #  See the LICENSE file.
 ====================================================#
+"""
+# ImageProcessing
+
+## Functions
+
+### IO
+
+#### Public
+
+- `loadFile`
+- `savePPM`
+- `savePGM`
+- `loadGrayscale`
+- `loadRGB`
+- `createGrayscaleMatrix`
+- `createRGBMatrix`
+
+#### Private
+
+- `saveHeader`
+
+### Filter
+
+#### Public
+
+- `averaging`
+- `gaussian`
+- `sobelLR`
+- `sobelTD`
+- `sobelGradient`
+- `laplacian`
+
+#### Private
+
+- `conv`
+- `clipping`
+"""
 module ImageProcessing
 
-include("./programs/FileIO.jl")
+include("./programs/DataFormat.jl")
+export dataPGM, dataPPM, dataLoaded
+
+include("./programs/IO.jl")
 include("./programs/Filter.jl")
+include("./programs/DFT.jl")
 
 
 end # module ImageProsessing
