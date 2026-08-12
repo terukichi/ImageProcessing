@@ -11,7 +11,7 @@ module DFT
 using ..ImageProcessing: dataLoaded, dataPPM, dataPGM
 
 export amplitudeSpectrum
-export dft, DFTtoPGM, idft
+export dft, DFTtoPGM, idft, lowPassFilter, highPassFilter
 
 
 mutable struct amplitudeSpectrum
@@ -214,19 +214,35 @@ function idft(data::amplitudeSpectrum)::dataPGM
 end
 
 function DFTtoPGM(data::amplitudeSpectrum)::dataPGM
-    F::Matrix{Float64} = log.(abs.(data.spectrum))
+    F::Matrix{Float64} = [x == 0 ? abs(x) : log(abs(x)) for x in data.spectrum]
     F_normalized::Matrix{Float64} = zeros(Float64, data.height, data.width)
-    min_spc = minimum(F)
-    if min_spc < 0
-        F = [x - min_spc for x in F]
+    min_val = minimum(F)
+    if min_val < 0
+    println(1)
+        F = [x - min_val for x in F]
     end
-    max_spc = maximum(F)
-    if max_spc > 0
-        F_normalized = [x / max_spc * 255.0 for x in F]
+    max_val = maximum(F)
+    if max_val > 0
+        F_normalized = [x / max_val * 255.0 for x in F]
     end
     pixels::Matrix{Int16} = round.(Int16, F_normalized)
     return dataPGM("P2", data.width, data.height, 255, pixels)
 end
 
+function lowPassFilter(data::amplitudeSpectrum, radius::Float64)::amplitudeSpectrum
+    width::Int = data.width
+    height::Int = data.height
+    mask::Matrix{Int8} = [((x-width/2)^2+(y-height/2)^2) < radius^2 ? 1 : 0  for y in 1:height, x in 1:width]
+    data.spectrum = data.spectrum .* mask
+    return data
+end
+
+function highPassFilter(data::amplitudeSpectrum, radius::Float64)::amplitudeSpectrum
+    width::Int = data.width
+    height::Int = data.height
+    mask::Matrix{Int8} = [((x-width/2)^2+(y-height/2)^2) > radius^2 ? 1 : 0  for y in 1:height, x in 1:width]
+    data.spectrum = data.spectrum .* mask
+    return data
+end
 
 end                             # module DFT

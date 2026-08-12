@@ -10,9 +10,7 @@
 
 ## Image File Format
 
-- **PPM**
-  - P3
-- **PGM**
-  - P2
+- **PPM** (P3)
+- **PGM** (P2)
 
 ## Installation
