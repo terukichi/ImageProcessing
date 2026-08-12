@@ -214,18 +214,8 @@ function idft(data::amplitudeSpectrum)::dataPGM
 end
 
 function DFTtoPGM(data::amplitudeSpectrum)::dataPGM
-    F::Matrix{Float64} = [x == 0 ? abs(x) : log(abs(x)) for x in data.spectrum]
-    F_normalized::Matrix{Float64} = zeros(Float64, data.height, data.width)
-    min_val = minimum(F)
-    if min_val < 0
-    println(1)
-        F = [x - min_val for x in F]
-    end
-    max_val = maximum(F)
-    if max_val > 0
-        F_normalized = [x / max_val * 255.0 for x in F]
-    end
-    pixels::Matrix{Int16} = round.(Int16, F_normalized)
+    F::Matrix{Float64} = [abs(x) for x in data.spectrum]
+    pixels::Matrix{Int16} = round.(Int16, F)
     return dataPGM("P2", data.width, data.height, 255, pixels)
 end
 
