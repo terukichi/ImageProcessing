@@ -23,8 +23,8 @@ Unsharp masking
 - `data::dataPGM`
 """
 function unsharpMasking(data::dataPGM, k::Int8)::dataPGM
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     img::Matrix{Float64} = Float64.(data.pixels)
     filter::Matrix{Float64} = [-k/9.0 -k/9.0 -k/9.0;
                                -k/9.0 1+8.0k/9.0 -k/9.0;
@@ -52,8 +52,8 @@ Unsharp masking
 """
 function unsharpMasking(data::dataPPM, k::Int8)::dataPPM
     magic_num::String = data.magic_num
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     max_brightness::Int16 = data.max_brightness
     red::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.red)
     green::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.green)

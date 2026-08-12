@@ -65,7 +65,7 @@ end
       ext::AbstractString,
       operation::AbstractString,
       magic_num::AbstractString,
-      width::Int, height::Int,
+      width::UInt, height::UInt,
       max_brightness::Int16,
       rgb::Vector{Int16},
       cmd::UInt8)
@@ -76,8 +76,8 @@ end
 - `ext::AbstractString`
 - `operation::AbstractString`
 - `magic_num::AbstractString`
-- `width::Int`
-- `height::Int`
+- `width::UInt`
+- `height::UInt`
 - `max_brightness::Int16`
 - `rgb::Vector{Int16}`
 - `cmd::UInt8`
@@ -87,8 +87,8 @@ end
 function ppm(name::AbstractString, ext::AbstractString,
              operation::AbstractString,
              loaded, cmd::UInt8)
-    width::Int = loaded.width
-    height::Int = loaded.height
+    width::UInt = loaded.width
+    height::UInt = loaded.height
     rgb::Vector{Int16} = loaded.pixels
     red::Matrix{Int16}, green::Matrix{Int16}, blue::Matrix{Int16} = createRGBMatrix(width, height, rgb)
 
@@ -121,7 +121,7 @@ end
       ext::AbstractString,
       operation::AbstractString,
       magic_num::AbstractString,
-      width::Int, height::Int,
+      width::UInt, height::UInt,
       max_brightness::Int16,
       pixels::Vector{Int16},
       cmd::UInt8)
@@ -132,8 +132,8 @@ end
 - `ext::AbstractString`
 - `operation::AbstractString`
 - `magic_num::AbstractString`
-- `width::Int`
-- `height::Int`
+- `width::UInt`
+- `height::UInt`
 - `max_brightness::Int16`
 - `pixels::Vector{Int16}`
 - `cmd::UInt8`
@@ -143,8 +143,8 @@ end
 function pgm(name::AbstractString, ext::AbstractString,
              operation::AbstractString,
              loaded, cmd::UInt8)
-    width::Int = loaded.width
-    height::Int = loaded.height
+    width::UInt = loaded.width
+    height::UInt = loaded.height
     pixels::Matrix{Int16} = createGrayscaleMatrix(width, height, loaded.pixels)
     data = dataPGM(loaded.magic_num, width, height, loaded.max_brightness, pixels)
 
@@ -246,8 +246,8 @@ function main(ARGS::Vector{String})
 
     magic_num::String = ""
 
-    width::Int = 0
-    height::Int = 0
+    width::UInt = 0
+    height::UInt = 0
     max_brightness::Int16 = 0
 
     pixels::Vector{Int16} = []

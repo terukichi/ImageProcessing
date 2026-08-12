@@ -22,8 +22,8 @@ Averaging filter
 - `data::dataPGM`
 """
 function averagingFilter(data::dataPGM)::dataPGM
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     img::Matrix{Float64} = data.pixels
     filter::Matrix{Float64} = [1.0/9.0 1.0/9.0 1.0/9.0;
                                1.0/9.0 1.0/9.0 1.0/9.0;
@@ -50,8 +50,8 @@ Averaging filter
 """
 function averagingFilter(data::dataPPM)::dataPPM
     magic_num::String = data.magic_num
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     max_brightness::Int16 = data.max_brightness
     red::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.red)
     green::dataPGM = dataPGM(magic_num, width, height, data.max_brightness, data.green)

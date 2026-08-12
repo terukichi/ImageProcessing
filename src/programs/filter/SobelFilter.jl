@@ -9,7 +9,7 @@
 """
 # Horizontal Sobel Filter
 ```julia
-  sobelFilterHorizontal(width::Int, height::Int,
+  sobelFilterHorizontal(width::UInt, height::UInt,
                         pixels::Matrix{Float64})
                         ::Matrix{Float64}
 ```
@@ -18,14 +18,14 @@
 Sobel filter (Horizontal)
 
 ## Arguments
-- `width::Int`
-- `height::Int`
+- `width::UInt`
+- `height::UInt`
 - `pixels::Matrix{Float64}`
 
 ## Return value
 - `img::Matrix{Float64}`
 """
-function sobelFilterHorizontal(width::Int, height::Int, pixels::Matrix{Float64})::Matrix{Float64}
+function sobelFilterHorizontal(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
     filterLR::Matrix{Float64} = [-1 0 1;
                                  -2 0 2;
                                  -1 0 1]
@@ -49,8 +49,8 @@ Sobel filter (Horizontal)
 - `data::dataPGM`
 """
 function sobelFilterHorizontal(data::dataPGM)::dataPGM
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     filterLR::Matrix{Float64} = [-1 0 1;
                                  -2 0 2;
                                  -1 0 1]
@@ -76,8 +76,8 @@ Sobel filter (Horizontal)
 """
 function sobelFilterHorizontal(data::dataPPM)::dataPPM
     magic_num::String = data.magic_num
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     max_brightness::Int16 = data.max_brightness
     red::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.red)
     green::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.green)
@@ -94,7 +94,7 @@ end
 """
 # Vertical Sobel Filter
 ```julia
-  sobelFilterVertical(width::Int, height::Int,
+  sobelFilterVertical(width::UInt, height::UInt,
                       pixels::Matrix{Float64})
                       ::Matrix{Float64}
 ```
@@ -103,14 +103,14 @@ end
 Sobel filter (Vertical)
 
 ## Arguments
-- `width::Int`
-- `height::Int`
+- `width::UInt`
+- `height::UInt`
 - `pixels::Matrix{Float64}`
 
 ## Return value
 - `img::Matrix{Float64}`
 """
-function sobelFilterVertical(width::Int, height::Int, pixels::Matrix{Float64})::Matrix{Float64}
+function sobelFilterVertical(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
     filterTD::Matrix{Float64} = [ 1  2  1;
                                   0  0  0;
                                  -1 -2 -1]
@@ -134,8 +134,8 @@ Sobel filter (Vertical)
 - `data::dataPGM`
 """
 function sobelFilterVertical(data::dataPGM)::dataPGM
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     filterTD::Matrix{Float64} = [  1  2  1;
                                    0  0  0;
                                   -1 -2 -1]
@@ -161,8 +161,8 @@ Sobel filter (Vertical)
 """
 function sobelFilterVertical(data::dataPPM)::dataPPM
     magic_num::String = data.magic_num
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     max_brightness::Int16 = data.max_brightness
     red::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.red)
     green::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.green)
@@ -192,8 +192,8 @@ Sobel filter (Gradient)
 - `data::dataPGM`
 """
 function sobelFilterGradient(data::dataPGM)::dataPGM
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     img::Matrix{Float64} = Float64.(data.pixels)
     imgLR::Matrix{Float64} = sobelFilterHorizontal(width, height, img)
     imgTD::Matrix{Float64} = sobelFilterVertical(width, height, img)
@@ -219,8 +219,8 @@ Sobel filter (Gradient)
 """
 function sobelFilterGradient(data::dataPPM)::dataPPM
     magic_num::String = data.magic_num
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     max_brightness::Int16 = data.max_brightness
     red::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.red)
     green::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.green)

@@ -15,8 +15,8 @@ export dft, DFTtoPGM, idft, lowPassFilter, highPassFilter
 
 
 mutable struct amplitudeSpectrum
-    width::Int
-    height::Int
+    width::UInt
+    height::UInt
     spectrum::Matrix{Complex{Float64}}
 end
 
@@ -25,10 +25,10 @@ function EVENxEVEN(data::amplitudeSpectrum)::Matrix{Complex{Float64}}
     spectrum::Matrix{Complex{Float64}} = data.spectrum
     arranged::Matrix{Complex{Float64}} = zeros(Complex{Float64}, data.height, data.width)
 
-    arranged[1:floor(Int, end/2), 1:floor(Int, end/2)] = spectrum[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end]
-    arranged[1:floor(Int, end/2), floor(Int, end/2)+1:end] = spectrum[floor(Int, end/2)+1:end, 1:floor(Int, end/2)]
-    arranged[floor(Int, end/2)+1:end, 1:floor(Int, end/2)] = spectrum[1:floor(Int, end/2), floor(Int, end/2)+1:end]
-    arranged[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end] = spectrum[1:floor(Int, end/2), 1:floor(Int, end/2)]
+    arranged[1:floor(UInt, end/2), 1:floor(UInt, end/2)] = spectrum[floor(UInt, end/2)+1:end, floor(UInt, end/2)+1:end]
+    arranged[1:floor(UInt, end/2), floor(UInt, end/2)+1:end] = spectrum[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)]
+    arranged[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)] = spectrum[1:floor(UInt, end/2), floor(UInt, end/2)+1:end]
+    arranged[floor(UInt, end/2)+1:end, floor(UInt, end/2)+1:end] = spectrum[1:floor(UInt, end/2), 1:floor(UInt, end/2)]
     return arranged
 end
 
@@ -36,10 +36,10 @@ function EVENxODD(data::amplitudeSpectrum)::Matrix{Complex{Float64}}
     spectrum::Matrix{Complex{Float64}} = data.spectrum
     arranged::Matrix{Complex{Float64}} = zeros(Complex{Float64}, data.height, data.width)
 
-    arranged[1:floor(Int, end/2), 1:floor(Int, end/2)+1] = spectrum[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end]
-    arranged[1:floor(Int, end/2), floor(Int, end/2)+2:end] = spectrum[floor(Int, end/2)+1:end, 1:floor(Int, end/2)]
-    arranged[floor(Int, end/2)+1:end, 1:floor(Int, end/2)+1] = spectrum[1:floor(Int, end/2), floor(Int, end/2)+1:end]
-    arranged[floor(Int, end/2)+1:end, floor(Int, end/2)+2:end] = spectrum[1:floor(Int, end/2), 1:floor(Int, end/2)]
+    arranged[1:floor(UInt, end/2), 1:floor(UInt, end/2)+1] = spectrum[floor(UInt, end/2)+1:end, floor(UInt, end/2)+1:end]
+    arranged[1:floor(UInt, end/2), floor(UInt, end/2)+2:end] = spectrum[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)]
+    arranged[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)+1] = spectrum[1:floor(UInt, end/2), floor(UInt, end/2)+1:end]
+    arranged[floor(UInt, end/2)+1:end, floor(UInt, end/2)+2:end] = spectrum[1:floor(UInt, end/2), 1:floor(UInt, end/2)]
     return arranged
 end
 
@@ -47,10 +47,10 @@ function ODDxEVEN(data::amplitudeSpectrum)::Matrix{Complex{Float64}}
     spectrum::Matrix{Complex{Float64}} = data.spectrum
     arranged::Matrix{Complex{Float64}} = zeros(Complex{Float64}, data.height, data.width)
 
-    arranged[1:floor(Int, end/2)+1, 1:floor(Int, end/2)] = spectrum[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end]
-    arranged[floor(Int, end/2)+2:end, 1:floor(Int, end/2)] = spectrum[1:floor(Int, end/2), floor(Int, end/2)+1:end]
-    arranged[1:floor(Int, end/2)+1, floor(Int, end/2)+1:end] = spectrum[floor(Int, end/2)+1:end, 1:floor(Int, end/2)]
-    arranged[floor(Int, end/2)+2:end, floor(Int, end/2)+1:end] = spectrum[1:floor(Int, end/2), 1:floor(Int, end/2)]
+    arranged[1:floor(UInt, end/2)+1, 1:floor(UInt, end/2)] = spectrum[floor(UInt, end/2)+1:end, floor(UInt, end/2)+1:end]
+    arranged[floor(UInt, end/2)+2:end, 1:floor(UInt, end/2)] = spectrum[1:floor(UInt, end/2), floor(UInt, end/2)+1:end]
+    arranged[1:floor(UInt, end/2)+1, floor(UInt, end/2)+1:end] = spectrum[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)]
+    arranged[floor(UInt, end/2)+2:end, floor(UInt, end/2)+1:end] = spectrum[1:floor(UInt, end/2), 1:floor(UInt, end/2)]
     return arranged
 end
 
@@ -58,16 +58,16 @@ function ODDxODD(data::amplitudeSpectrum)::Matrix{Complex{Float64}}
     spectrum::Matrix{Complex{Float64}} = data.spectrum
     arranged::Matrix{Complex{Float64}} = zeros(Complex{Float64}, data.height, data.width)
 
-    arranged[1:floor(Int, end/2)+1, 1:floor(Int, end/2)+1] = spectrum[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end]
-    arranged[1:floor(Int, end/2)+1, floor(Int, end/2)+2:end] = spectrum[floor(Int, end/2)+1:end, 1:floor(Int, end/2)]
-    arranged[floor(Int, end/2)+2:end, 1:floor(Int, end/2)+1] = spectrum[1:floor(Int, end/2), floor(Int, end/2)+1:end]
-    arranged[floor(Int, end/2)+2:end, floor(Int, end/2)+2:end] = spectrum[1:floor(Int, end/2), 1:floor(Int, end/2)]
+    arranged[1:floor(UInt, end/2)+1, 1:floor(UInt, end/2)+1] = spectrum[floor(UInt, end/2)+1:end, floor(UInt, end/2)+1:end]
+    arranged[1:floor(UInt, end/2)+1, floor(UInt, end/2)+2:end] = spectrum[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)]
+    arranged[floor(UInt, end/2)+2:end, 1:floor(UInt, end/2)+1] = spectrum[1:floor(UInt, end/2), floor(UInt, end/2)+1:end]
+    arranged[floor(UInt, end/2)+2:end, floor(UInt, end/2)+2:end] = spectrum[1:floor(UInt, end/2), 1:floor(UInt, end/2)]
     return arranged
 end
 
 function arrangeMatrix(data::amplitudeSpectrum)::amplitudeSpectrum
-    height::Int = data.height
-    width::Int = data.width
+    height::UInt = data.height
+    width::UInt = data.width
     spectrum::Matrix{Complex{Float64}} = data.spectrum
     arranged::Matrix{Complex{Float64}} = zeros(Complex{Float64}, height, width)
 
@@ -87,47 +87,47 @@ function arrangeMatrix(data::amplitudeSpectrum)::amplitudeSpectrum
     return amplitudeSpectrum(width, height, arranged)
 end
 
-function EVENxEVEN(width::Int, height::Int, spectrum::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}
+function EVENxEVEN(width::UInt, height::UInt, spectrum::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}
     arranged::Matrix{Complex{Float64}} = zeros(Complex{Float64}, height, width)
 
-    arranged[1:floor(Int, end/2), 1:floor(Int, end/2)] = spectrum[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end]
-    arranged[1:floor(Int, end/2), floor(Int, end/2)+1:end] = spectrum[floor(Int, end/2)+1:end, 1:floor(Int, end/2)]
-    arranged[floor(Int, end/2)+1:end, 1:floor(Int, end/2)] = spectrum[1:floor(Int, end/2), floor(Int, end/2)+1:end]
-    arranged[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end] = spectrum[1:floor(Int, end/2), 1:floor(Int, end/2)]
+    arranged[1:floor(UInt, end/2), 1:floor(UInt, end/2)] = spectrum[floor(UInt, end/2)+1:end, floor(UInt, end/2)+1:end]
+    arranged[1:floor(UInt, end/2), floor(UInt, end/2)+1:end] = spectrum[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)]
+    arranged[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)] = spectrum[1:floor(UInt, end/2), floor(UInt, end/2)+1:end]
+    arranged[floor(UInt, end/2)+1:end, floor(UInt, end/2)+1:end] = spectrum[1:floor(UInt, end/2), 1:floor(UInt, end/2)]
     return arranged
 end
 
-function EVENxODD(width::Int, height::Int, spectrum::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}
+function EVENxODD(width::UInt, height::UInt, spectrum::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}
     arranged::Matrix{Complex{Float64}} = zeros(Complex{Float64}, height, width)
 
-    arranged[1:floor(Int, end/2), 1:floor(Int, end/2)] = spectrum[floor(Int, end/2)+1:end, floor(Int, end/2)+2:end]
-    arranged[1:floor(Int, end/2), floor(Int, end/2)+1:end] = spectrum[floor(Int, end/2)+1:end, 1:floor(Int, end/2)+1]
-    arranged[floor(Int, end/2)+1:end, 1:floor(Int, end/2)] = spectrum[1:floor(Int, end/2), floor(Int, end/2)+2:end]
-    arranged[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end] = spectrum[1:floor(Int, end/2), 1:floor(Int, end/2)+1]
+    arranged[1:floor(UInt, end/2), 1:floor(UInt, end/2)] = spectrum[floor(UInt, end/2)+1:end, floor(UInt, end/2)+2:end]
+    arranged[1:floor(UInt, end/2), floor(UInt, end/2)+1:end] = spectrum[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)+1]
+    arranged[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)] = spectrum[1:floor(UInt, end/2), floor(UInt, end/2)+2:end]
+    arranged[floor(UInt, end/2)+1:end, floor(UInt, end/2)+1:end] = spectrum[1:floor(UInt, end/2), 1:floor(UInt, end/2)+1]
     return arranged
 end
 
-function ODDxEVEN(width::Int, height::Int, spectrum::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}
+function ODDxEVEN(width::UInt, height::UInt, spectrum::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}
     arranged::Matrix{Complex{Float64}} = zeros(Complex{Float64}, height, width)
 
-    arranged[1:floor(Int, end/2), 1:floor(Int, end/2)] = spectrum[floor(Int, end/2)+2:end, floor(Int, end/2)+1:end]
-    arranged[floor(Int, end/2)+1:end, 1:floor(Int, end/2)] = spectrum[1:floor(Int, end/2)+1, floor(Int, end/2)+1:end]
-    arranged[1:floor(Int, end/2), floor(Int, end/2)+1:end] = spectrum[floor(Int, end/2)+2:end, 1:floor(Int, end/2)]
-    arranged[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end] = spectrum[1:floor(Int, end/2)+1, 1:floor(Int, end/2)]
+    arranged[1:floor(UInt, end/2), 1:floor(UInt, end/2)] = spectrum[floor(UInt, end/2)+2:end, floor(UInt, end/2)+1:end]
+    arranged[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)] = spectrum[1:floor(UInt, end/2)+1, floor(UInt, end/2)+1:end]
+    arranged[1:floor(UInt, end/2), floor(UInt, end/2)+1:end] = spectrum[floor(UInt, end/2)+2:end, 1:floor(UInt, end/2)]
+    arranged[floor(UInt, end/2)+1:end, floor(UInt, end/2)+1:end] = spectrum[1:floor(UInt, end/2)+1, 1:floor(UInt, end/2)]
     return arranged
 end
 
-function ODDxODD(width::Int, height::Int, spectrum::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}
+function ODDxODD(width::UInt, height::UInt, spectrum::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}
     arranged::Matrix{Complex{Float64}} = zeros(Complex{Float64}, height, width)
 
-    arranged[1:floor(Int, end/2), 1:floor(Int, end/2)] = spectrum[floor(Int, end/2)+2:end, floor(Int, end/2)+2:end]
-    arranged[1:floor(Int, end/2), floor(Int, end/2)+1:end] = spectrum[floor(Int, end/2)+2:end, 1:floor(Int, end/2)+1]
-    arranged[floor(Int, end/2)+1:end, 1:floor(Int, end/2)] = spectrum[1:floor(Int, end/2)+1, floor(Int, end/2)+2:end]
-    arranged[floor(Int, end/2)+1:end, floor(Int, end/2)+1:end] = spectrum[1:floor(Int, end/2)+1, 1:floor(Int, end/2)+1]
+    arranged[1:floor(UInt, end/2), 1:floor(UInt, end/2)] = spectrum[floor(UInt, end/2)+2:end, floor(UInt, end/2)+2:end]
+    arranged[1:floor(UInt, end/2), floor(UInt, end/2)+1:end] = spectrum[floor(UInt, end/2)+2:end, 1:floor(UInt, end/2)+1]
+    arranged[floor(UInt, end/2)+1:end, 1:floor(UInt, end/2)] = spectrum[1:floor(UInt, end/2)+1, floor(UInt, end/2)+2:end]
+    arranged[floor(UInt, end/2)+1:end, floor(UInt, end/2)+1:end] = spectrum[1:floor(UInt, end/2)+1, 1:floor(UInt, end/2)+1]
     return arranged
 end
 
-function arrangeMatrix(width::Int, height::Int, spectrum::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}
+function arrangeMatrix(width::UInt, height::UInt, spectrum::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}
     arranged::Matrix{Complex{Float64}} = zeros(Complex{Float64}, height, width)
 
     if iseven(height)
@@ -146,14 +146,14 @@ function arrangeMatrix(width::Int, height::Int, spectrum::Matrix{Complex{Float64
     return arranged
 end
 
-function calcDft(data::dataPGM, u::Int, v::Int)::Complex{Float64}
+function calcDft(data::dataPGM, u::UInt, v::UInt)::Complex{Float64}
     ans::Complex{Float64} = 0.0
     height::Float64 = Float64(data.height)
     width::Float64 = Float64(data.width)
-    for y::Int in 0:height-1
-        yp::Int = y+1
-        for x::Int in 0:width-1
-            xp::Int = x+1
+    for y::UInt in 0:height-1
+        yp::UInt = y+1
+        for x::UInt in 0:width-1
+            xp::UInt = x+1
             theta::Float64 = 2pi*(u*x/width+v*y/height)
             fxy::Float64 = data.pixels[yp, xp]/255.0
             ans += fxy * cos(theta)
@@ -164,13 +164,13 @@ function calcDft(data::dataPGM, u::Int, v::Int)::Complex{Float64}
 end
 
 function dft(data::dataPGM)::amplitudeSpectrum
-    height::Int = data.height
-    width::Int = data.width
+    height::UInt = data.height
+    width::UInt = data.width
     F::Matrix{Complex{Float64}} = zeros(Complex{Float64}, height, width)
-    for v::Int in 0:height-1
-        vp::Int = v+1
-        for u::Int in 0:width-1
-            up::Int = u+1
+    for v::UInt in 0:height-1
+        vp::UInt = v+1
+        for u::UInt in 0:width-1
+            up::UInt = u+1
             F[vp, up] = calcDft(data, u, v)
         end
     end
@@ -179,15 +179,15 @@ function dft(data::dataPGM)::amplitudeSpectrum
     return arrangeMatrix(ans)
 end
 
-function calcIdft(data::amplitudeSpectrum, x::Int, y::Int)::Float64
+function calcIdft(data::amplitudeSpectrum, x::UInt, y::UInt)::Float64
     cmp::Complex{Float64} = 0.0
     ams::Float64 = 0.0
     height::Float64 = Float64(data.height)
     width::Float64 = Float64(data.width)
-    for v::Int in 0:height-1
-        vp::Int = v+1
-        for u::Int in 0:width-1
-            up::Int = u+1
+    for v::UInt in 0:height-1
+        vp::UInt = v+1
+        for u::UInt in 0:width-1
+            up::UInt = u+1
             theta::Float64 = 2pi*(u*x/width+v*y/height)
             Fuv::Complex{Float64} = data.spectrum[vp, up]*255.0
             cmp += Fuv * cos(theta)
@@ -199,14 +199,14 @@ function calcIdft(data::amplitudeSpectrum, x::Int, y::Int)::Float64
 end
 
 function idft(data::amplitudeSpectrum)::dataPGM
-    height::Int = data.height
-    width::Int = data.width
+    height::UInt = data.height
+    width::UInt = data.width
     f::Matrix{Float64} = zeros(Float64, height, width)
     data.spectrum = arrangeMatrix(width, height, data.spectrum)
-    for y::Int in 0:height-1
-        yp::Int = y+1
-        for x::Int in 0:width-1
-            xp::Int = x+1
+    for y::UInt in 0:height-1
+        yp::UInt = y+1
+        for x::UInt in 0:width-1
+            xp::UInt = x+1
             f[yp, xp] = calcIdft(data, x, y)
         end
     end
@@ -215,22 +215,22 @@ end
 
 function DFTtoPGM(data::amplitudeSpectrum)::dataPGM
     F::Matrix{Float64} = [abs(x) for x in data.spectrum]
-    pixels::Matrix{Int16} = round.(Int16, F)
+    pixels::Matrix{UInt16} = round.(UInt16, F)
     return dataPGM("P2", data.width, data.height, 255, pixels)
 end
 
 function lowPassFilter(data::amplitudeSpectrum, radius::Float64)::amplitudeSpectrum
-    width::Int = data.width
-    height::Int = data.height
-    mask::Matrix{Int8} = [((x-width/2)^2+(y-height/2)^2) < radius^2 ? 1 : 0  for y in 1:height, x in 1:width]
+    width::UInt = data.width
+    height::UInt = data.height
+    mask::Matrix{UInt8} = [((x-width/2)^2+(y-height/2)^2) < radius^2 ? 1 : 0  for y in 1:height, x in 1:width]
     data.spectrum = data.spectrum .* mask
     return data
 end
 
 function highPassFilter(data::amplitudeSpectrum, radius::Float64)::amplitudeSpectrum
-    width::Int = data.width
-    height::Int = data.height
-    mask::Matrix{Int8} = [((x-width/2)^2+(y-height/2)^2) > radius^2 ? 1 : 0  for y in 1:height, x in 1:width]
+    width::UInt = data.width
+    height::UInt = data.height
+    mask::Matrix{UInt8} = [((x-width/2)^2+(y-height/2)^2) > radius^2 ? 1 : 0  for y in 1:height, x in 1:width]
     data.spectrum = data.spectrum .* mask
     return data
 end

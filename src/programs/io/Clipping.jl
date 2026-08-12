@@ -9,7 +9,7 @@
 """
 # Clipping
 ```julia
-  clipping(width::Int, height::Int,
+  clipping(width::UInt, height::UInt,
            pixels::Matrix{Float64})::Matrix{Int16}
 ```
 
@@ -18,17 +18,17 @@ Clipping
 - 0-255
 
 ## Arguments
-- `width::Int`
-- `height::Int`
+- `width::UInt`
+- `height::UInt`
 - `pixels::Matrix{Float64}`
 
 ## Return value
 - `img::Matrix{Int16}`
 """
-function clipping(width::Int, height::Int, pixels::Matrix{Float64})::Matrix{Int16}
+function clipping(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Int16}
     img::Matrix{Int16} = round.(Int16, pixels)
-    for i::Int in 1:height
-        for j::Int in 1:width
+    for i::UInt in 1:height
+        for j::UInt in 1:width
             if img[i, j] < 0
                 img[i, j] = 0
             elseif img[i, j] > 255
@@ -42,7 +42,7 @@ end
 """
 # Clipping
 ```julia
-  clipping(width::Int, height::Int,
+  clipping(width::UInt, height::UInt,
            pixels::Matrix{Int16})::Matrix{Int16}
 ```
 
@@ -51,16 +51,16 @@ Clipping
 - 0-255
 
 ## Arguments
-- `width::Int`
-- `height::Int`
+- `width::UInt`
+- `height::UInt`
 - `pixels::Matrix{Int16}`
 
 ## Return value
 - `img::Matrix{Int16}`
 """
-function clipping(width::Int, height::Int, pixels::Matrix{Int16})::Matrix{Int16}
-    for i::Int in 1:height
-        for j::Int in 1:width
+function clipping(width::UInt, height::UInt, pixels::Matrix{Int16})::Matrix{Int16}
+    for i::UInt in 1:height
+        for j::UInt in 1:width
             if pixels[i, j] < 0
                 pixels[i, j] = 0
             elseif pixels[i, j] > 255
