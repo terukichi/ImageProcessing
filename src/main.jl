@@ -180,25 +180,21 @@ end
 ```
 
 ## Options:
-```
-   | OPTION          | Summary                            |
-   |-----------------|------------------------------------|
-   | --help, -h      | print this help and exit           |
-   | --version, -v   | print version information and exit |
-```
+| OPTION          | Summary                            |
+|:--------------- |:---------------------------------- |
+| --help, -h      | print this help and exit           |
+| --version, -v   | print version information and exit |
 
 ## Commands:
-```
-   | COMMAND         | Summary                   |
-   |-----------------|---------------------------|
-   | averaging       | averaging filter          |
-   | gaussian        | gaussian filter           |
-   | sobel-gradient  | sobel filter (gradient)   |
-   | sobel-LR        | sobel filter (horizontal) |
-   | sobel-TD        | sobel filter (vertical)   |
-   | laplacian       | laplacian filter          |
-   | sharpening      | unsharp masking           |
-```
+| COMMAND         | Summary                   |
+|:--------------- |:------------------------- |
+| averaging       | averaging filter          |
+| gaussian        | gaussian filter           |
+| sobel-gradient  | sobel filter (gradient)   |
+| sobel-LR        | sobel filter (horizontal) |
+| sobel-TD        | sobel filter (vertical)   |
+| laplacian       | laplacian filter          |
+| sharpening      | unsharp masking           |
 """
 function main(ARGS::Vector{String})
     cmd::UInt8 = 0

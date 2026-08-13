@@ -31,3 +31,9 @@ mutable struct dataPPM
     green::Matrix{Float64}
     blue::Matrix{Float64}
 end
+
+mutable struct dataFrequency
+    width::UInt
+    height::UInt
+    frequency::Matrix{Complex{Float64}}
+end

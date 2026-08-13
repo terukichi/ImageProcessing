@@ -292,3 +292,53 @@ function savePGM(path::AbstractString,
         @error "Save error." exception=e
     end
 end
+
+function FtoPGM(data::dataFrequency)::dataPGM
+    F::Matrix{Float64} = [abs(x) for x in data.frequency]
+    pixels::Matrix{UInt16} = round.(UInt16, F)
+    return dataPGM("P2", data.width, data.height, 255, pixels)
+end
+
+"""
+# Save PGM Data
+```julia
+  savePGM(path::AbstractString, freq::dataFrequency)
+```
+
+## Summary
+Save PGM data
+
+## Arguments
+- `path::AbstractString`
+- `freq::dataFrequency`
+
+## Return value
+"""
+function savePGM(path::AbstractString,
+                 freq::dataFrequency)
+    width::UInt = freq.width
+    height::UInt = freq.height
+    pgm::dataPGM = FtoPGM(freq)
+    magic_num::String = pgm.magic_num
+    max_brightness::Int16 = pgm.max_brightness
+    pixels::Matrix{Int16} = round.(Int16, pgm.pixels)
+    pixels = clipping(width, height, pixels)
+    saveHeader(path, magic_num, width, height, max_brightness)
+
+    try
+        open("output/"*path, "a") do f
+            for i::UInt in 1:height
+                for j::UInt in 1:width-1
+                    print(f, pixels[i, j])
+                    print(f, " ")
+                end
+                print(f, pixels[i, width])
+                print(f, "\n")
+            end
+        end
+
+        println("Saved "*"output/"*path)
+    catch e
+        @error "Save error." exception=e
+    end
+end
