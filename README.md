@@ -18,7 +18,7 @@
 1. Start julia.
 
    ```shell
-   julia
+   $ julia
    ```
 
 2. Push `]` key.
