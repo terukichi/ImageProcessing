@@ -6,9 +6,6 @@
 #  This project is licensed under the MIT License.
 #  See the LICENSE file.
 ====================================================#
-# include("./programs/FileIO.jl")
-# include("./programs/Filter.jl")
-# include("./src/ImageProcessing.jl")
 import ImageProcessing
 
 using .ImageProcessing.IO, .ImageProcessing.Filter, .ImageProcessing
@@ -29,7 +26,7 @@ const UNSHARPMASK = 6
 """
 function printVersion()
     println("""
-    version 0.1.0
+    version 0.2.0
     """)
 end
 

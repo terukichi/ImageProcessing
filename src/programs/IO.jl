@@ -16,8 +16,8 @@
 - `loadFile`
 - `savePPM`
 - `savePGM`
-- `loadGrayscale`
-- `loadRGB`
+- `loadPPM`
+- `loadPGM`
 - `createGrayscaleMatrix`
 - `createRGBMatrix`
 
