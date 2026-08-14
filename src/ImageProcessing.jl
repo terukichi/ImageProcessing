@@ -40,8 +40,27 @@
 
 #### Private
 
-- `conv`
+- `convolution`
 - `clipping`
+
+### FrequencyFilter
+
+#### Public
+
+- `dft`
+- `idft`
+- `lowPassFilter`
+- `highPassFilter`
+
+#### Private
+
+- `EVENxEVEN`
+- `EVENxODD`
+- `ODDxEVEN`
+- `ODDxODD`
+- `arrangeMatrix`
+- `calcDft`
+- `calcIdft`
 """
 module ImageProcessing
 
@@ -51,6 +70,8 @@ export dataPGM, dataPPM, dataLoaded
 include("./programs/IO.jl")
 include("./programs/Filter.jl")
 include("./programs/FrequencyFilter.jl")
+include("./programs/ZeroPadding.jl")
+export zeroPadding
 
 
 end # module ImageProsessing

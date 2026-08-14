@@ -71,20 +71,3 @@ function convolution(width::UInt, height::UInt, pixels::Matrix{Float64}, filter:
 
     return img
 end
-
-function zeroPadding(data::dataPGM)::dataPGM
-    width::UInt = data.width + 2
-    height::UInt = data.height + 2
-    pixels::Matrix{Float64} = data.pixels
-    padded::Matrix{Float64} = zeros(Float64, height, width)
-    padded[2:end-1, 2:end-1] .= pixels
-    return dataPGM(data.magic_num, width, height, data.max_brightness, padded)
-end
-
-function zeroPadding(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
-    width += 2
-    height += 2
-    padded::Matrix{Float64} = zeros(Float64, height, width)
-    padded[2:end-1, 2:end-1] .= pixels
-    return padded
-end
