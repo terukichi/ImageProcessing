@@ -27,9 +27,8 @@ function laplacianFilter(data::dataPGM)::dataPGM
     filter::Matrix{Float64} = [0  1 0;
                                1 -4 1;
                                0  1 0]
-    img::Matrix{Float64} = convolution(width, height, data.pixels, filter)
-    data.pixels = img
-    return data
+    ans::dataPGM = convolution(data, filter)
+    return ans
 end
 
 
@@ -59,8 +58,6 @@ function laplacianFilter(data::dataPPM)::dataPPM
     red = laplacianFilter(red)
     green = laplacianFilter(green)
     blue = laplacianFilter(blue)
-    data.red = red.pixels
-    data.green = green.pixels
-    data.blue = blue.pixels
-    return data
+    ans = dataPPM(data.magic_num, red.width, red.height, data.max_brightness, red.pixels, green.pixels, blue.pixels)
+    return ans
 end

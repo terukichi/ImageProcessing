@@ -25,13 +25,11 @@ Unsharp masking
 function unsharpMasking(data::dataPGM, k::Int8)::dataPGM
     width::UInt = data.width
     height::UInt = data.height
-    img::Matrix{Float64} = Float64.(data.pixels)
     filter::Matrix{Float64} = [-k/9.0 -k/9.0 -k/9.0;
                                -k/9.0 1+8.0k/9.0 -k/9.0;
                                -k/9.0 -k/9.0 -k/9.0]
-    img = convolution(width, height, img, filter)
-    data.pixels = img
-    return data
+    ans::dataPGM = convolution(data, filter)
+    return ans
 end
 
 """
@@ -61,8 +59,6 @@ function unsharpMasking(data::dataPPM, k::Int8)::dataPPM
     red = unsharpMasking(red, k)
     green = unsharpMasking(green, k)
     blue = unsharpMasking(blue, k)
-    data.red = red.pixels
-    data.green = green.pixels
-    data.blue = blue.pixels
-    return data
+    ans = dataPPM(data.magic_num, red.width, red.height, data.max_brightness, red.pixels, green.pixels, blue.pixels)
+    return ans
 end

@@ -26,11 +26,11 @@ Sobel filter (Horizontal)
 - `img::Matrix{Float64}`
 """
 function sobelFilterHorizontal(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
-    filterLR::Matrix{Float64} = [-1 0 1;
-                                 -2 0 2;
-                                 -1 0 1]
-    imgLR::Matrix{Float64} = convolution(width, height, pixels, filterLR)
-    return imgLR
+    filter::Matrix{Float64} = [-1 0 1;
+                               -2 0 2;
+                               -1 0 1]
+    ans::Matrix{Float64} = convolution(width, height, pixels, filter)
+    return ans
 end
 
 """
@@ -51,12 +51,11 @@ Sobel filter (Horizontal)
 function sobelFilterHorizontal(data::dataPGM)::dataPGM
     width::UInt = data.width
     height::UInt = data.height
-    filterLR::Matrix{Float64} = [-1 0 1;
-                                 -2 0 2;
-                                 -1 0 1]
-    imgLR::Matrix{Float64} = convolution(width, height, data.pixels, filterLR)
-    data.pixels = imgLR
-    return data
+    filter::Matrix{Float64} = [-1 0 1;
+                               -2 0 2;
+                               -1 0 1]
+    ans::dataPGM = convolution(data, filter)
+    return ans
 end
 
 """
@@ -85,10 +84,8 @@ function sobelFilterHorizontal(data::dataPPM)::dataPPM
     red = sobelFilterHorizontal(red)
     green = sobelFilterHorizontal(green)
     blue = sobelFilterHorizontal(blue)
-    data.red = red.pixels
-    data.green = green.pixels
-    data.blue = blue.pixels
-    return data
+    ans = dataPPM(data.magic_num, red.width, red.height, data.max_brightness, red.pixels, green.pixels, blue.pixels)
+    return ans
 end
 
 """
@@ -111,11 +108,11 @@ Sobel filter (Vertical)
 - `img::Matrix{Float64}`
 """
 function sobelFilterVertical(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
-    filterTD::Matrix{Float64} = [ 1  2  1;
-                                  0  0  0;
-                                 -1 -2 -1]
-    imgTD::Matrix{Float64} = convolution(width, height, pixels, filterTD)
-    return imgTD
+    filter::Matrix{Float64} = [ 1  2  1;
+                                0  0  0;
+                               -1 -2 -1]
+    ans::Matrix{Float64} = convolution(width, height, pixels, filter)
+    return ans
 end
 
 """
@@ -136,12 +133,11 @@ Sobel filter (Vertical)
 function sobelFilterVertical(data::dataPGM)::dataPGM
     width::UInt = data.width
     height::UInt = data.height
-    filterTD::Matrix{Float64} = [  1  2  1;
-                                   0  0  0;
-                                  -1 -2 -1]
-    imgTD::Matrix{Float64} = convolution(width, height, data.pixels, filterTD)
-    data.pixels = imgTD
-    return data
+    filter::Matrix{Float64} = [  1  2  1;
+                                 0  0  0;
+                                -1 -2 -1]
+    ans::dataPGM = convolution(data, filter)
+    return ans
 end
 
 """
@@ -170,10 +166,8 @@ function sobelFilterVertical(data::dataPPM)::dataPPM
     red = sobelFilterVertical(red)
     green = sobelFilterVertical(green)
     blue = sobelFilterVertical(blue)
-    data.red = red.pixels
-    data.green = green.pixels
-    data.blue = blue.pixels
-    return data
+    ans = dataPPM(data.magic_num, red.width, red.height, data.max_brightness, red.pixels, green.pixels, blue.pixels)
+    return ans
 end
 
 """
@@ -198,8 +192,7 @@ function sobelFilterGradient(data::dataPGM)::dataPGM
     imgLR::Matrix{Float64} = sobelFilterHorizontal(width, height, img)
     imgTD::Matrix{Float64} = sobelFilterVertical(width, height, img)
     img = sqrt.(imgLR.^2 + imgTD.^2)
-    data.pixels = img
-    return data
+    return dataPGM(data.magic_num, width - 2, height - 2, data.max_brightness, img)
 end
 
 """
@@ -228,8 +221,6 @@ function sobelFilterGradient(data::dataPPM)::dataPPM
     red = sobelFilterGradient(red)
     green = sobelFilterGradient(green)
     blue = sobelFilterGradient(blue)
-    data.red = red.pixels
-    data.green = green.pixels
-    data.blue = blue.pixels
-    return data
+    ans = dataPPM(data.magic_num, red.width, red.height, data.max_brightness, red.pixels, green.pixels, blue.pixels)
+    return ans
 end

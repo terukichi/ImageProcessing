@@ -24,13 +24,11 @@ Averaging filter
 function averagingFilter(data::dataPGM)::dataPGM
     width::UInt = data.width
     height::UInt = data.height
-    img::Matrix{Float64} = data.pixels
     filter::Matrix{Float64} = [1.0/9.0 1.0/9.0 1.0/9.0;
                                1.0/9.0 1.0/9.0 1.0/9.0;
                                1.0/9.0 1.0/9.0 1.0/9.0]
-    img = convolution(width, height, img, filter)
-    data.pixels = img
-    return data
+    ans::dataPGM = convolution(data, filter)
+    return ans
 end
 
 """
@@ -59,8 +57,6 @@ function averagingFilter(data::dataPPM)::dataPPM
     red = averagingFilter(red)
     green = averagingFilter(green)
     blue = averagingFilter(blue)
-    data.red = red.pixels
-    data.green = green.pixels
-    data.blue = blue.pixels
-    return data
+    ans = dataPPM(data.magic_num, red.width, red.height, data.max_brightness, red.pixels, green.pixels, blue.pixels)
+    return ans
 end

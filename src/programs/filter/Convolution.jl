@@ -24,18 +24,67 @@ Convolution function
 - `filter::Matrix{Float64}`
 
 ## Return value
-- `pixels::Matrix{Float64}`
+- `ans::dataPGM`
 """
-function convolution(width::UInt, height::UInt, pixels::Matrix{Float64}, filter::Matrix{Float64})::Matrix{Float64}
-    ans::Matrix{Float64} = zeros(Float64, height, width)
-    padded::Matrix{Float64} = zeros(Float64, height + 2, width + 2)
-    padded[2:end-1, 2:end-1] .= pixels
+function convolution(data::dataPGM, filter::Matrix{Float64})::dataPGM
+    width::UInt = data.width - 2
+    height::UInt = data.height - 2
+    pixels::Matrix{Float64} = data.pixels
+    img::Matrix{Float64} = zeros(Float64, height, width)
 
     for i::UInt in 1:height
         for j::UInt in 1:width
-            ans[i, j] = sum(padded[i:i+2, j:j+2] .* filter)
+            img[i, j] = sum(pixels[i:i+2, j:j+2] .* filter)
         end
     end
 
-    return ans
+    return dataPGM(data.magic_num, width, height, data.max_brightness, img)
+end
+
+"""
+# Convolution
+```julia
+  convolution(width::UInt, height::UInt,
+       pixels::Matrix{Float64},
+       filter::Matrix{Float64})::Matrix{Float64}
+```
+
+## Summary
+Convolution function
+
+## Arguments
+- `width::UInt`
+- `height::UInt`
+- `pixels::Matrix{Float64}`
+- `filter::Matrix{Float64}`
+
+## Return value
+- `ans::dataPGM`
+"""
+function convolution(width::UInt, height::UInt, pixels::Matrix{Float64}, filter::Matrix{Float64})::Matrix{Float64}
+    img::Matrix{Float64} = zeros(Float64, height - 2, width - 2)
+    for i::UInt in 1:height - 2
+        for j::UInt in 1:width - 2
+            img[i, j] = sum(pixels[i:i+2, j:j+2] .* filter)
+        end
+    end
+
+    return img
+end
+
+function zeroPadding(data::dataPGM)::dataPGM
+    width::UInt = data.width + 2
+    height::UInt = data.height + 2
+    pixels::Matrix{Float64} = data.pixels
+    padded::Matrix{Float64} = zeros(Float64, height, width)
+    padded[2:end-1, 2:end-1] .= pixels
+    return dataPGM(data.magic_num, width, height, data.max_brightness, padded)
+end
+
+function zeroPadding(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
+    width += 2
+    height += 2
+    padded::Matrix{Float64} = zeros(Float64, height, width)
+    padded[2:end-1, 2:end-1] .= pixels
+    return padded
 end
