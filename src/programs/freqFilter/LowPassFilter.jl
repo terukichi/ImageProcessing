@@ -6,6 +6,22 @@
 #  This project is licensed under the MIT License.
 #  See the LICENSE file.
 ====================================================#
+"""
+# Lowpass Filter
+```julia
+  lowPassFilter(data::dataPGM)::dataPGM
+```
+
+## Summary
+Lowpass filter
+
+## Arguments
+- `data::dataFrequency`
+- `radius::Float64`
+
+## Return value
+- `data::dataFrequency`
+"""
 function lowPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
     width::UInt = data.width
     height::UInt = data.height

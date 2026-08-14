@@ -6,6 +6,22 @@
 #  This project is licensed under the MIT License.
 #  See the LICENSE file.
 ====================================================#
+"""
+# Highpass Filter
+```julia
+  highPassFilter(data::dataPGM)::dataPGM
+```
+
+## Summary
+Highpass filter
+
+## Arguments
+- `data::dataFrequency`
+- `radius::Float64`
+
+## Return value
+- `data::dataFrequency`
+"""
 function highPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
     width::UInt = data.width
     height::UInt = data.height

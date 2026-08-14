@@ -26,9 +26,23 @@ function calcIdft(data::dataFrequency, x::UInt, y::UInt)::Float64
 end
 
 """
+# IDFT
+```julia
+  idft(data::dataPGM)::dataPGM
+```
+
 !!! warning "deprecation"
 
     This function has a high computational complexity.
+
+## Summary
+IDFT
+
+## Arguments
+- `data::dataPGM`
+
+## Return value
+- `data::dataPGM`
 """
 function idft(data::dataFrequency)::dataPGM
     height::UInt = data.height

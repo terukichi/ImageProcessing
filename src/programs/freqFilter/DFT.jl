@@ -24,9 +24,23 @@ function calcDft(data::dataPGM, u::UInt, v::UInt)::Complex{Float64}
 end
 
 """
+# DFT
+```julia
+  dft(data::dataPGM)::dataPGM
+```
+
 !!! warning "deprecation"
 
     This function has a high computational complexity.
+
+## Summary
+DFT
+
+## Arguments
+- `data::dataPGM`
+
+## Return value
+- `data::dataPGM`
 """
 function dft(data::dataPGM)::dataFrequency
     height::UInt = data.height
