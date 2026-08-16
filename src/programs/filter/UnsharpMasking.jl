@@ -9,7 +9,7 @@
 """
 # Unsharp Masking
 ```julia
-  unsharpMasking(data::dataPGM, k::Int8)::dataPGM
+  unsharpMasking(data::dataPGM, k::Int)::dataPGM
 ```
 
 ## Summary
@@ -22,7 +22,7 @@ Unsharp masking
 ## Return value
 - `data::dataPGM`
 """
-function unsharpMasking(data::dataPGM, k::Int8)::dataPGM
+function unsharpMasking(data::dataPGM, k::Integer)::dataPGM
     width::UInt = data.width
     height::UInt = data.height
     filter::Matrix{Float64} = [-k/9.0 -k/9.0 -k/9.0;
@@ -35,7 +35,7 @@ end
 """
 # Unsharp Masking
 ```julia
-  unsharpMasking(data::dataPPM, k::Int8)::dataPPM
+  unsharpMasking(data::dataPPM, k::Int)::dataPPM
 ```
 
 ## Summary
@@ -48,7 +48,7 @@ Unsharp masking
 ## Return values
 - `data::dataPPM`
 """
-function unsharpMasking(data::dataPPM, k::Int8)::dataPPM
+function unsharpMasking(data::dataPPM, k::Integer)::dataPPM
     magic_num::String = data.magic_num
     width::UInt = data.width
     height::UInt = data.height

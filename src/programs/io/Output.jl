@@ -295,7 +295,7 @@ end
 
 function FtoPGM(data::dataFrequency)::dataPGM
     F::Matrix{Float64} = [abs(x) for x in data.frequency]
-    pixels::Matrix{UInt16} = round.(UInt16, F)
+    pixels::Matrix{UInt} = round.(UInt, F)
     return dataPGM("P2", data.width, data.height, 255, pixels)
 end
 
@@ -321,18 +321,18 @@ function savePGM(path::AbstractString,
     pgm::dataPGM = FtoPGM(freq)
     magic_num::String = pgm.magic_num
     max_brightness::Int16 = pgm.max_brightness
-    pixels::Matrix{Int16} = round.(Int16, pgm.pixels)
-    pixels = clipping(width, height, pixels)
+    pixels::Matrix{Float64} = pgm.pixels
+    clipped::Matrix{Int16} = clipping(width, height, pixels)
     saveHeader(path, magic_num, width, height, max_brightness)
 
     try
         open("output/"*path, "a") do f
             for i::UInt in 1:height
                 for j::UInt in 1:width-1
-                    print(f, pixels[i, j])
+                    print(f, clipped[i, j])
                     print(f, " ")
                 end
-                print(f, pixels[i, width])
+                print(f, clipped[i, width])
                 print(f, "\n")
             end
         end

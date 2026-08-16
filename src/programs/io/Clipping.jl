@@ -26,7 +26,7 @@ Clipping
 - `img::Matrix{Int16}`
 """
 function clipping(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Int16}
-    img::Matrix{Int16} = round.(Int16, pixels)
+    img::Matrix{Integer} = round.(Integer, pixels)
     for i::UInt in 1:height
         for j::UInt in 1:width
             if img[i, j] < 0
