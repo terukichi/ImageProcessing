@@ -9,7 +9,7 @@
 """
 # Unsharp Masking
 ```julia
-  unsharpMasking(data::dataPGM, k::Int8)::dataPGM
+  unsharpMasking(data::dataPGM, k::Integer)::dataPGM
 ```
 
 ## Summary
@@ -17,27 +17,25 @@ Unsharp masking
 
 ## Arguments
 - `data::dataPGM`
-- `k::Int8`
+- `k::Integer`
 
 ## Return value
 - `data::dataPGM`
 """
-function unsharpMasking(data::dataPGM, k::Int8)::dataPGM
-    width::Int = data.width
-    height::Int = data.height
-    img::Matrix{Float64} = Float64.(data.pixels)
+function unsharpMasking(data::dataPGM, k::Integer)::dataPGM
+    width::UInt = data.width
+    height::UInt = data.height
     filter::Matrix{Float64} = [-k/9.0 -k/9.0 -k/9.0;
                                -k/9.0 1+8.0k/9.0 -k/9.0;
                                -k/9.0 -k/9.0 -k/9.0]
-    img = convolution(width, height, img, filter)
-    data.pixels = img
-    return data
+    ans::dataPGM = convolution(data, filter)
+    return ans
 end
 
 """
 # Unsharp Masking
 ```julia
-  unsharpMasking(data::dataPPM, k::Int8)::dataPPM
+  unsharpMasking(data::dataPPM, k::Integer)::dataPPM
 ```
 
 ## Summary
@@ -45,15 +43,15 @@ Unsharp masking
 
 ## Arguments
 - `data::dataPPM`
-- `k::Int8`
+- `k::Integer`
 
 ## Return values
 - `data::dataPPM`
 """
-function unsharpMasking(data::dataPPM, k::Int8)::dataPPM
+function unsharpMasking(data::dataPPM, k::Integer)::dataPPM
     magic_num::String = data.magic_num
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     max_brightness::Int16 = data.max_brightness
     red::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.red)
     green::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.green)
@@ -61,8 +59,6 @@ function unsharpMasking(data::dataPPM, k::Int8)::dataPPM
     red = unsharpMasking(red, k)
     green = unsharpMasking(green, k)
     blue = unsharpMasking(blue, k)
-    data.red = red.pixels
-    data.green = green.pixels
-    data.blue = blue.pixels
-    return data
+    ans = dataPPM(data.magic_num, red.width, red.height, data.max_brightness, red.pixels, green.pixels, blue.pixels)
+    return ans
 end

@@ -37,10 +37,10 @@ function loadFile(path::AbstractString)::dataLoaded
 
         try
             result.magic_num = data[1]
-            result.width = parse(Int, data[2])
-            result.height = parse(Int, data[3])
-            result.max_brightness = parse(Int16, data[4])
-            result.pixels = parse.(Int16, data[5:end])
+            result.width = parse(UInt, data[2])
+            result.height = parse(UInt, data[3])
+            result.max_brightness = parse(UInt16, data[4])
+            result.pixels = parse.(UInt16, data[5:end])
         catch e
             @error "File parameter error." exception=e
         end
@@ -54,7 +54,7 @@ end
 """
 # Create Grayscale Matrix
 ```julia
-  createGrayscaleMatrix(width::Int, height::Int,
+  createGrayscaleMatrix(width::UInt, height::UInt,
                         pixels::Vector{Int16})::Matrix{Float64}
 ```
 
@@ -62,21 +62,21 @@ end
 Create grayscale matrix from list
 
 ## Arguments
-- `width::Int`
-- `heigh::Int`
+- `width::UInt`
+- `heigh::UInt`
 - `pixels::Vector{Int16}`
 
 ## Return value
 - `gray::Matrix{Float64}`
 """
-function createGrayscaleMatrix(width::Int, height::Int, pixels::Vector{Int16})::Matrix{Float64}
+function createGrayscaleMatrix(width::UInt, height::UInt, pixels::Vector{Int16})::Matrix{Float64}
     return transpose(reshape(Float64.(pixels), width, height))
 end
 
 """
 # Create RGB Matrix
 ```julia
-  createRGBMatrix(width::Int, height::Int,
+  createRGBMatrix(width::UInt, height::UInt,
                   pixels::Vector{Int16})
                   ::Tuple{Matrix{Float64}, Matrix{Float64}, Matrix{Float64}}
 ```
@@ -85,8 +85,8 @@ end
 Create RGB matrix from list
 
 ## Arguments
-- `width::Int`
-- `heigh::Int`
+- `width::UInt`
+- `heigh::UInt`
 - `pixels::Vector{Int16}`
 
 ## Return value
@@ -94,7 +94,7 @@ Create RGB matrix from list
 - `green::Matrix{Float64}`
 - `blue::Matrix{Float64}`
 """
-function createRGBMatrix(width::Int, height::Int, pixels::Vector{Int16})::Tuple{Matrix{Float64}, Matrix{Float64}, Matrix{Float64}}
+function createRGBMatrix(width::UInt, height::UInt, pixels::Vector{Int16})::Tuple{Matrix{Float64}, Matrix{Float64}, Matrix{Float64}}
     red::Matrix{Float64} = createGrayscaleMatrix(width, height, pixels[1:3:end])
     green::Matrix{Float64} = createGrayscaleMatrix(width, height, pixels[2:3:end])
     blue::Matrix{Float64} = createGrayscaleMatrix(width, height, pixels[3:3:end])
@@ -119,8 +119,8 @@ Load grayscale data
 function loadPGM(path::AbstractString)::dataPGM
     loaded::dataLoaded = loadFile(path)
     magic_num::String = loaded.magic_num
-    width::Int = loaded.width
-    height::Int = loaded.height
+    width::UInt = loaded.width
+    height::UInt = loaded.height
     max_brightness::Int16 = loaded.max_brightness
     pixels::Vector{Int16} = loaded.pixels
     gray::Matrix{Float64} = createGrayscaleMatrix(width, height, pixels)
@@ -145,8 +145,8 @@ Load RGB data
 function loadPPM(path::AbstractString)::dataPPM
     loaded::dataLoaded = loadFile(path)
     magic_num::String = loaded.magic_num
-    width::Int = loaded.width
-    height::Int = loaded.height
+    width::UInt = loaded.width
+    height::UInt = loaded.height
     max_brightness::Int16 = loaded.max_brightness
     pixels::Vector{Int16} = loaded.pixels
     red::Matrix{Float64}, green::Matrix{Float64}, blue::Matrix{Float64} = createRGBMatrix(width, height, pixels)

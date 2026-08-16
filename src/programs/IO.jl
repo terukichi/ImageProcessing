@@ -16,8 +16,8 @@
 - `loadFile`
 - `savePPM`
 - `savePGM`
-- `loadGrayscale`
-- `loadRGB`
+- `loadPPM`
+- `loadPGM`
 - `createGrayscaleMatrix`
 - `createRGBMatrix`
 
@@ -28,7 +28,7 @@
 """
 module IO
 
-using ..ImageProcessing: dataLoaded, dataPPM, dataPGM
+using ..ImageProcessing: dataLoaded, dataPPM, dataPGM, dataFrequency
 
 
 include("io/Input.jl")

@@ -9,7 +9,7 @@
 """
 # Horizontal Sobel Filter
 ```julia
-  sobelFilterHorizontal(width::Int, height::Int,
+  sobelFilterHorizontal(width::UInt, height::UInt,
                         pixels::Matrix{Float64})
                         ::Matrix{Float64}
 ```
@@ -18,19 +18,19 @@
 Sobel filter (Horizontal)
 
 ## Arguments
-- `width::Int`
-- `height::Int`
+- `width::UInt`
+- `height::UInt`
 - `pixels::Matrix{Float64}`
 
 ## Return value
 - `img::Matrix{Float64}`
 """
-function sobelFilterHorizontal(width::Int, height::Int, pixels::Matrix{Float64})::Matrix{Float64}
-    filterLR::Matrix{Float64} = [-1 0 1;
-                                 -2 0 2;
-                                 -1 0 1]
-    imgLR::Matrix{Float64} = convolution(width, height, pixels, filterLR)
-    return imgLR
+function sobelFilterHorizontal(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
+    filter::Matrix{Float64} = [-1 0 1;
+                               -2 0 2;
+                               -1 0 1]
+    ans::Matrix{Float64} = convolution(width, height, pixels, filter)
+    return ans
 end
 
 """
@@ -49,14 +49,13 @@ Sobel filter (Horizontal)
 - `data::dataPGM`
 """
 function sobelFilterHorizontal(data::dataPGM)::dataPGM
-    width::Int = data.width
-    height::Int = data.height
-    filterLR::Matrix{Float64} = [-1 0 1;
-                                 -2 0 2;
-                                 -1 0 1]
-    imgLR::Matrix{Float64} = convolution(width, height, data.pixels, filterLR)
-    data.pixels = imgLR
-    return data
+    width::UInt = data.width
+    height::UInt = data.height
+    filter::Matrix{Float64} = [-1 0 1;
+                               -2 0 2;
+                               -1 0 1]
+    ans::dataPGM = convolution(data, filter)
+    return ans
 end
 
 """
@@ -76,8 +75,8 @@ Sobel filter (Horizontal)
 """
 function sobelFilterHorizontal(data::dataPPM)::dataPPM
     magic_num::String = data.magic_num
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     max_brightness::Int16 = data.max_brightness
     red::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.red)
     green::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.green)
@@ -85,16 +84,14 @@ function sobelFilterHorizontal(data::dataPPM)::dataPPM
     red = sobelFilterHorizontal(red)
     green = sobelFilterHorizontal(green)
     blue = sobelFilterHorizontal(blue)
-    data.red = red.pixels
-    data.green = green.pixels
-    data.blue = blue.pixels
-    return data
+    ans = dataPPM(data.magic_num, red.width, red.height, data.max_brightness, red.pixels, green.pixels, blue.pixels)
+    return ans
 end
 
 """
 # Vertical Sobel Filter
 ```julia
-  sobelFilterVertical(width::Int, height::Int,
+  sobelFilterVertical(width::UInt, height::UInt,
                       pixels::Matrix{Float64})
                       ::Matrix{Float64}
 ```
@@ -103,19 +100,19 @@ end
 Sobel filter (Vertical)
 
 ## Arguments
-- `width::Int`
-- `height::Int`
+- `width::UInt`
+- `height::UInt`
 - `pixels::Matrix{Float64}`
 
 ## Return value
 - `img::Matrix{Float64}`
 """
-function sobelFilterVertical(width::Int, height::Int, pixels::Matrix{Float64})::Matrix{Float64}
-    filterTD::Matrix{Float64} = [ 1  2  1;
-                                  0  0  0;
-                                 -1 -2 -1]
-    imgTD::Matrix{Float64} = convolution(width, height, pixels, filterTD)
-    return imgTD
+function sobelFilterVertical(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
+    filter::Matrix{Float64} = [ 1  2  1;
+                                0  0  0;
+                               -1 -2 -1]
+    ans::Matrix{Float64} = convolution(width, height, pixels, filter)
+    return ans
 end
 
 """
@@ -134,14 +131,13 @@ Sobel filter (Vertical)
 - `data::dataPGM`
 """
 function sobelFilterVertical(data::dataPGM)::dataPGM
-    width::Int = data.width
-    height::Int = data.height
-    filterTD::Matrix{Float64} = [  1  2  1;
-                                   0  0  0;
-                                  -1 -2 -1]
-    imgTD::Matrix{Float64} = convolution(width, height, data.pixels, filterTD)
-    data.pixels = imgTD
-    return data
+    width::UInt = data.width
+    height::UInt = data.height
+    filter::Matrix{Float64} = [  1  2  1;
+                                 0  0  0;
+                                -1 -2 -1]
+    ans::dataPGM = convolution(data, filter)
+    return ans
 end
 
 """
@@ -161,8 +157,8 @@ Sobel filter (Vertical)
 """
 function sobelFilterVertical(data::dataPPM)::dataPPM
     magic_num::String = data.magic_num
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     max_brightness::Int16 = data.max_brightness
     red::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.red)
     green::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.green)
@@ -170,10 +166,8 @@ function sobelFilterVertical(data::dataPPM)::dataPPM
     red = sobelFilterVertical(red)
     green = sobelFilterVertical(green)
     blue = sobelFilterVertical(blue)
-    data.red = red.pixels
-    data.green = green.pixels
-    data.blue = blue.pixels
-    return data
+    ans = dataPPM(data.magic_num, red.width, red.height, data.max_brightness, red.pixels, green.pixels, blue.pixels)
+    return ans
 end
 
 """
@@ -192,14 +186,13 @@ Sobel filter (Gradient)
 - `data::dataPGM`
 """
 function sobelFilterGradient(data::dataPGM)::dataPGM
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     img::Matrix{Float64} = Float64.(data.pixels)
     imgLR::Matrix{Float64} = sobelFilterHorizontal(width, height, img)
     imgTD::Matrix{Float64} = sobelFilterVertical(width, height, img)
     img = sqrt.(imgLR.^2 + imgTD.^2)
-    data.pixels = img
-    return data
+    return dataPGM(data.magic_num, width - 2, height - 2, data.max_brightness, img)
 end
 
 """
@@ -219,8 +212,8 @@ Sobel filter (Gradient)
 """
 function sobelFilterGradient(data::dataPPM)::dataPPM
     magic_num::String = data.magic_num
-    width::Int = data.width
-    height::Int = data.height
+    width::UInt = data.width
+    height::UInt = data.height
     max_brightness::Int16 = data.max_brightness
     red::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.red)
     green::dataPGM = dataPGM(magic_num, width, height, max_brightness, data.green)
@@ -228,8 +221,6 @@ function sobelFilterGradient(data::dataPPM)::dataPPM
     red = sobelFilterGradient(red)
     green = sobelFilterGradient(green)
     blue = sobelFilterGradient(blue)
-    data.red = red.pixels
-    data.green = green.pixels
-    data.blue = blue.pixels
-    return data
+    ans = dataPPM(data.magic_num, red.width, red.height, data.max_brightness, red.pixels, green.pixels, blue.pixels)
+    return ans
 end

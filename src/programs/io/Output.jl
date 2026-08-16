@@ -15,7 +15,7 @@ include("Clipping.jl")
              ext::AbstractString,
              operation::AbstractString,
              magic_num::AbstractString,
-             width::Int, height::Int,
+             width::UInt, height::UInt,
              max_brightness::Int16)
 ```
 
@@ -27,8 +27,8 @@ Save header information
 - `ext::AbstractString`
 - `operation::AbstractString`
 - `magic_num::AbstractString`
-- `width::Int`
-- `height::Int`
+- `width::UInt`
+- `height::UInt`
 - `max_brightness::Int16`
 
 ## Return value
@@ -36,7 +36,7 @@ Save header information
 function saveHeader(name::AbstractString, ext::AbstractString,
                     operation::AbstractString,
                     magic_num::AbstractString,
-                    width::Int, height::Int,
+                    width::UInt, height::UInt,
                     max_brightness::Int16)
     if !isdir("output")
         mkdir("output")
@@ -60,7 +60,7 @@ end
 ```julia
   saveHeader(path::AbstractString,
              magic_num::AbstractString,
-             width::Int, height::Int,
+             width::UInt, height::UInt,
              max_brightness::Int16)
 ```
 
@@ -70,15 +70,15 @@ Save header information
 ## Arguments
 - `path::AbstractString`
 - `magic_num::AbstractString`
-- `width::Int`
-- `height::Int`
+- `width::UInt`
+- `height::UInt`
 - `max_brightness::Int16`
 
 ## Return value
 """
 function saveHeader(path::AbstractString,
                     magic_num::AbstractString,
-                    width::Int, height::Int,
+                    width::UInt, height::UInt,
                     max_brightness::Int16)
     if !isdir("output")
         mkdir("output")
@@ -121,8 +121,8 @@ function savePPM(name::AbstractString, ext::AbstractString,
                  operation::AbstractString,
                  ppm::dataPPM)
     magic_num::String = ppm.magic_num
-    width::Int = ppm.width
-    height::Int = ppm.height
+    width::UInt = ppm.width
+    height::UInt = ppm.height
     max_brightness::Int16 = ppm.max_brightness
     red::Matrix{Int16} = round.(Int16, ppm.red)
     green::Matrix{Int16} = round.(Int16, ppm.green)
@@ -134,8 +134,8 @@ function savePPM(name::AbstractString, ext::AbstractString,
 
     try
         open("output/"*name*"-"*operation*ext, "a") do f
-            for i::Int in 1:height
-                for j::Int in 1:width
+            for i::UInt in 1:height
+                for j::UInt in 1:width
                     print(f, red[i, j])
                     print(f, " ")
                     print(f, green[i, j])
@@ -170,8 +170,8 @@ Save PPM data
 function savePPM(path::AbstractString,
                  ppm::dataPPM)
     magic_num::String = ppm.magic_num
-    width::Int = ppm.width
-    height::Int = ppm.height
+    width::UInt = ppm.width
+    height::UInt = ppm.height
     max_brightness::Int16 = ppm.max_brightness
     red::Matrix{Int16} = round.(Int16, ppm.red)
     green::Matrix{Int16} = round.(Int16, ppm.green)
@@ -183,8 +183,8 @@ function savePPM(path::AbstractString,
 
     try
         open("output/"*path, "a") do f
-            for i::Int in 1:height
-                for j::Int in 1:width
+            for i::UInt in 1:height
+                for j::UInt in 1:width
                     print(f, red[i, j])
                     print(f, " ")
                     print(f, green[i, j])
@@ -225,8 +225,8 @@ function savePGM(name::AbstractString, ext::AbstractString,
                  operation::AbstractString,
                  pgm::dataPGM)
     magic_num::String = pgm.magic_num
-    width::Int = pgm.width
-    height::Int = pgm.height
+    width::UInt = pgm.width
+    height::UInt = pgm.height
     max_brightness::Int16 = pgm.max_brightness
     pixels::Matrix{Int16} = round.(Int16, pgm.pixels)
     pixels = clipping(width, height, pixels)
@@ -234,8 +234,8 @@ function savePGM(name::AbstractString, ext::AbstractString,
 
     try
         open("output/"*name*"-"*operation*ext, "a") do f
-            for i::Int in 1:height
-                for j::Int in 1:width-1
+            for i::UInt in 1:height
+                for j::UInt in 1:width-1
                     print(f, pixels[i, j])
                     print(f, " ")
                 end
@@ -268,8 +268,8 @@ Save PGM data
 function savePGM(path::AbstractString,
                  pgm::dataPGM)
     magic_num::String = pgm.magic_num
-    width::Int = pgm.width
-    height::Int = pgm.height
+    width::UInt = pgm.width
+    height::UInt = pgm.height
     max_brightness::Int16 = pgm.max_brightness
     pixels::Matrix{Int16} = round.(Int16, pgm.pixels)
     pixels = clipping(width, height, pixels)
@@ -277,12 +277,62 @@ function savePGM(path::AbstractString,
 
     try
         open("output/"*path, "a") do f
-            for i::Int in 1:height
-                for j::Int in 1:width-1
+            for i::UInt in 1:height
+                for j::UInt in 1:width-1
                     print(f, pixels[i, j])
                     print(f, " ")
                 end
                 print(f, pixels[i, width])
+                print(f, "\n")
+            end
+        end
+
+        println("Saved "*"output/"*path)
+    catch e
+        @error "Save error." exception=e
+    end
+end
+
+function FtoPGM(data::dataFrequency)::dataPGM
+    F::Matrix{Float64} = [abs(x) for x in data.frequency]
+    pixels::Matrix{UInt} = round.(UInt, F)
+    return dataPGM("P2", data.width, data.height, 255, pixels)
+end
+
+"""
+# Save PGM Data
+```julia
+  savePGM(path::AbstractString, freq::dataFrequency)
+```
+
+## Summary
+Save PGM data
+
+## Arguments
+- `path::AbstractString`
+- `freq::dataFrequency`
+
+## Return value
+"""
+function savePGM(path::AbstractString,
+                 freq::dataFrequency)
+    width::UInt = freq.width
+    height::UInt = freq.height
+    pgm::dataPGM = FtoPGM(freq)
+    magic_num::String = pgm.magic_num
+    max_brightness::Int16 = pgm.max_brightness
+    pixels::Matrix{Float64} = pgm.pixels
+    clipped::Matrix{Int16} = clipping(width, height, pixels)
+    saveHeader(path, magic_num, width, height, max_brightness)
+
+    try
+        open("output/"*path, "a") do f
+            for i::UInt in 1:height
+                for j::UInt in 1:width-1
+                    print(f, clipped[i, j])
+                    print(f, " ")
+                end
+                print(f, clipped[i, width])
                 print(f, "\n")
             end
         end
