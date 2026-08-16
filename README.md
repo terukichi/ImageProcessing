@@ -13,11 +13,11 @@
 - **PGM** (P2)
 - **PPM** (P3)
 
-| module          | **.pgm** (P2) | **.ppm** (P3) |
-| :-------------- | ------------- | ------------- |
-| IO              | available     | available     |
-| Filter          | available     | available     |
-| FrequencyFilter | available     | ---           |
+| module          | .pgm (P2) |  .ppm (P3)  |
+| :-------------- | :-------: | :---------: |
+| IO              | available |  available  |
+| Filter          | available |  available  |
+| FrequencyFilter | available | unavailable |
 
 ## Installation
 
@@ -68,6 +68,9 @@ savePGM("output2.pgm", ifft_img)
 
 ### IO
 
+<details>
+    <summary>click here</summary>
+
 - Load File
   ```julia
   loadFile(path::AbstractString)::dataLoaded
@@ -108,7 +111,12 @@ savePGM("output2.pgm", ifft_img)
   savePGM(path::AbstractString, freq::dataFrequency)
   ```
 
+</details>
+
 ### Filter
+
+<details>
+    <summary>click here</summary>
 
 - Averaging Filter
   ```julia
@@ -164,7 +172,12 @@ savePGM("output2.pgm", ifft_img)
   unsharpMasking(data::dataPPM, k::Integer)::dataPPM
   ```
 
+</details>
+
 ### FrequencyFilter
+
+<details>
+    <summary>click here</summary>
 
 - DFT
   ```julia
@@ -195,7 +208,12 @@ savePGM("output2.pgm", ifft_img)
   bandPassFilter(data::dataFrequency, radius_a::Float64, radius_b::Float64)::dataFrequency
   ```
 
+</details>
+
 ### Others
+
+<details>
+    <summary>click here</summary>
 
 - Zero Padding
 
@@ -210,3 +228,5 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   zeroPadding(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
   ```
+
+</details>

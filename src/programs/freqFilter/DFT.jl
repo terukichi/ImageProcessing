@@ -54,6 +54,6 @@ function dft(data::dataPGM)::dataFrequency
         end
     end
 
-    ans = dataFrequency(width, height, 0, 0, F)
+    ans = dataFrequency(width, height, width, height, F)
     return arrangeMatrix(ans)
 end

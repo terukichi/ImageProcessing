@@ -16,7 +16,7 @@ function calcFft(data::Vector{Complex{Float64}})::Vector{Complex{Float64}}
     E = calcFft(even)
     O = calcFft(odd)
     ans::Vector{Complex{Float64}} = zeros(Complex{Float64}, n)
-    for k in 0:floor(Integer, n/2)-1
+    for k::Integer in 0:floor(Integer, n/2)-1
         W = exp(-2pi*im*k/n)
         ans[k + 1] = E[k+1] + W * O[k+1]
         ans[k + floor.(Integer, n/2) + 1] = E[k+1] - W * O[k+1]
@@ -56,12 +56,12 @@ function fft(data::dataPGM)::dataFrequency
     frequency::Matrix{Complex{Float64}} = zeros(Complex{Float64}, new_height, new_width)
     padded::Matrix{Complex{Float64}} = zeros(Complex{Float64}, new_height, new_width)
     padded[1:height, 1:width] = pixels ./ 255.0
-    for i in 1:2^fft_h
+    for i::UInt in 1:2^fft_h
         frequency[i, :] = calcFft(padded[i, :])
     end
-    for i in 1:2^fft_w
+    for i::UInt in 1:2^fft_w
         frequency[:, i] = calcFft(frequency[:, i])
     end
-    ans = dataFrequency(new_width, new_height, new_width - width, new_height - height,frequency)
+    ans = dataFrequency(new_width, new_height, width, height,frequency)
     return arrangeMatrix(ans)
 end

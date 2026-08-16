@@ -31,7 +31,6 @@ using ..ImageProcessing: dataPPM, dataPGM
 
 
 include("filter/Convolution.jl")
-include("filter/Normalize.jl")
 include("filter/AveragingFilter.jl")
 include("filter/GaussianFilter.jl")
 include("filter/SobelFilter.jl")

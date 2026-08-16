@@ -16,7 +16,7 @@ function calcIfft(data::Vector{Complex{Float64}})::Vector{Complex{Float64}}
     E = calcIfft(even)
     O = calcIfft(odd)
     ans::Vector{Complex{Float64}} = zeros(Complex{Float64}, n)
-    for k in 0:floor(Integer, n/2)-1
+    for k::Integer in 0:floor(Integer, n/2)-1
         W = exp(2pi*im*k/n)
         ans[k + 1] = E[k+1] + W * O[k+1]
         ans[k + floor.(Integer, n/2) + 1] = E[k+1] - W * O[k+1]
@@ -42,16 +42,16 @@ IFFT
 function ifft(data::dataFrequency)::dataPGM
     width::UInt = data.width
     height::UInt = data.height
-    img_width::UInt = width - data.add_width
-    img_height::UInt = height - data.add_height
+    img_width::UInt = data.init_width
+    img_height::UInt = data.init_height
     frequency::Matrix{Complex{Float64}} = Complex{Float64}.(data.frequency)
 
     pixels::Matrix{Complex{Float64}} = zeros(Complex{Float64}, height, width)
     frequency = arrangeMatrix(width, height, frequency) .* 255.0
-    for i in 1:height
+    for i::UInt in 1:height
         frequency[i, :] = calcIfft(frequency[i, :]) ./ height
     end
-    for i in 1:width
+    for i::UInt in 1:width
         frequency[:, i] = calcIfft(frequency[:, i]) ./ width
     end
     f::Matrix{Float64} = abs.(frequency)
