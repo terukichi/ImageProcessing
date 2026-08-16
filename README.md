@@ -191,7 +191,7 @@ savePGM("output2.pgm", ifft_img)
 
 ### Others
 
-- zeroPadding
+- Zero Padding
 
   ```julia
   zeroPadding(data::dataPGM)::dataPGM
