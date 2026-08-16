@@ -24,6 +24,21 @@ function calcIfft(data::Vector{Complex{Float64}})::Vector{Complex{Float64}}
     return ans
 end
 
+"""
+# IFFT
+```julia
+  ifft(data::dataFrequency)::dataPGM
+```
+
+## Summary
+IFFT
+
+## Arguments
+- `data::dataFrequency`
+
+## Return value
+- `data::dataPGM`
+"""
 function ifft(data::dataFrequency)::dataPGM
     width::UInt = data.width
     height::UInt = data.height

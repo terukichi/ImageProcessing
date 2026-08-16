@@ -24,6 +24,21 @@ function calcFft(data::Vector{Complex{Float64}})::Vector{Complex{Float64}}
     return ans
 end
 
+"""
+# DFT
+```julia
+  fft(data::dataPGM)::dataFrequency
+```
+
+## Summary
+FFT
+
+## Arguments
+- `data::dataPGM`
+
+## Return value
+- `data::dataFrequency`
+"""
 function fft(data::dataPGM)::dataFrequency
     width::UInt = data.width
     height::UInt = data.height

@@ -38,23 +38,27 @@
    (your project) pkg> add https://github.com/terukichi/ImageProcessing.git
    ```
 
+## Example
+
+```julia
+import ImageProcessing
+using ImageProcessing.IO
+using ImageProcessing.Filter
+
+img = loadPGM("image.pgm")
+filtered = averagingFilter(img)
+savePGM("output.pgm", filtered)
+
+
+using ImageProcessing.FrequencyFilter
+
+fft_img = fft(img)
+freqFiltered = lowPassFilter(fft_img, 100.0)
+ifft_img = ifft(freqFiltered)
+savePGM("output2.pgm", ifft_img)
+```
+
 ## Functions
-
-### Base
-
-- zeroPadding
-
-  ```julia
-  zeroPadding(data::dataPGM)::dataPGM
-  ```
-
-  ```julia
-  zeroPadding(data::dataPPM)::dataPPM
-  ```
-
-  ```julia
-  zeroPadding(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
-  ```
 
 ### IO
 
@@ -148,10 +152,10 @@
   ```
 - Unsharp Masking
   ```julia
-  unsharpMasking(data::dataPGM, k::Int8)::dataPGM
+  unsharpMasking(data::dataPGM, k::Integer)::dataPGM
   ```
   ```julia
-  unsharpMasking(data::dataPPM, k::Int8)::dataPPM
+  unsharpMasking(data::dataPPM, k::Integer)::dataPPM
   ```
 
 ### FrequencyFilter
@@ -164,6 +168,14 @@
   ```julia
   idft(data::dataFrequency)::dataPGM
   ```
+- FFT
+  ```julia
+  fft(data::dataPGM)::dataFrequency
+  ```
+- IFFT
+  ```julia
+  ifft(data::dataFrequency)::dataPGM
+  ```
 - Lowpass Filter
   ```julia
   lowPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
@@ -175,4 +187,20 @@
 - Bandpass Filter
   ```julia
   bandPassFilter(data::dataFrequency, radius_a::Float64, radius_b::Float64)::dataFrequency
+  ```
+
+### Others
+
+- zeroPadding
+
+  ```julia
+  zeroPadding(data::dataPGM)::dataPGM
+  ```
+
+  ```julia
+  zeroPadding(data::dataPPM)::dataPPM
+  ```
+
+  ```julia
+  zeroPadding(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
   ```

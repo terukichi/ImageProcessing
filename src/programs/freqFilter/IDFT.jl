@@ -28,7 +28,7 @@ end
 """
 # IDFT
 ```julia
-  idft(data::dataPGM)::dataPGM
+  idft(data::dataFrequency)::dataPGM
 ```
 
 !!! warning "deprecation"
@@ -39,7 +39,7 @@ end
 IDFT
 
 ## Arguments
-- `data::dataPGM`
+- `data::dataFrequency`
 
 ## Return value
 - `data::dataPGM`

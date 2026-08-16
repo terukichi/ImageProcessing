@@ -9,7 +9,7 @@
 """
 # Unsharp Masking
 ```julia
-  unsharpMasking(data::dataPGM, k::Int)::dataPGM
+  unsharpMasking(data::dataPGM, k::Integer)::dataPGM
 ```
 
 ## Summary
@@ -17,7 +17,7 @@ Unsharp masking
 
 ## Arguments
 - `data::dataPGM`
-- `k::Int8`
+- `k::Integer`
 
 ## Return value
 - `data::dataPGM`
@@ -35,7 +35,7 @@ end
 """
 # Unsharp Masking
 ```julia
-  unsharpMasking(data::dataPPM, k::Int)::dataPPM
+  unsharpMasking(data::dataPPM, k::Integer)::dataPPM
 ```
 
 ## Summary
@@ -43,7 +43,7 @@ Unsharp masking
 
 ## Arguments
 - `data::dataPPM`
-- `k::Int8`
+- `k::Integer`
 
 ## Return values
 - `data::dataPPM`

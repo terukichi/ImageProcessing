@@ -26,7 +26,7 @@ end
 """
 # DFT
 ```julia
-  dft(data::dataPGM)::dataPGM
+  dft(data::dataPGM)::dataFrequency
 ```
 
 !!! warning "deprecation"
@@ -40,7 +40,7 @@ DFT
 - `data::dataPGM`
 
 ## Return value
-- `data::dataPGM`
+- `data::dataFrequency`
 """
 function dft(data::dataPGM)::dataFrequency
     height::UInt = data.height
