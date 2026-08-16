@@ -2,3 +2,9 @@ name = "ImageProcessing"
 uuid = "91793690-624d-422d-8a91-b5d7cff02a0d"
 version = "0.3.0"
 authors = ["terukichi <263539179+terukichi@users.noreply.github.com>"]
+
+[deps]
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[compat]
+Random = "1.11.0"

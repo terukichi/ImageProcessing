@@ -70,6 +70,7 @@ export dataPGM, dataPPM, dataLoaded
 include("./programs/IO.jl")
 include("./programs/Filter.jl")
 include("./programs/FrequencyFilter.jl")
+include("./programs/Binaryzation.jl")
 include("./programs/ZeroPadding.jl")
 export zeroPadding
 

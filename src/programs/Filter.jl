@@ -20,10 +20,6 @@
 - `sobelFilterGradient`
 - `laplacianFilter`
 - `unsharpMasking`
-
-### Private
-
-- `convolution`
 """
 module Filter
 

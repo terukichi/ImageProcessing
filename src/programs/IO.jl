@@ -20,11 +20,6 @@
 - `loadPGM`
 - `createGrayscaleMatrix`
 - `createRGBMatrix`
-
-### Private
-
-- `saveHeader`
-- `clipping`
 """
 module IO
 

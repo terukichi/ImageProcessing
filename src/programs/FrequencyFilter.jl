@@ -6,6 +6,21 @@
 #  This project is licensed under the MIT License.
 #  See the LICENSE file.
 ====================================================#
+"""
+# FrequencyFilter
+
+## Functions
+
+### Public
+
+- `dft`
+- `idft`
+- `lowPassFilter`
+- `highPassFilter`
+- `bandPassFilter`
+- `fft`
+- `ifft`
+"""
 module FrequencyFilter
 
 using ..ImageProcessing: dataLoaded, dataPPM, dataPGM, dataFrequency
