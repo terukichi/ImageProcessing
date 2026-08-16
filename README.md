@@ -8,10 +8,16 @@
 
 - **Julia**
 
-## Image File Format
+## Image File Formats
 
-- **PPM** (P3)
 - **PGM** (P2)
+- **PPM** (P3)
+
+| module          | **.pgm** (P2) | **.ppm** (P3) |
+| :-------------- | ------------- | ------------- |
+| IO              | available     | available     |
+| Filter          | available     | available     |
+| FrequencyFilter | available     | ---           |
 
 ## Installation
 
