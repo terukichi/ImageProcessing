@@ -69,7 +69,7 @@ function arrangeMatrix(data::dataFrequency)::dataFrequency
             arranged = ODDxODD(data)
         end
     end
-    return dataFrequency(width, height, arranged)
+    return dataFrequency(width, height, data.add_width, data.add_height, arranged)
 end
 
 function EVENxEVEN(width::UInt, height::UInt, frequency::Matrix{Complex{Float64}})::Matrix{Complex{Float64}}

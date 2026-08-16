@@ -35,5 +35,7 @@ end
 mutable struct dataFrequency
     width::UInt
     height::UInt
+    add_width::UInt
+    add_height::UInt
     frequency::Matrix{Complex{Float64}}
 end

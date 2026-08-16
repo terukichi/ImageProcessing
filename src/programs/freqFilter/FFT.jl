@@ -51,8 +51,10 @@ function fft(data::dataPGM)::dataFrequency
     while 2^fft_h < height
         fft_h += 1
     end
-    frequency::Matrix{Complex{Float64}} = zeros(Complex{Float64}, 2^fft_h, 2^fft_w)
-    padded::Matrix{Complex{Float64}} = zeros(Complex{Float64}, 2^fft_h, 2^fft_w)
+    new_width::UInt = 2^fft_w
+    new_height::UInt = 2^fft_h
+    frequency::Matrix{Complex{Float64}} = zeros(Complex{Float64}, new_height, new_width)
+    padded::Matrix{Complex{Float64}} = zeros(Complex{Float64}, new_height, new_width)
     padded[1:height, 1:width] = pixels ./ 255.0
     for i in 1:2^fft_h
         frequency[i, :] = calcFft(padded[i, :])
@@ -60,6 +62,6 @@ function fft(data::dataPGM)::dataFrequency
     for i in 1:2^fft_w
         frequency[:, i] = calcFft(frequency[:, i])
     end
-    ans = dataFrequency(2^fft_w, 2^fft_h, frequency)
+    ans = dataFrequency(new_width, new_height, new_width - width, new_height - height,frequency)
     return arrangeMatrix(ans)
 end

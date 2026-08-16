@@ -42,6 +42,8 @@ IFFT
 function ifft(data::dataFrequency)::dataPGM
     width::UInt = data.width
     height::UInt = data.height
+    img_width::UInt = width - data.add_width
+    img_height::UInt = height - data.add_height
     frequency::Matrix{Complex{Float64}} = Complex{Float64}.(data.frequency)
 
     pixels::Matrix{Complex{Float64}} = zeros(Complex{Float64}, height, width)
@@ -53,5 +55,6 @@ function ifft(data::dataFrequency)::dataPGM
         frequency[:, i] = calcIfft(frequency[:, i]) ./ width
     end
     f::Matrix{Float64} = abs.(frequency)
-    return dataPGM("P2", width, height, 255, f)
+    ans::Matrix{Float64} = f[1:img_height, 1:img_width]
+    return dataPGM("P2", img_width, img_height, 255, ans)
 end
