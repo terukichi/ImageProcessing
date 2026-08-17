@@ -26,6 +26,22 @@ function changed(new_centroid::Vector{Float64},
     return false
 end
 
+"""
+# k-means
+```julia
+  kmeansRegionSegmentation(data::dataPGM, k::Integer)::dataPGM
+```
+
+## Summary
+Region Segmentation
+
+## Arguments
+- `data::dataPGM`
+- `k::Integer`
+
+## Return value
+- `data::dataPGM`
+"""
 function kmeansRegionSegmentation(data::dataPGM, k::Integer)::dataPGM
     width::UInt = data.width
     height::UInt = data.height
@@ -98,6 +114,22 @@ function changed(new_centroid_red::Vector{Float64},
     return false
 end
 
+"""
+# k-means
+```julia
+  kmeansRegionSegmentation(data::dataPPM, k::Integer)::dataPPM
+```
+
+## Summary
+Region Segmentation
+
+## Arguments
+- `data::dataPPM`
+- `k::Integer`
+
+## Return value
+- `data::dataPPM`
+"""
 function kmeansRegionSegmentation(data::dataPPM, k::Integer)::dataPPM
     width::UInt = data.width
     height::UInt = data.height

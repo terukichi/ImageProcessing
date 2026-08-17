@@ -182,13 +182,23 @@ savePGM("output2.pgm", ifft_img)
     <summary>click here</summary>
 
 - DFT
+
   ```julia
   dft(data::dataPGM)::dataFrequency
   ```
+
+  > [!warning]
+  > This function has a high computational complexity.
+
 - IDFT
+
   ```julia
   idft(data::dataFrequency)::dataPGM
   ```
+
+  > [!warning]
+  > This function has a high computational complexity.
+
 - FFT
   ```julia
   fft(data::dataPGM)::dataFrequency
@@ -198,17 +208,29 @@ savePGM("output2.pgm", ifft_img)
   ifft(data::dataFrequency)::dataPGM
   ```
 - Lowpass Filter
+
   ```julia
   lowPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
   ```
+
+  > [!note]
+  > 0 $\leq$ `radious`
+
 - Highpass Filter
+
   ```julia
   highPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
   ```
+
+  > [!note]
+  > 0 $\leq$ `radious`
+
 - Bandpass Filter
   ```julia
   bandPassFilter(data::dataFrequency, radius_a::Float64, radius_b::Float64)::dataFrequency
   ```
+  > [!note]
+  > 0 $\leq$ `radious_a` < `radious_b`
 
 </details>
 
@@ -235,14 +257,14 @@ savePGM("output2.pgm", ifft_img)
     <summary>click here</summary>
 
 - k-means
-
   ```julia
   kmeansRegionSegmentation(data::dataPGM, k::Integer)::dataPGM
   ```
-
   ```julia
   kmeansRegionSegmentation(data::dataPPM, k::Integer)::dataPPM
   ```
+  > [!note]
+  > $k \in \mathbb{N}$
 
 </details>
 

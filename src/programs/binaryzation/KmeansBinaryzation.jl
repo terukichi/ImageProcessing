@@ -11,6 +11,21 @@ using Random
 const MAX_NUM =  100
 const threshold = 0.1
 
+"""
+# k-means
+```julia
+  kmeansBinaryzation(data::dataPGM)::dataPGM
+```
+
+## Summary
+Binaryzation
+
+## Arguments
+- `data::dataPGM`
+
+## Return value
+- `data::dataPGM`
+"""
 function kmeansBinaryzation(data::dataPGM)::dataPGM
     width::UInt = data.width
     height::UInt = data.height
@@ -83,6 +98,21 @@ function changed(new_centroid_red::Vector{Float64},
     return false
 end
 
+"""
+# k-means
+```julia
+  kmeansBinaryzation(data::dataPPM)::dataPPM
+```
+
+## Summary
+Binaryzation
+
+## Arguments
+- `data::dataPPM`
+
+## Return value
+- `data::dataPPM`
+"""
 function kmeansBinaryzation(data::dataPPM)::dataPPM
     width::UInt = data.width
     height::UInt = data.height
