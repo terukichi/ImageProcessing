@@ -18,7 +18,7 @@
 | IO              | available |  available  |
 | Filter          | available |  available  |
 | FrequencyFilter | available | unavailable |
-| Binaryzation    | available |      -      |
+| Binaryzation    | available |  available  |
 
 ## Installation
 
@@ -220,6 +220,10 @@ savePGM("output2.pgm", ifft_img)
 
   ```julia
   kmeansBinaryzation(data::dataPGM)::dataPGM
+  ```
+
+  ```julia
+  kmeansBinaryzation(data::dataPPM)::dataPPM
   ```
 
 ### Others
