@@ -13,12 +13,13 @@
 - **PGM** (P2)
 - **PPM** (P3)
 
-| module          | .pgm (P2) |  .ppm (P3)  |
-| :-------------- | :-------: | :---------: |
-| IO              | available |  available  |
-| Filter          | available |  available  |
-| FrequencyFilter | available | unavailable |
-| Binaryzation    | available |  available  |
+| module             | .pgm (P2) |  .ppm (P3)  |
+| :----------------- | :-------: | :---------: |
+| IO                 | available |  available  |
+| Filter             | available |  available  |
+| FrequencyFilter    | available | unavailable |
+| Binaryzation       | available |  available  |
+| RegionSegmentation | available |  available  |
 
 ## Installation
 
@@ -216,7 +217,7 @@ savePGM("output2.pgm", ifft_img)
 <details>
     <summary>click here</summary>
 
-- kmeansBinaryzation
+- k-means
 
   ```julia
   kmeansBinaryzation(data::dataPGM)::dataPGM
@@ -225,6 +226,25 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   kmeansBinaryzation(data::dataPPM)::dataPPM
   ```
+
+</details>
+
+### RegionSegmentation
+
+<details>
+    <summary>click here</summary>
+
+- k-means
+
+  ```julia
+  kmeansRegionSegmentation(data::dataPGM, k::Integer)::dataPGM
+  ```
+
+  ```julia
+  kmeansRegionSegmentation(data::dataPPM, k::Integer)::dataPPM
+  ```
+
+</details>
 
 ### Others
 

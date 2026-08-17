@@ -59,6 +59,30 @@ function kmeansBinaryzation(data::dataPGM)::dataPGM
     return dataPGM("P2", width, height, 255, ans)
 end
 
+function changed(new_centroid_red::Vector{Float64},
+                 centroid_red::Vector{Float64},
+                 new_centroid_green::Vector{Float64},
+                 centroid_green::Vector{Float64},
+                 new_centroid_blue::Vector{Float64},
+                 centroid_blue::Vector{Float64})::Bool
+    for i in 1:2
+        if abs(new_centroid_red[i] - centroid_red[i]) > threshold
+            return true
+        end
+    end
+    for i in 1:2
+        if abs(new_centroid_green[i] - centroid_green[i]) > threshold
+            return true
+        end
+    end
+    for i in 1:2
+        if abs(new_centroid_blue[i] - centroid_blue[i]) > threshold
+            return true
+        end
+    end
+    return false
+end
+
 function kmeansBinaryzation(data::dataPPM)::dataPPM
     width::UInt = data.width
     height::UInt = data.height
@@ -112,7 +136,7 @@ function kmeansBinaryzation(data::dataPPM)::dataPPM
                 new_centroid_blue[k] = centroid[k]
             end
         end
-        if abs(new_centroid_red[1] - centroid_red[1]) < threshold && abs(new_centroid_red[2] - centroid_red[2]) < threshold && abs(new_centroid_green[1] - centroid_green[1]) < threshold && abs(new_centroid_green[2] - centroid_green[2]) < threshold && abs(new_centroid_blue[1] - centroid_blue[1]) < threshold && abs(new_centroid_blue[2] - centroid_blue[2]) < threshold
+        if !changed(new_centroid_red, centroid_red, new_centroid_green, centroid_green, new_centroid_blue, centroid_blue)
             break
         end
         for k in 1:2
