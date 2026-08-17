@@ -70,9 +70,6 @@ savePGM("output2.pgm", ifft_img)
 
 ### IO
 
-<details>
-    <summary>click here</summary>
-
 - Load File
   ```julia
   loadFile(path::AbstractString)::dataLoaded
@@ -113,12 +110,7 @@ savePGM("output2.pgm", ifft_img)
   savePGM(path::AbstractString, freq::dataFrequency)
   ```
 
-</details>
-
 ### Filter
-
-<details>
-    <summary>click here</summary>
 
 - Averaging Filter
   ```julia
@@ -174,12 +166,7 @@ savePGM("output2.pgm", ifft_img)
   unsharpMasking(data::dataPPM, k::Integer)::dataPPM
   ```
 
-</details>
-
 ### FrequencyFilter
-
-<details>
-    <summary>click here</summary>
 
 - DFT
 
@@ -187,8 +174,8 @@ savePGM("output2.pgm", ifft_img)
   dft(data::dataPGM)::dataFrequency
   ```
 
-  > [!warning]
-  > This function has a high computational complexity.
+> [!warning]
+> This function has a high computational complexity.
 
 - IDFT
 
@@ -196,8 +183,8 @@ savePGM("output2.pgm", ifft_img)
   idft(data::dataFrequency)::dataPGM
   ```
 
-  > [!warning]
-  > This function has a high computational complexity.
+> [!warning]
+> This function has a high computational complexity.
 
 - FFT
   ```julia
@@ -213,8 +200,8 @@ savePGM("output2.pgm", ifft_img)
   lowPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
   ```
 
-  > [!note]
-  > 0 $\leq$ `radious`
+> [!note]
+> 0 $\leq$ `radious`
 
 - Highpass Filter
 
@@ -222,22 +209,18 @@ savePGM("output2.pgm", ifft_img)
   highPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
   ```
 
-  > [!note]
-  > 0 $\leq$ `radious`
+> [!note]
+> 0 $\leq$ `radious`
 
 - Bandpass Filter
   ```julia
   bandPassFilter(data::dataFrequency, radius_a::Float64, radius_b::Float64)::dataFrequency
   ```
-  > [!note]
-  > 0 $\leq$ `radious_a` < `radious_b`
 
-</details>
+> [!note]
+> 0 $\leq$ `radious_a` < `radious_b`
 
 ### Binaryzation
-
-<details>
-    <summary>click here</summary>
 
 - k-means
 
@@ -249,12 +232,7 @@ savePGM("output2.pgm", ifft_img)
   kmeansBinaryzation(data::dataPPM)::dataPPM
   ```
 
-</details>
-
 ### RegionSegmentation
-
-<details>
-    <summary>click here</summary>
 
 - k-means
   ```julia
@@ -263,15 +241,11 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   kmeansRegionSegmentation(data::dataPPM, k::Integer)::dataPPM
   ```
-  > [!note]
-  > $k \in \mathbb{N}$
 
-</details>
+> [!note]
+> $k \in \mathbb{N}$
 
 ### Others
-
-<details>
-    <summary>click here</summary>
 
 - Zero Padding
 
@@ -286,5 +260,3 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   zeroPadding(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
   ```
-
-</details>
