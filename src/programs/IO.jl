@@ -11,8 +11,6 @@
 
 ## Functions
 
-### Public
-
 - `loadFile`
 - `savePPM`
 - `savePGM`
@@ -20,11 +18,6 @@
 - `loadPGM`
 - `createGrayscaleMatrix`
 - `createRGBMatrix`
-
-### Private
-
-- `saveHeader`
-- `clipping`
 """
 module IO
 

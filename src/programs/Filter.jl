@@ -11,8 +11,6 @@
 
 ## Functions
 
-### Public
-
 - `averagingFilter`
 - `gaussianFilter`
 - `sobelFilterHorizontal`
@@ -20,10 +18,6 @@
 - `sobelFilterGradient`
 - `laplacianFilter`
 - `unsharpMasking`
-
-### Private
-
-- `convolution`
 """
 module Filter
 

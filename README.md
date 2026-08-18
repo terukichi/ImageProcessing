@@ -6,18 +6,20 @@
 
 ## Language
 
-- **Julia**
+**Julia**
 
 ## Image File Formats
 
 - **PGM** (P2)
 - **PPM** (P3)
 
-| module          | .pgm (P2) |  .ppm (P3)  |
-| :-------------- | :-------: | :---------: |
-| IO              | available |  available  |
-| Filter          | available |  available  |
-| FrequencyFilter | available | unavailable |
+| module             | .pgm (P2) |  .ppm (P3)  |
+| :----------------- | :-------: | :---------: |
+| IO                 | available |  available  |
+| Filter             | available |  available  |
+| FrequencyFilter    | available | unavailable |
+| Binaryzation       | available |  available  |
+| RegionSegmentation | available |  available  |
 
 ## Installation
 
@@ -68,9 +70,6 @@ savePGM("output2.pgm", ifft_img)
 
 ### IO
 
-<details>
-    <summary>click here</summary>
-
 - Load File
   ```julia
   loadFile(path::AbstractString)::dataLoaded
@@ -111,12 +110,7 @@ savePGM("output2.pgm", ifft_img)
   savePGM(path::AbstractString, freq::dataFrequency)
   ```
 
-</details>
-
 ### Filter
-
-<details>
-    <summary>click here</summary>
 
 - Averaging Filter
   ```julia
@@ -134,16 +128,10 @@ savePGM("output2.pgm", ifft_img)
   ```
 - Sobel Filter
   ```julia
-  sobelFilterHorizontal(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
-  ```
-  ```julia
   sobelFilterHorizontal(data::dataPGM)::dataPGM
   ```
   ```julia
   sobelFilterHorizontal(data::dataPPM)::dataPPM
-  ```
-  ```julia
-  sobelFilterVertical(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
   ```
   ```julia
   sobelFilterVertical(data::dataPGM)::dataPGM
@@ -172,21 +160,26 @@ savePGM("output2.pgm", ifft_img)
   unsharpMasking(data::dataPPM, k::Integer)::dataPPM
   ```
 
-</details>
-
 ### FrequencyFilter
 
-<details>
-    <summary>click here</summary>
-
 - DFT
+
   ```julia
   dft(data::dataPGM)::dataFrequency
   ```
+
+> [!warning]
+> This function has a high computational complexity.
+
 - IDFT
+
   ```julia
   idft(data::dataFrequency)::dataPGM
   ```
+
+> [!warning]
+> This function has a high computational complexity.
+
 - FFT
   ```julia
   fft(data::dataPGM)::dataFrequency
@@ -196,24 +189,57 @@ savePGM("output2.pgm", ifft_img)
   ifft(data::dataFrequency)::dataPGM
   ```
 - Lowpass Filter
+
   ```julia
   lowPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
   ```
+
+> [!note]
+> 0 $\leq$ `radious`
+
 - Highpass Filter
+
   ```julia
   highPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
   ```
+
+> [!note]
+> 0 $\leq$ `radious`
+
 - Bandpass Filter
   ```julia
   bandPassFilter(data::dataFrequency, radius_a::Float64, radius_b::Float64)::dataFrequency
   ```
 
-</details>
+> [!note]
+> 0 $\leq$ `radious_a` < `radious_b`
+
+### Binaryzation
+
+- k-means
+
+  ```julia
+  kmeansBinaryzation(data::dataPGM)::dataPGM
+  ```
+
+  ```julia
+  kmeansBinaryzation(data::dataPPM)::dataPPM
+  ```
+
+### RegionSegmentation
+
+- k-means
+  ```julia
+  kmeansRegionSegmentation(data::dataPGM, k::Integer)::dataPGM
+  ```
+  ```julia
+  kmeansRegionSegmentation(data::dataPPM, k::Integer)::dataPPM
+  ```
+
+> [!note]
+> $k \in \mathbb{N}$
 
 ### Others
-
-<details>
-    <summary>click here</summary>
 
 - Zero Padding
 
@@ -228,5 +254,3 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   zeroPadding(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
   ```
-
-</details>

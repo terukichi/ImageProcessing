@@ -23,10 +23,6 @@
 - `createGrayscaleMatrix`
 - `createRGBMatrix`
 
-#### Private
-
-- `saveHeader`
-
 ### Filter
 
 #### Public
@@ -38,29 +34,22 @@
 - `sobelGradient`
 - `laplacian`
 
-#### Private
-
-- `convolution`
-- `clipping`
-
 ### FrequencyFilter
 
 #### Public
 
 - `dft`
 - `idft`
+- `fft`
+- `ifft`
 - `lowPassFilter`
 - `highPassFilter`
+- `bandPassFilter`
 
-#### Private
+### Binaryzation
 
-- `EVENxEVEN`
-- `EVENxODD`
-- `ODDxEVEN`
-- `ODDxODD`
-- `arrangeMatrix`
-- `calcDft`
-- `calcIdft`
+#### Public
+- `kmeansBinaryzation`
 """
 module ImageProcessing
 
@@ -70,6 +59,8 @@ export dataPGM, dataPPM, dataLoaded
 include("./programs/IO.jl")
 include("./programs/Filter.jl")
 include("./programs/FrequencyFilter.jl")
+include("./programs/Binaryzation.jl")
+include("./programs/RegionSegmentation.jl")
 include("./programs/ZeroPadding.jl")
 export zeroPadding
 
