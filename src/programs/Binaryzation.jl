@@ -11,8 +11,6 @@
 
 ## Functions
 
-### Public
-
 - `kmeansBinaryzation`
 """
 module Binaryzation

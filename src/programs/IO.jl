@@ -11,8 +11,6 @@
 
 ## Functions
 
-### Public
-
 - `loadFile`
 - `savePPM`
 - `savePGM`

@@ -11,8 +11,6 @@
 
 ## Functions
 
-### Public
-
 - `averagingFilter`
 - `gaussianFilter`
 - `sobelFilterHorizontal`

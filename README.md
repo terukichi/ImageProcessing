@@ -6,7 +6,7 @@
 
 ## Language
 
-- **Julia**
+**Julia**
 
 ## Image File Formats
 
@@ -128,16 +128,10 @@ savePGM("output2.pgm", ifft_img)
   ```
 - Sobel Filter
   ```julia
-  sobelFilterHorizontal(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
-  ```
-  ```julia
   sobelFilterHorizontal(data::dataPGM)::dataPGM
   ```
   ```julia
   sobelFilterHorizontal(data::dataPPM)::dataPPM
-  ```
-  ```julia
-  sobelFilterVertical(width::UInt, height::UInt, pixels::Matrix{Float64})::Matrix{Float64}
   ```
   ```julia
   sobelFilterVertical(data::dataPGM)::dataPGM

@@ -11,8 +11,6 @@
 
 ## Functions
 
-### Public
-
 - `dft`
 - `idft`
 - `lowPassFilter`
