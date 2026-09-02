@@ -212,7 +212,7 @@ savePGM("output2.pgm", ifft_img)
   ```
 
 > [!note]
-> 0 $\leq$ `radious_a` < `radious_b`
+> 0 $\leq$ `radious_a` $\leq$ `radious_b`
 
 ### Binaryzation
 
