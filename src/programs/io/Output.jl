@@ -11,51 +11,6 @@ include("Clipping.jl")
 """
 # Save PNM's Header
 ```julia
-  saveHeader(name::AbstractString,
-             ext::AbstractString,
-             operation::AbstractString,
-             magic_num::AbstractString,
-             width::UInt, height::UInt,
-             max_brightness::Int16)
-```
-
-## Summary
-Save header information
-
-## Arguments
-- `name::AbstractString`
-- `ext::AbstractString`
-- `operation::AbstractString`
-- `magic_num::AbstractString`
-- `width::UInt`
-- `height::UInt`
-- `max_brightness::Int16`
-
-## Return value
-"""
-function saveHeader(name::AbstractString, ext::AbstractString,
-                    operation::AbstractString,
-                    magic_num::AbstractString,
-                    width::UInt, height::UInt,
-                    max_brightness::Int16)
-
-    try
-        write(name*"-"*operation*ext, "")
-        open(name*"-"*operation*ext, "a") do f
-            println(f, magic_num)
-            print(f, width)
-            print(f, " ")
-            println(f, height)
-            println(f, max_brightness)
-        end
-    catch e
-        @error "Save error." exception=e
-    end
-end
-
-"""
-# Save PNM's Header
-```julia
   saveHeader(path::AbstractString,
              magic_num::AbstractString,
              width::UInt, height::UInt,

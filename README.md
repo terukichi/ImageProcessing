@@ -80,28 +80,13 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   loadPPM(path::AbstractString)::dataPPM
   ```
-- Create Matrix
-  ```julia
-  createGrayscaleMatrix(width::UInt, height::UInt, pixels::Vector{Int16})::Matrix{Float64}
-  ```
-  ```julia
-  createRGBMatrix(width::UInt, height::UInt, pixels::Vector{Int16})::Tuple{Matrix{Float64}, Matrix{Float64}, Matrix{Float64}}
-  ```
 - Save File
-  ```julia
-  saveHeader(name::AbstractString, ext::AbstractString, operation::AbstractString, magic_num::AbstractString, width::UInt, height::UInt, max_brightness::Int16)
-  ```
+
   ```julia
   saveHeader(path::AbstractString, magic_num::AbstractString, width::UInt, height::UInt, max_brightness::Int16)
   ```
   ```julia
-  savePPM(name::AbstractString, ext::AbstractString, operation::AbstractString, ppm::dataPPM)
-  ```
-  ```julia
   savePPM(path::AbstractString, ppm::dataPPM)
-  ```
-  ```julia
-  savePGM(name::AbstractString, ext::AbstractString, operation::AbstractString, pgm::dataPGM)
   ```
   ```julia
   savePGM(path::AbstractString, pgm::dataPGM)
