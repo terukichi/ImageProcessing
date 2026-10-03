@@ -27,7 +27,7 @@ using ..ImageProcessing: dataLoaded, dataPPM, dataPGM, dataFrequency
 include("io/Input.jl")
 include("io/Output.jl")
 
-export savePPM, savePGM, loadPGM, loadPPM
+export save, loadPGM, loadPPM, load
 
 
 end                             # module IO

@@ -156,3 +156,29 @@ function loadPPM(path::AbstractString)::dataPPM
         return dataPPM("P3", 0, 0, 0, Matrix{Float64}(undef, 0, 0), Matrix{Float64}(undef, 0, 0), Matrix{Float64}(undef, 0, 0))
     end
 end
+
+"""
+# Load PNM Data
+```julia
+  load(path::AbstractString)
+```
+
+## Summary
+Load PNM data
+
+## Arguments
+- `path::AbstractString`
+
+## Return value
+- `data::dataPGM`
+- `data::dataPPM`
+"""
+function load(path::AbstractString)
+    ext = split(path, ".")[end]
+    if ext == "pgm"
+        return loadPGM(path)
+    else ext = "ppm"
+        return loadPPM(path)
+    end
+    println("File format error.")
+end

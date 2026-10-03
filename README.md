@@ -78,17 +78,21 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   loadPPM(path::AbstractString)::dataPPM
   ```
+  ```julia
+  load(path::AbstractString)::dataPGM
+  load(path::AbstractString)::dataPPM
+  ```
 
 - Save File
 
   ```julia
-  savePPM(path::AbstractString, ppm::dataPPM)
+  save(path::AbstractString, ppm::dataPPM)
   ```
   ```julia
-  savePGM(path::AbstractString, pgm::dataPGM)
+  save(path::AbstractString, pgm::dataPGM)
   ```
   ```julia
-  savePGM(path::AbstractString, freq::dataFrequency)
+  save(path::AbstractString, freq::dataFrequency)
   ```
 
 ### Filter

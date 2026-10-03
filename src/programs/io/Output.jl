@@ -51,7 +51,7 @@ end
 """
 # Save PPM Data
 ```julia
-  savePPM(path::AbstractString, ppm::dataPPM)
+  save(path::AbstractString, ppm::dataPPM)
 ```
 
 ## Summary
@@ -63,7 +63,7 @@ Save PPM data
 
 ## Return value
 """
-function savePPM(path::AbstractString,
+function save(path::AbstractString,
                  ppm::dataPPM)
     magic_num::String = ppm.magic_num
     width::UInt = ppm.width
@@ -100,7 +100,7 @@ end
 """
 # Save PGM Data
 ```julia
-  savePGM(path::AbstractString, pgm::dataPGM)
+  save(path::AbstractString, pgm::dataPGM)
 ```
 
 ## Summary
@@ -112,8 +112,8 @@ Save PGM data
 
 ## Return value
 """
-function savePGM(path::AbstractString,
-                 pgm::dataPGM)
+function save(path::AbstractString,
+              pgm::dataPGM)
     magic_num::String = pgm.magic_num
     width::UInt = pgm.width
     height::UInt = pgm.height
@@ -149,7 +149,7 @@ end
 """
 # Save PGM Data
 ```julia
-  savePGM(path::AbstractString, freq::dataFrequency)
+  save(path::AbstractString, freq::dataFrequency)
 ```
 
 ## Summary
@@ -161,8 +161,8 @@ Save PGM data
 
 ## Return value
 """
-function savePGM(path::AbstractString,
-                 freq::dataFrequency)
+function save(path::AbstractString,
+              freq::dataFrequency)
     width::UInt = freq.width
     height::UInt = freq.height
     pgm::dataPGM = FtoPGM(freq)
