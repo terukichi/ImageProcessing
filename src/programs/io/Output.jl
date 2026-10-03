@@ -38,12 +38,10 @@ function saveHeader(name::AbstractString, ext::AbstractString,
                     magic_num::AbstractString,
                     width::UInt, height::UInt,
                     max_brightness::Int16)
-    if !isdir("output")
-        mkdir("output")
-    end
+
     try
-        write("output/"*name*"-"*operation*ext, "")
-        open("output/"*name*"-"*operation*ext, "a") do f
+        write(name*"-"*operation*ext, "")
+        open(name*"-"*operation*ext, "a") do f
             println(f, magic_num)
             print(f, width)
             print(f, " ")
@@ -80,73 +78,16 @@ function saveHeader(path::AbstractString,
                     magic_num::AbstractString,
                     width::UInt, height::UInt,
                     max_brightness::Int16)
-    if !isdir("output")
-        mkdir("output")
-    end
+
     try
-        write("output/"*path, "")
-        open("output/"*path, "a") do f
+        write(path, "")
+        open(path, "a") do f
             println(f, magic_num)
             print(f, width)
             print(f, " ")
             println(f, height)
             println(f, max_brightness)
         end
-    catch e
-        @error "Save error." exception=e
-    end
-end
-
-"""
-# Save PPM Data
-```julia
-  savePPM(name::AbstractString,
-          ext::AbstractString,
-          operation::AbstractString,
-          ppm::dataPPM)
-```
-
-## Summary
-Save PPM data
-
-## Arguments
-- `name::AbstractString`
-- `ext::AbstractString`
-- `operation::AbstractString`
-- `ppm::dataPPM`
-
-## Return value
-"""
-function savePPM(name::AbstractString, ext::AbstractString,
-                 operation::AbstractString,
-                 ppm::dataPPM)
-    magic_num::String = ppm.magic_num
-    width::UInt = ppm.width
-    height::UInt = ppm.height
-    max_brightness::Int16 = ppm.max_brightness
-    red::Matrix{Int16} = round.(Int16, ppm.red)
-    green::Matrix{Int16} = round.(Int16, ppm.green)
-    blue::Matrix{Int16} = round.(Int16, ppm.blue)
-    red = clipping(width, height, red)
-    green = clipping(width, height, green)
-    blue = clipping(width, height, blue)
-    saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
-
-    try
-        open("output/"*name*"-"*operation*ext, "a") do f
-            for i::UInt in 1:height
-                for j::UInt in 1:width
-                    print(f, red[i, j])
-                    print(f, " ")
-                    print(f, green[i, j])
-                    print(f, " ")
-                    print(f, blue[i, j])
-                    print(f, " ")
-                end
-                print(f, "\n")
-            end
-        end
-        println("Saved "*"output/"*name*"-"*operation*ext)
     catch e
         @error "Save error." exception=e
     end
@@ -182,7 +123,7 @@ function savePPM(path::AbstractString,
     saveHeader(path, magic_num, width, height, max_brightness)
 
     try
-        open("output/"*path, "a") do f
+        open(path, "a") do f
             for i::UInt in 1:height
                 for j::UInt in 1:width
                     print(f, red[i, j])
@@ -195,56 +136,7 @@ function savePPM(path::AbstractString,
                 print(f, "\n")
             end
         end
-        println("Saved "*"output/"*path)
-    catch e
-        @error "Save error." exception=e
-    end
-end
-
-"""
-# Save PGM Data
-```julia
-  savePGM(name::AbstractString,
-          ext::AbstractString,
-          operation::AbstractString,
-          pgm::dataPGM)
-```
-
-## Summary
-Save PGM data
-
-## Arguments
-- `name::AbstractString`
-- `ext::AbstractString`
-- `operation::AbstractString`
-- `pgm::dataPGM`
-
-## Return value
-"""
-function savePGM(name::AbstractString, ext::AbstractString,
-                 operation::AbstractString,
-                 pgm::dataPGM)
-    magic_num::String = pgm.magic_num
-    width::UInt = pgm.width
-    height::UInt = pgm.height
-    max_brightness::Int16 = pgm.max_brightness
-    pixels::Matrix{Int16} = round.(Int16, pgm.pixels)
-    pixels = clipping(width, height, pixels)
-    saveHeader(name, ext, operation, magic_num, width, height, max_brightness)
-
-    try
-        open("output/"*name*"-"*operation*ext, "a") do f
-            for i::UInt in 1:height
-                for j::UInt in 1:width-1
-                    print(f, pixels[i, j])
-                    print(f, " ")
-                end
-                print(f, pixels[i, width])
-                print(f, "\n")
-            end
-        end
-
-        println("Saved "*"output/"*name*"-"*operation*ext)
+        println("Saved "*path)
     catch e
         @error "Save error." exception=e
     end
@@ -276,7 +168,7 @@ function savePGM(path::AbstractString,
     saveHeader(path, magic_num, width, height, max_brightness)
 
     try
-        open("output/"*path, "a") do f
+        open(path, "a") do f
             for i::UInt in 1:height
                 for j::UInt in 1:width-1
                     print(f, pixels[i, j])
@@ -287,7 +179,7 @@ function savePGM(path::AbstractString,
             end
         end
 
-        println("Saved "*"output/"*path)
+        println("Saved "*path)
     catch e
         @error "Save error." exception=e
     end
@@ -326,7 +218,7 @@ function savePGM(path::AbstractString,
     saveHeader(path, magic_num, width, height, max_brightness)
 
     try
-        open("output/"*path, "a") do f
+        open(path, "a") do f
             for i::UInt in 1:height
                 for j::UInt in 1:width-1
                     print(f, clipped[i, j])
@@ -337,7 +229,7 @@ function savePGM(path::AbstractString,
             end
         end
 
-        println("Saved "*"output/"*path)
+        println("Saved "*path)
     catch e
         @error "Save error." exception=e
     end
