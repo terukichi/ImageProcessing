@@ -71,20 +71,16 @@ savePGM("output2.pgm", ifft_img)
 ### IO
 
 - Load File
-  ```julia
-  loadFile(path::AbstractString)::dataLoaded
-  ```
+
   ```julia
   loadPGM(path::AbstractString)::dataPGM
   ```
   ```julia
   loadPPM(path::AbstractString)::dataPPM
   ```
+
 - Save File
 
-  ```julia
-  saveHeader(path::AbstractString, magic_num::AbstractString, width::UInt, height::UInt, max_brightness::Int16)
-  ```
   ```julia
   savePPM(path::AbstractString, ppm::dataPPM)
   ```
@@ -98,6 +94,7 @@ savePGM("output2.pgm", ifft_img)
 ### Filter
 
 - Averaging Filter
+
   ```julia
   averagingFilter(data::dataPGM)::dataPGM
   ```
@@ -105,13 +102,16 @@ savePGM("output2.pgm", ifft_img)
   averagingFilter(data::dataPPM)::dataPPM
   ```
 - Gaussian Filter
+
   ```julia
   gaussianFilter(data::dataPGM)::dataPGM
   ```
   ```julia
   gaussianFilter(data::dataPPM)::dataPPM
   ```
+
 - Sobel Filter
+
   ```julia
   sobelFilterHorizontal(data::dataPGM)::dataPGM
   ```
@@ -131,13 +131,16 @@ savePGM("output2.pgm", ifft_img)
   sobelFilterGradient(data::dataPPM)::dataPPM
   ```
 - Laplacian Filter
+
   ```julia
   laplacianFilter(data::dataPGM)::dataPGM
   ```
   ```julia
   laplacianFilter(data::dataPPM)::dataPPM
   ```
+
 - Unsharp Masking
+
   ```julia
   unsharpMasking(data::dataPGM, k::Integer)::dataPGM
   ```
