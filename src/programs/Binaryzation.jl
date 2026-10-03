@@ -18,9 +18,10 @@ module Binaryzation
 using ..ImageProcessing: dataPPM, dataPGM
 
 
+include("binaryzation/NormalBinaryzation.jl")
 include("binaryzation/KmeansBinaryzation.jl")
 
-export kmeansBinaryzation
+export  normalBinaryzation, kmeansBinaryzation
 
 
 end                             # module Binaryzation

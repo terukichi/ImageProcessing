@@ -27,7 +27,7 @@ using ..ImageProcessing: dataLoaded, dataPPM, dataPGM, dataFrequency
 include("io/Input.jl")
 include("io/Output.jl")
 
-export loadFile, savePPM, savePGM, loadPGM, loadPPM, createGrayscaleMatrix, createRGBMatrix
+export save, loadPGM, loadPPM, load
 
 
 end                             # module IO

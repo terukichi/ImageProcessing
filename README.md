@@ -71,48 +71,34 @@ savePGM("output2.pgm", ifft_img)
 ### IO
 
 - Load File
-  ```julia
-  loadFile(path::AbstractString)::dataLoaded
-  ```
+
   ```julia
   loadPGM(path::AbstractString)::dataPGM
   ```
   ```julia
   loadPPM(path::AbstractString)::dataPPM
   ```
-- Create Matrix
   ```julia
-  createGrayscaleMatrix(width::UInt, height::UInt, pixels::Vector{Int16})::Matrix{Float64}
+  load(path::AbstractString)::dataPGM
+  load(path::AbstractString)::dataPPM
   ```
-  ```julia
-  createRGBMatrix(width::UInt, height::UInt, pixels::Vector{Int16})::Tuple{Matrix{Float64}, Matrix{Float64}, Matrix{Float64}}
-  ```
+
 - Save File
+
   ```julia
-  saveHeader(name::AbstractString, ext::AbstractString, operation::AbstractString, magic_num::AbstractString, width::UInt, height::UInt, max_brightness::Int16)
+  save(path::AbstractString, ppm::dataPPM)
   ```
   ```julia
-  saveHeader(path::AbstractString, magic_num::AbstractString, width::UInt, height::UInt, max_brightness::Int16)
+  save(path::AbstractString, pgm::dataPGM)
   ```
   ```julia
-  savePPM(name::AbstractString, ext::AbstractString, operation::AbstractString, ppm::dataPPM)
-  ```
-  ```julia
-  savePPM(path::AbstractString, ppm::dataPPM)
-  ```
-  ```julia
-  savePGM(name::AbstractString, ext::AbstractString, operation::AbstractString, pgm::dataPGM)
-  ```
-  ```julia
-  savePGM(path::AbstractString, pgm::dataPGM)
-  ```
-  ```julia
-  savePGM(path::AbstractString, freq::dataFrequency)
+  save(path::AbstractString, freq::dataFrequency)
   ```
 
 ### Filter
 
 - Averaging Filter
+
   ```julia
   averagingFilter(data::dataPGM)::dataPGM
   ```
@@ -120,13 +106,16 @@ savePGM("output2.pgm", ifft_img)
   averagingFilter(data::dataPPM)::dataPPM
   ```
 - Gaussian Filter
+
   ```julia
   gaussianFilter(data::dataPGM)::dataPGM
   ```
   ```julia
   gaussianFilter(data::dataPPM)::dataPPM
   ```
+
 - Sobel Filter
+
   ```julia
   sobelFilterHorizontal(data::dataPGM)::dataPGM
   ```
@@ -146,13 +135,16 @@ savePGM("output2.pgm", ifft_img)
   sobelFilterGradient(data::dataPPM)::dataPPM
   ```
 - Laplacian Filter
+
   ```julia
   laplacianFilter(data::dataPGM)::dataPGM
   ```
   ```julia
   laplacianFilter(data::dataPPM)::dataPPM
   ```
+
 - Unsharp Masking
+
   ```julia
   unsharpMasking(data::dataPGM, k::Integer)::dataPGM
   ```
@@ -212,9 +204,19 @@ savePGM("output2.pgm", ifft_img)
   ```
 
 > [!note]
-> 0 $\leq$ `radious_a` < `radious_b`
+> 0 $\leq$ `radious_a` $\leq$ `radious_b`
 
 ### Binaryzation
+
+- Binaryzation
+
+  ```julia
+  normalBinaryzation(data::dataPGM, threshold::Number)::dataPGM
+  ```
+
+  ```julia
+  normalBinaryzation(data::dataPPM, threshold::Number)::dataPPM
+  ```
 
 - k-means
 

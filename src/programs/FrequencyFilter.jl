@@ -37,4 +37,4 @@ export amplitudeSpectrum
 export dft, idft, lowPassFilter, highPassFilter, bandPassFilter, fft, ifft
 
 
-end                             # module DFT
+end                             # module FrequencyFilter
