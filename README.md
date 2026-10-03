@@ -208,6 +208,16 @@ savePGM("output2.pgm", ifft_img)
 
 ### Binaryzation
 
+- Binaryzation
+
+  ```julia
+  normalBinaryzation(data::dataPGM, threshold::Number)::dataPGM
+  ```
+
+  ```julia
+  normalBinaryzation(data::dataPPM, threshold::Number)::dataPPM
+  ```
+
 - k-means
 
   ```julia
