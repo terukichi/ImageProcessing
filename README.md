@@ -1,5 +1,7 @@
 # ImageProcessing
 
+![MIT_License](https://img.shields.io/badge/License-MIT-green)
+
 ## Summary
 
 - _ImageProcessing_ is an image processing package.
@@ -75,9 +77,11 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   loadPGM(path::AbstractString)::dataPGM
   ```
+
   ```julia
   loadPPM(path::AbstractString)::dataPPM
   ```
+
   ```julia
   load(path::AbstractString)::dataPGM
   load(path::AbstractString)::dataPPM
@@ -88,9 +92,11 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   save(path::AbstractString, ppm::dataPPM)
   ```
+
   ```julia
   save(path::AbstractString, pgm::dataPGM)
   ```
+
   ```julia
   save(path::AbstractString, freq::dataFrequency)
   ```
@@ -102,14 +108,17 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   averagingFilter(data::dataPGM)::dataPGM
   ```
+
   ```julia
   averagingFilter(data::dataPPM)::dataPPM
   ```
+
 - Gaussian Filter
 
   ```julia
   gaussianFilter(data::dataPGM)::dataPGM
   ```
+
   ```julia
   gaussianFilter(data::dataPPM)::dataPPM
   ```
@@ -119,26 +128,33 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   sobelFilterHorizontal(data::dataPGM)::dataPGM
   ```
+
   ```julia
   sobelFilterHorizontal(data::dataPPM)::dataPPM
   ```
+
   ```julia
   sobelFilterVertical(data::dataPGM)::dataPGM
   ```
+
   ```julia
   sobelFilterVertical(data::dataPPM)::dataPPM
   ```
+
   ```julia
   sobelFilterGradient(data::dataPGM)::dataPGM
   ```
+
   ```julia
   sobelFilterGradient(data::dataPPM)::dataPPM
   ```
+
 - Laplacian Filter
 
   ```julia
   laplacianFilter(data::dataPGM)::dataPGM
   ```
+
   ```julia
   laplacianFilter(data::dataPPM)::dataPPM
   ```
@@ -148,6 +164,7 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   unsharpMasking(data::dataPGM, k::Integer)::dataPGM
   ```
+
   ```julia
   unsharpMasking(data::dataPPM, k::Integer)::dataPPM
   ```
@@ -173,13 +190,17 @@ savePGM("output2.pgm", ifft_img)
 > This function has a high computational complexity.
 
 - FFT
+
   ```julia
   fft(data::dataPGM)::dataFrequency
   ```
+
 - IFFT
+
   ```julia
   ifft(data::dataFrequency)::dataPGM
   ```
+
 - Lowpass Filter
 
   ```julia
@@ -228,12 +249,17 @@ savePGM("output2.pgm", ifft_img)
   kmeansBinaryzation(data::dataPPM)::dataPPM
   ```
 
+> [!note]
+> $k \in \mathbb{N}$
+
 ### RegionSegmentation
 
 - k-means
+
   ```julia
   kmeansRegionSegmentation(data::dataPGM, k::Integer)::dataPGM
   ```
+
   ```julia
   kmeansRegionSegmentation(data::dataPPM, k::Integer)::dataPPM
   ```
