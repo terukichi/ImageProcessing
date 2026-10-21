@@ -60,7 +60,7 @@
 module ImageProcessing
 
 include("./programs/DataFormat.jl")
-export dataPGM, dataPPM, dataLoaded
+export dataPGM, dataPPM, dataFrequency
 
 include("./programs/IO.jl")
 include("./programs/Filter.jl")
@@ -68,7 +68,7 @@ include("./programs/FrequencyFilter.jl")
 include("./programs/Binaryzation.jl")
 include("./programs/RegionSegmentation.jl")
 include("./programs/ZeroPadding.jl")
-export zeroPadding
+export IO, Filter, FrequencyFilter, Binaryzation, RegionSegmentation, zeroPadding
 
 
 end # module ImageProsessing

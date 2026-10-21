@@ -204,7 +204,7 @@ savePGM("output2.pgm", ifft_img)
 - Lowpass Filter
 
   ```julia
-  lowPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
+  lowPassFilter(data::dataFrequency, radius::Real)::dataFrequency
   ```
 
 > [!note]
@@ -213,7 +213,7 @@ savePGM("output2.pgm", ifft_img)
 - Highpass Filter
 
   ```julia
-  highPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
+  highPassFilter(data::dataFrequency, radius::Real)::dataFrequency
   ```
 
 > [!note]
@@ -221,7 +221,7 @@ savePGM("output2.pgm", ifft_img)
 
 - Bandpass Filter
   ```julia
-  bandPassFilter(data::dataFrequency, radius_a::Float64, radius_b::Float64)::dataFrequency
+  bandPassFilter(data::dataFrequency, radius_a::Real, radius_b::Real)::dataFrequency
   ```
 
 > [!note]

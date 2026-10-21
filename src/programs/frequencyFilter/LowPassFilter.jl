@@ -9,7 +9,7 @@
 """
 # Lowpass Filter
 ```julia
-  lowPassFilter(data::dataPGM)::dataPGM
+  lowPassFilter(data::dataPGM, radius::Real)::dataPGM
 ```
 
 ## Summary
@@ -17,15 +17,17 @@ Lowpass filter
 
 ## Arguments
 - `data::dataFrequency`
-- `radius::Float64`
+- `radius::Real`
 
 ## Return value
-- `data::dataFrequency`
+- `ans::dataFrequency`
 """
-function lowPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
+function lowPassFilter(data::dataFrequency, radius::Real)::dataFrequency
+    r::Float64 = Float64(radius)
     width::UInt = data.width
     height::UInt = data.height
-    mask::Matrix{Int8} = [((x-width/2)^2+(y-height/2)^2) < radius^2 ? 1 : 0  for y in 1:height, x in 1:width]
-    data.frequency = data.frequency .* mask
-    return data
+    mask::Matrix{Int8} = [((x-width/2)^2+(y-height/2)^2) < r^2 ? 1 : 0  for y in 1:height, x in 1:width]
+    frequency = data.frequency .* mask
+    ans = dataFrequency(width, height, data.init_width, data.init_height, frequency)
+    return ans
 end
