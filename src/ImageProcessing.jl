@@ -15,24 +15,22 @@
 
 #### Public
 
-- `loadFile`
-- `savePPM`
-- `savePGM`
-- `loadGrayscale`
-- `loadRGB`
-- `createGrayscaleMatrix`
-- `createRGBMatrix`
+- `save`
+- `load`
+- `loadPPM`
+- `loadPGM`
 
 ### Filter
 
 #### Public
 
-- `averaging`
-- `gaussian`
-- `sobelLR`
-- `sobelTD`
-- `sobelGradient`
-- `laplacian`
+- `averagingFilter`
+- `gaussianFilter`
+- `sobelFilterHorizontal`
+- `sobelFilterVertical`
+- `sobelFilterGradient`
+- `laplacianFilter`
+- `unsharpMasking`
 
 ### FrequencyFilter
 
@@ -49,7 +47,15 @@
 ### Binaryzation
 
 #### Public
+
+- `normalBinaryzation`
 - `kmeansBinaryzation`
+
+### RegionSegmentation
+
+#### Public
+
+- `kmeansRegionSegmentation`
 """
 module ImageProcessing
 

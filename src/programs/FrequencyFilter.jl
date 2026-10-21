@@ -13,11 +13,11 @@
 
 - `dft`
 - `idft`
+- `fft`
+- `ifft`
 - `lowPassFilter`
 - `highPassFilter`
 - `bandPassFilter`
-- `fft`
-- `ifft`
 """
 module FrequencyFilter
 

@@ -11,13 +11,10 @@
 
 ## Functions
 
-- `loadFile`
-- `savePPM`
-- `savePGM`
+- `save`
+- `load`
 - `loadPPM`
 - `loadPGM`
-- `createGrayscaleMatrix`
-- `createRGBMatrix`
 """
 module IO
 
