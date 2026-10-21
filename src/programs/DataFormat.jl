@@ -14,6 +14,13 @@ mutable struct dataLoaded
     pixels::Vector{Int16}
 end
 
+mutable struct dataPBM
+    magic_num::String
+    width::UInt
+    height::UInt
+    pixels::Matrix{Bool}
+end
+
 mutable struct dataPGM
     magic_num::String
     width::UInt

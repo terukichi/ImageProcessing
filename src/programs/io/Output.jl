@@ -64,7 +64,7 @@ Save PPM data
 ## Return value
 """
 function save(path::AbstractString,
-                 ppm::dataPPM)
+              ppm::dataPPM)
     magic_num::String = ppm.magic_num
     width::UInt = ppm.width
     height::UInt = ppm.height
