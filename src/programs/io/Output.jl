@@ -91,7 +91,7 @@ function save(path::AbstractString,
                 print(f, "\n")
             end
         end
-        println("Saved "*path)
+
     catch e
         @error "Save error." exception=e
     end
@@ -134,7 +134,6 @@ function save(path::AbstractString,
             end
         end
 
-        println("Saved "*path)
     catch e
         @error "Save error." exception=e
     end
@@ -184,7 +183,6 @@ function save(path::AbstractString,
             end
         end
 
-        println("Saved "*path)
     catch e
         @error "Save error." exception=e
     end

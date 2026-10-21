@@ -232,11 +232,11 @@ savePGM("output2.pgm", ifft_img)
 - Binaryzation
 
   ```julia
-  normalBinaryzation(data::dataPGM, threshold::Number)::dataPGM
+  normalBinaryzation(data::dataPGM, threshold::Real)::dataPGM
   ```
 
   ```julia
-  normalBinaryzation(data::dataPPM, threshold::Number)::dataPPM
+  normalBinaryzation(data::dataPPM, threshold::Real)::dataPPM
   ```
 
 - k-means

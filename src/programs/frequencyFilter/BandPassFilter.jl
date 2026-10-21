@@ -16,7 +16,7 @@
 
 !!! note
 
-    `radious_a < radious_b`
+    `0 <= radious_a <= radious_b`
 
 ## Summary
 Bandpass filter

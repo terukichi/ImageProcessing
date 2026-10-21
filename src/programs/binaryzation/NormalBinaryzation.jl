@@ -10,7 +10,7 @@
 """
 # Binaryzation
 ```julia
-  normalBinaryzation(data::dataPGM, threshold::Number)::dataPGM
+  normalBinaryzation(data::dataPGM, threshold::Real)::dataPGM
 ```
 
 ## Summary
@@ -22,7 +22,7 @@ Binaryzation
 ## Return value
 - `data::dataPGM`
 """
-function normalBinaryzation(data::dataPGM, threshold::Number)::dataPGM
+function normalBinaryzation(data::dataPGM, threshold::Real)::dataPGM
     width::UInt = data.width
     height::UInt = data.height
     pixels::Matrix{Float64} = data.pixels
@@ -35,7 +35,7 @@ end
 """
 # Binaryzation
 ```julia
-  normalBinaryzation(data::dataPPM, threshold::Number)::dataPPM
+  normalBinaryzation(data::dataPPM, threshold::Real)::dataPPM
 ```
 
 ## Summary
@@ -47,7 +47,7 @@ Binaryzation
 ## Return value
 - `data::dataPPM`
 """
-function normalBinaryzation(data::dataPPM, threshold::Number)::dataPPM
+function normalBinaryzation(data::dataPPM, threshold::Real)::dataPPM
     width::UInt = data.width
     height::UInt = data.height
     red::Matrix{Float64} = data.red
