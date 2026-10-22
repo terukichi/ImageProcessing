@@ -10,29 +10,32 @@
 # Bandpass Filter
 ```julia
   bandPassFilter(data::dataPGM,
-                 radius_a::Float64, radius_b::Float64)
+                 radius_a::Real, radius_b::Real)
                  ::dataPGM
 ```
 
 !!! note
 
-    `radious_a < radious_b`
+    `0 <= radious_a <= radious_b`
 
 ## Summary
 Bandpass filter
 
 ## Arguments
 - `data::dataFrequency`
-- `radius_a::Float64`
-- `radius_b::Float64`
+- `radius_a::Real`
+- `radius_b::Real`
 
 ## Return value
-- `data::dataFrequency`
+- `ans::dataFrequency`
 """
-function bandPassFilter(data::dataFrequency, radius_a::Float64, radius_b::Float64)::dataFrequency
+function bandPassFilter(data::dataFrequency, radius_a::Real, radius_b::Real)::dataFrequency
+    r_a::Float64 = Float64(radius_a)
+    r_b::Float64 = Float64(radius_b)
     width::UInt = data.width
     height::UInt = data.height
-    mask::Matrix{Int8} = [((x-width/2)^2+(y-height/2)^2) > radius_a^2 && ((x-width/2)^2+(y-height/2)^2) < radius_b^2 ? 1 : 0  for y in 1:height, x in 1:width]
-    data.frequency = data.frequency .* mask
-    return data
+    mask::Matrix{Int8} = [((x-width/2)^2+(y-height/2)^2) > r_a^2 && ((x-width/2)^2+(y-height/2)^2) < r_b^2 ? 1 : 0  for y in 1:height, x in 1:width]
+    frequency = data.frequency .* mask
+    ans = dataFrequency(width, height, data.init_width, data.init_height, frequency)
+    return ans
 end

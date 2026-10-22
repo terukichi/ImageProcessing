@@ -11,6 +11,7 @@
 
 ## Functions
 
+- `normalBinaryzation`
 - `kmeansBinaryzation`
 """
 module Binaryzation

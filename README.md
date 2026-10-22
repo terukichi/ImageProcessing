@@ -1,5 +1,7 @@
 # ImageProcessing
 
+[![MIT_License](https://img.shields.io/badge/License-MIT-green)](https://img.shields.io/badges/)
+
 ## Summary
 
 - _ImageProcessing_ is an image processing package.
@@ -10,16 +12,17 @@
 
 ## Image File Formats
 
+- **PBM** (P1)
 - **PGM** (P2)
 - **PPM** (P3)
 
-| module             | .pgm (P2) |  .ppm (P3)  |
-| :----------------- | :-------: | :---------: |
-| IO                 | available |  available  |
-| Filter             | available |  available  |
-| FrequencyFilter    | available | unavailable |
-| Binaryzation       | available |  available  |
-| RegionSegmentation | available |  available  |
+| module             |  .pbm (P1)  | .pgm (P2) |  .ppm (P3)  |
+| :----------------- | :---------: | :-------: | :---------: |
+| IO                 | write only  | available |  available  |
+| Filter             | unavailable | available |  available  |
+| FrequencyFilter    | unavailable | available | unavailable |
+| Binaryzation       | unavailable | available |  available  |
+| RegionSegmentation | unavailable | available |  available  |
 
 ## Installation
 
@@ -70,14 +73,20 @@ savePGM("output2.pgm", ifft_img)
 
 ### IO
 
+```julia
+using ImageProcessing.IO
+```
+
 - Load File
 
   ```julia
   loadPGM(path::AbstractString)::dataPGM
   ```
+
   ```julia
   loadPPM(path::AbstractString)::dataPPM
   ```
+
   ```julia
   load(path::AbstractString)::dataPGM
   load(path::AbstractString)::dataPPM
@@ -88,28 +97,37 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   save(path::AbstractString, ppm::dataPPM)
   ```
+
   ```julia
   save(path::AbstractString, pgm::dataPGM)
   ```
+
   ```julia
   save(path::AbstractString, freq::dataFrequency)
   ```
 
 ### Filter
 
+```julia
+using ImageProcessing.Filter
+```
+
 - Averaging Filter
 
   ```julia
   averagingFilter(data::dataPGM)::dataPGM
   ```
+
   ```julia
   averagingFilter(data::dataPPM)::dataPPM
   ```
+
 - Gaussian Filter
 
   ```julia
   gaussianFilter(data::dataPGM)::dataPGM
   ```
+
   ```julia
   gaussianFilter(data::dataPPM)::dataPPM
   ```
@@ -119,26 +137,33 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   sobelFilterHorizontal(data::dataPGM)::dataPGM
   ```
+
   ```julia
   sobelFilterHorizontal(data::dataPPM)::dataPPM
   ```
+
   ```julia
   sobelFilterVertical(data::dataPGM)::dataPGM
   ```
+
   ```julia
   sobelFilterVertical(data::dataPPM)::dataPPM
   ```
+
   ```julia
   sobelFilterGradient(data::dataPGM)::dataPGM
   ```
+
   ```julia
   sobelFilterGradient(data::dataPPM)::dataPPM
   ```
+
 - Laplacian Filter
 
   ```julia
   laplacianFilter(data::dataPGM)::dataPGM
   ```
+
   ```julia
   laplacianFilter(data::dataPPM)::dataPPM
   ```
@@ -148,11 +173,16 @@ savePGM("output2.pgm", ifft_img)
   ```julia
   unsharpMasking(data::dataPGM, k::Integer)::dataPGM
   ```
+
   ```julia
   unsharpMasking(data::dataPPM, k::Integer)::dataPPM
   ```
 
 ### FrequencyFilter
+
+```julia
+using ImageProcessing.FrequencyFilter
+```
 
 - DFT
 
@@ -173,17 +203,21 @@ savePGM("output2.pgm", ifft_img)
 > This function has a high computational complexity.
 
 - FFT
+
   ```julia
   fft(data::dataPGM)::dataFrequency
   ```
+
 - IFFT
+
   ```julia
   ifft(data::dataFrequency)::dataPGM
   ```
+
 - Lowpass Filter
 
   ```julia
-  lowPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
+  lowPassFilter(data::dataFrequency, radius::Real)::dataFrequency
   ```
 
 > [!note]
@@ -192,7 +226,7 @@ savePGM("output2.pgm", ifft_img)
 - Highpass Filter
 
   ```julia
-  highPassFilter(data::dataFrequency, radius::Float64)::dataFrequency
+  highPassFilter(data::dataFrequency, radius::Real)::dataFrequency
   ```
 
 > [!note]
@@ -200,7 +234,7 @@ savePGM("output2.pgm", ifft_img)
 
 - Bandpass Filter
   ```julia
-  bandPassFilter(data::dataFrequency, radius_a::Float64, radius_b::Float64)::dataFrequency
+  bandPassFilter(data::dataFrequency, radius_a::Real, radius_b::Real)::dataFrequency
   ```
 
 > [!note]
@@ -208,14 +242,18 @@ savePGM("output2.pgm", ifft_img)
 
 ### Binaryzation
 
+```julia
+using ImageProcessing.Binaryzation
+```
+
 - Binaryzation
 
   ```julia
-  normalBinaryzation(data::dataPGM, threshold::Number)::dataPGM
+  normalBinaryzation(data::dataPGM, threshold::Real)::dataPGM
   ```
 
   ```julia
-  normalBinaryzation(data::dataPPM, threshold::Number)::dataPPM
+  normalBinaryzation(data::dataPPM, threshold::Real)::dataPPM
   ```
 
 - k-means
@@ -228,12 +266,21 @@ savePGM("output2.pgm", ifft_img)
   kmeansBinaryzation(data::dataPPM)::dataPPM
   ```
 
+> [!note]
+> $k \in \mathbb{N}$
+
 ### RegionSegmentation
 
+```julia
+using ImageProcessing.RegionSegmentation
+```
+
 - k-means
+
   ```julia
   kmeansRegionSegmentation(data::dataPGM, k::Integer)::dataPGM
   ```
+
   ```julia
   kmeansRegionSegmentation(data::dataPPM, k::Integer)::dataPPM
   ```
@@ -242,6 +289,10 @@ savePGM("output2.pgm", ifft_img)
 > $k \in \mathbb{N}$
 
 ### Others
+
+```julia
+using ImageProcessing
+```
 
 - Zero Padding
 

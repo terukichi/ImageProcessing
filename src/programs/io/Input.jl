@@ -174,10 +174,10 @@ Load PNM data
 - `data::dataPPM`
 """
 function load(path::AbstractString)
-    ext = split(path, ".")[end]
+    ext::AbstractString = split(path, ".")[end]
     if ext == "pgm"
         return loadPGM(path)
-    else ext = "ppm"
+    elseif ext == "ppm"
         return loadPPM(path)
     end
     println("File format error.")
