@@ -72,6 +72,10 @@ savePGM("output2.pgm", ifft_img)
 
 ### IO
 
+```julia
+using ImageProcessing.IO
+```
+
 - Load File
 
   ```julia
@@ -102,6 +106,10 @@ savePGM("output2.pgm", ifft_img)
   ```
 
 ### Filter
+
+```julia
+using ImageProcessing.Filter
+```
 
 - Averaging Filter
 
@@ -171,6 +179,10 @@ savePGM("output2.pgm", ifft_img)
 
 ### FrequencyFilter
 
+```julia
+using ImageProcessing.FrequencyFilter
+```
+
 - DFT
 
   ```julia
@@ -229,6 +241,10 @@ savePGM("output2.pgm", ifft_img)
 
 ### Binaryzation
 
+```julia
+using ImageProcessing.Binaryzation
+```
+
 - Binaryzation
 
   ```julia
@@ -254,6 +270,10 @@ savePGM("output2.pgm", ifft_img)
 
 ### RegionSegmentation
 
+```julia
+using ImageProcessing.RegionSegmentation
+```
+
 - k-means
 
   ```julia
@@ -268,6 +288,10 @@ savePGM("output2.pgm", ifft_img)
 > $k \in \mathbb{N}$
 
 ### Others
+
+```julia
+using ImageProcessing
+```
 
 - Zero Padding
 

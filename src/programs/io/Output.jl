@@ -49,6 +49,42 @@ function saveHeader(path::AbstractString,
 end
 
 """
+# Save PNM's Header
+```julia
+  saveHeader(path::AbstractString,
+             magic_num::AbstractString,
+             width::UInt, height::UInt)
+```
+
+## Summary
+Save header information
+
+## Arguments
+- `path::AbstractString`
+- `magic_num::AbstractString`
+- `width::UInt`
+- `height::UInt`
+
+## Return value
+"""
+function saveHeader(path::AbstractString,
+                    magic_num::AbstractString,
+                    width::UInt, height::UInt)
+
+    try
+        write(path, "")
+        open(path, "a") do f
+            println(f, magic_num)
+            print(f, width)
+            print(f, " ")
+            println(f, height)
+        end
+    catch e
+        @error "Save error." exception=e
+    end
+end
+
+"""
 # Save PPM Data
 ```julia
   save(path::AbstractString, ppm::dataPPM)
@@ -65,6 +101,7 @@ Save PPM data
 """
 function save(path::AbstractString,
               ppm::dataPPM)
+    ext::AbstractString = split(path, ".")[end]
     magic_num::String = ppm.magic_num
     width::UInt = ppm.width
     height::UInt = ppm.height
@@ -72,28 +109,55 @@ function save(path::AbstractString,
     red::Matrix{Int16} = round.(Int16, ppm.red)
     green::Matrix{Int16} = round.(Int16, ppm.green)
     blue::Matrix{Int16} = round.(Int16, ppm.blue)
-    red = clipping(width, height, red)
-    green = clipping(width, height, green)
-    blue = clipping(width, height, blue)
-    saveHeader(path, magic_num, width, height, max_brightness)
+    if ext == "pbm"
+        rgb_sum::Matrix{Int16} = red + green + blue
+        pixels::Matrix{Int8} = zeros(Int8, height, width)
 
-    try
-        open(path, "a") do f
-            for i::UInt in 1:height
-                for j::UInt in 1:width
-                    print(f, red[i, j])
-                    print(f, " ")
-                    print(f, green[i, j])
-                    print(f, " ")
-                    print(f, blue[i, j])
-                    print(f, " ")
-                end
-                print(f, "\n")
-            end
+        for i::UInt in 1:height
+             for j::UInt in 1:width
+                 pixels[i, j] = rgb_sum[i, j] == max_brightness*3 ? 1 : 0
+             end
         end
+        saveHeader(path, "P1", width, height)
 
-    catch e
-        @error "Save error." exception=e
+        try
+            open(path, "a") do f
+                for i::UInt in 1:height
+                    for j::UInt in 1:width
+                        print(f, pixels[i, j])
+                        print(f, " ")
+                    end
+                    print(f, "\n")
+                end
+            end
+
+        catch e
+            @error "Save error." exception=e
+        end
+    else
+        red = clipping(width, height, red)
+        green = clipping(width, height, green)
+        blue = clipping(width, height, blue)
+        saveHeader(path, magic_num, width, height, max_brightness)
+
+        try
+            open(path, "a") do f
+                for i::UInt in 1:height
+                    for j::UInt in 1:width
+                        print(f, red[i, j])
+                        print(f, " ")
+                        print(f, green[i, j])
+                        print(f, " ")
+                        print(f, blue[i, j])
+                        print(f, " ")
+                    end
+                    print(f, "\n")
+                end
+            end
+
+        catch e
+            @error "Save error." exception=e
+        end
     end
 end
 
@@ -114,28 +178,53 @@ Save PGM data
 """
 function save(path::AbstractString,
               pgm::dataPGM)
+    ext::AbstractString = split(path, ".")[end]
     magic_num::String = pgm.magic_num
     width::UInt = pgm.width
     height::UInt = pgm.height
     max_brightness::Int16 = pgm.max_brightness
     pixels::Matrix{Int16} = round.(Int16, pgm.pixels)
-    pixels = clipping(width, height, pixels)
-    saveHeader(path, magic_num, width, height, max_brightness)
-
-    try
-        open(path, "a") do f
-            for i::UInt in 1:height
-                for j::UInt in 1:width-1
-                    print(f, pixels[i, j])
-                    print(f, " ")
-                end
-                print(f, pixels[i, width])
-                print(f, "\n")
-            end
+    if ext == "pbm"
+        for i::UInt in 1:height
+             for j::UInt in 1:width
+                 pixels[i, j] = pixels[i, j] == max_brightness ? 1 : 0
+             end
         end
+        saveHeader(path, "P1", width, height)
 
-    catch e
-        @error "Save error." exception=e
+        try
+            open(path, "a") do f
+                for i::UInt in 1:height
+                    for j::UInt in 1:width
+                        print(f, pixels[i, j])
+                        print(f, " ")
+                    end
+                    print(f, "\n")
+                end
+            end
+
+        catch e
+            @error "Save error." exception=e
+        end
+    else
+        pixels = clipping(width, height, pixels)
+        saveHeader(path, magic_num, width, height, max_brightness)
+
+        try
+            open(path, "a") do f
+                for i::UInt in 1:height
+                    for j::UInt in 1:width-1
+                        print(f, pixels[i, j])
+                        print(f, " ")
+                    end
+                    print(f, pixels[i, width])
+                    print(f, "\n")
+                end
+            end
+
+        catch e
+            @error "Save error." exception=e
+        end
     end
 end
 
