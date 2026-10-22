@@ -12,16 +12,17 @@
 
 ## Image File Formats
 
+- **PBM** (P1)
 - **PGM** (P2)
 - **PPM** (P3)
 
-| module             | .pgm (P2) |  .ppm (P3)  |
-| :----------------- | :-------: | :---------: |
-| IO                 | available |  available  |
-| Filter             | available |  available  |
-| FrequencyFilter    | available | unavailable |
-| Binaryzation       | available |  available  |
-| RegionSegmentation | available |  available  |
+| module             |  .pbm (P1)  | .pgm (P2) |  .ppm (P3)  |
+| :----------------- | :---------: | :-------: | :---------: |
+| IO                 | write only  | available |  available  |
+| Filter             | unavailable | available |  available  |
+| FrequencyFilter    | unavailable | available | unavailable |
+| Binaryzation       | unavailable | available |  available  |
+| RegionSegmentation | unavailable | available |  available  |
 
 ## Installation
 

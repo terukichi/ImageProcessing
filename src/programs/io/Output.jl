@@ -112,10 +112,11 @@ function save(path::AbstractString,
     if ext == "pbm"
         rgb_sum::Matrix{Int16} = red + green + blue
         pixels::Matrix{Int8} = zeros(Int8, height, width)
+        threshold::Real = max_brightness * 3.0 / 2.0
 
         for i::UInt in 1:height
              for j::UInt in 1:width
-                 pixels[i, j] = rgb_sum[i, j] == max_brightness*3 ? 1 : 0
+                 pixels[i, j] = rgb_sum[i, j] > threshold ? 1 : 0
              end
         end
         saveHeader(path, "P1", width, height)
@@ -185,9 +186,10 @@ function save(path::AbstractString,
     max_brightness::Int16 = pgm.max_brightness
     pixels::Matrix{Int16} = round.(Int16, pgm.pixels)
     if ext == "pbm"
+        threshold::Real = max_brightness / 2.0
         for i::UInt in 1:height
              for j::UInt in 1:width
-                 pixels[i, j] = pixels[i, j] == max_brightness ? 1 : 0
+                 pixels[i, j] = pixels[i, j] > threshold ? 1 : 0
              end
         end
         saveHeader(path, "P1", width, height)
