@@ -40,7 +40,7 @@ function kmeansBinaryzation(data::dataPGM)::dataPGM
         for i in 1:height
             for j in 1:width
                 for k in 1:2
-                    d[k] = abs(pixels[i, j] - centroid[k])
+                    d[k] = (pixels[i, j] - centroid[k])^2
                 end
                 label[i, j] = d[1] < d[2] ? 0 : 1
             end
@@ -62,7 +62,7 @@ function kmeansBinaryzation(data::dataPGM)::dataPGM
                 new_centroid[k] = centroid[k]
             end
         end
-        if abs(new_centroid[1] - centroid[1]) < threshold && abs(new_centroid[2] - centroid[2]) < threshold
+        if (new_centroid[1] - centroid[1])^2 < threshold && (new_centroid[2] - centroid[2])^2 < threshold
             break
         end
         for k in 1:2
@@ -81,17 +81,17 @@ function changed(new_centroid_red::Vector{Float64},
                  new_centroid_blue::Vector{Float64},
                  centroid_blue::Vector{Float64})::Bool
     for i in 1:2
-        if abs(new_centroid_red[i] - centroid_red[i]) > threshold
+        if (new_centroid_red[i] - centroid_red[i])^2 > threshold
             return true
         end
     end
     for i in 1:2
-        if abs(new_centroid_green[i] - centroid_green[i]) > threshold
+        if (new_centroid_green[i] - centroid_green[i])^2 > threshold
             return true
         end
     end
     for i in 1:2
-        if abs(new_centroid_blue[i] - centroid_blue[i]) > threshold
+        if (new_centroid_blue[i] - centroid_blue[i])^2 > threshold
             return true
         end
     end
@@ -136,7 +136,7 @@ function kmeansBinaryzation(data::dataPPM)::dataPPM
         for i in 1:height
             for j in 1:width
                 for k in 1:2
-                    d[k] = abs(red[i, j] - centroid_red[k]) + abs(green[i, j] - centroid_green[k]) + abs(blue[i, j] - centroid_blue[k])
+                    d[k] = (red[i, j] - centroid_red[k])^2 + (green[i, j] - centroid_green[k])^2 + (blue[i, j] - centroid_blue[k])^2
                 end
                 label[i, j] = d[1] < d[2] ? 0 : 1
             end
