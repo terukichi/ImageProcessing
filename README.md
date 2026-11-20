@@ -10,6 +10,10 @@
       alt="Language"
       src="https://img.shields.io/badge/language-julia-violet"
       />
+    <img
+      alt="Stable"
+      src="https://img.shields.io/badge/stable-main-blue"
+      />
   </a>
 </div>
 
