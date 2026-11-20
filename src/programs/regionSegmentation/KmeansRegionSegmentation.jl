@@ -19,7 +19,7 @@ function changed(new_centroid::Vector{Float64},
                  centroid::Vector{Float64},
                  k::Integer)::Bool
     for i in 1:k
-        if abs(new_centroid[i] - centroid[i]) > threshold
+        if (new_centroid[i] - centroid[i])^2 > threshold
             return true
         end
     end
@@ -56,7 +56,7 @@ function kmeansRegionSegmentation(data::dataPGM, k::Integer)::dataPGM
         for i in 1:height
             for j in 1:width
                 for x in 1:k
-                    d[x] = abs(pixels[i, j] - centroid[x])
+                    d[x] = (pixels[i, j] - centroid[x])^2
                 end
                 label[i, j] = argmin(d)
             end
@@ -97,17 +97,17 @@ function changed(new_centroid_red::Vector{Float64},
                  centroid_blue::Vector{Float64},
                  k::Integer)::Bool
     for i in 1:k
-        if abs(new_centroid_red[i] - centroid_red[i]) > threshold
+        if (new_centroid_red[i] - centroid_red[i])^2 > threshold
             return true
         end
     end
     for i in 1:k
-        if abs(new_centroid_green[i] - centroid_green[i]) > threshold
+        if (new_centroid_green[i] - centroid_green[i])^2 > threshold
             return true
         end
     end
     for i in 1:k
-        if abs(new_centroid_blue[i] - centroid_blue[i]) > threshold
+        if (new_centroid_blue[i] - centroid_blue[i])^2 > threshold
             return true
         end
     end
@@ -153,7 +153,7 @@ function kmeansRegionSegmentation(data::dataPPM, k::Integer)::dataPPM
         for i in 1:height
             for j in 1:width
                 for x in 1:k
-                    d[x] = abs(red[i, j] - centroid_red[x]) + abs(green[i, j] - centroid_green[x]) + abs(blue[i, j] - centroid_blue[x])
+                    d[x] = (red[i, j] - centroid_red[x])^2 + (green[i, j] - centroid_green[x])^2 + (blue[i, j] - centroid_blue[x])^2
                 end
                 label[i, j] = argmin(d)
             end
